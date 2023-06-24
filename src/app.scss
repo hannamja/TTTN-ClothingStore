@@ -1,6 +1,15 @@
-.app{
+.app {
 
-  .link{
+  .link {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.appAdmin {
+  display: flex;
+
+  .link {
     color: inherit;
     text-decoration: none;
   }

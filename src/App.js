@@ -1,4 +1,4 @@
-import { Children } from "react";
+import { Children, useState } from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import NavBar from "./components/NavBar/Navbar";
@@ -6,6 +6,8 @@ import Home from "./pages/Home/Home";
 import Product from "./pages/Product/Product";
 import Products from "./pages/Products/Products";
 import "./app.scss"
+import AdminSideBar from "./components/AdminSideBar/AdminSideBar";
+import WarehouseTabs from "./components/WarehouseTabs/WarehouseTabs";
 
 const Layout = () => {
   return (
@@ -13,6 +15,15 @@ const Layout = () => {
       <NavBar />
       <Outlet />
       <Footer />
+    </div>
+  );
+};
+const AdminLayout = () => {
+  const [open,setOpen] = useState(false)
+  return (
+    <div className="appAdmin">
+      <Outlet />
+      <AdminSideBar />
     </div>
   );
 };
@@ -38,7 +49,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/admin',
-    element: <div>Admin</div>
+    element: <AdminLayout />,
+    children: [
+      {
+        path: '/admin',
+        element: <WarehouseTabs />
+      }
+    ]
   }
 ]);
 
