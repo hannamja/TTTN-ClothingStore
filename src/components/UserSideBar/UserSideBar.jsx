@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import { Link } from 'react-router-dom'
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Fab from '@mui/material/Fab';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import WarehouseOutlinedIcon from '@mui/icons-material/WarehouseOutlined';
-import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
-import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
-import StackedLineChartOutlinedIcon from '@mui/icons-material/StackedLineChartOutlined';
-import './AdminSideBar.scss'
-import { ArrowLeftOutlined, HomeOutlined } from '@mui/icons-material';
-
-const AdminSideBar = ({ isOpen }) => {
-    const [open, setOpen] = useState(false)
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import './UserSideBar.scss'
+import { ArrowLeftOutlined } from '@mui/icons-material';
+const UserSideBar = () => {
+    const [open, setOpen] = React.useState(false)
     const handleClose = () => {
         setOpen(!open)
     }
@@ -26,14 +24,14 @@ const AdminSideBar = ({ isOpen }) => {
             } : { display: 'none' }} onClick={handleClose}>
                 <MenuOutlinedIcon />
             </Fab >
-            <div className='adminSideBar' style={open ? { display: "none" } : { display: 'block' }}>
+            <div className='userSideBar' style={open ? { display: "none" } : { display: 'block' }}>
                 <div className="close" onClick={handleClose}>
                     <CloseOutlinedIcon />
                 </div>
 
                 <div className='top'>
                     <div className='user'>
-                        <img src='img/admin.png' alt='Admin'></img>
+                        <img src='../img/admin.png' alt='Admin'></img>
                         <div className="userInfo">
                             <span className='name'>Nguyễn Văn A</span>
                             <span className='role'>Admin</span>
@@ -46,35 +44,25 @@ const AdminSideBar = ({ isOpen }) => {
                 </div>
                 <div className="bottom">
                     <div className="item">
-                        <HomeOutlined />
+                        <HomeOutlinedIcon />
                         <Link className='link' to='/'>Back to homepage</Link>
                         <ArrowLeftOutlined />
                     </div>
                     <div className="item">
-                        <WarehouseOutlinedIcon />
-                        <Link className='link' to='/admin'>Quản lí kho</Link>
+                        <InfoOutlinedIcon />
+                        <Link className='link' to='/admin'>Thông tin chung</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
+
                     <div className="item">
-                        <FileCopyOutlinedIcon />
-                        <Link className='link' to='/admin/importManagement'>Đơn nhập</Link>
-                        <ArrowRightOutlinedIcon />
-                    </div>
-                    <div className="item">
-                        <BadgeOutlinedIcon />
-                        <Link className='link' to='/admin/empManagement'>Quản lí nhân viên</Link>
-                        <ArrowRightOutlinedIcon />
-                    </div>
-                    <div className="item">
-                        <StackedLineChartOutlinedIcon />
-                        <Link className='link' to='/admin/reports'>Thống kê</Link>
+                        <SecurityOutlinedIcon />
+                        <Link className='link' to='/admin'>Bảo mật</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                 </div>
             </div>
         </>
-
     )
 }
 
-export default AdminSideBar
+export default UserSideBar

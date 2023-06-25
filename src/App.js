@@ -8,6 +8,14 @@ import Products from "./pages/Products/Products";
 import "./app.scss"
 import AdminSideBar from "./components/AdminSideBar/AdminSideBar";
 import WarehouseTabs from "./components/WarehouseTabs/WarehouseTabs";
+import UserSideBar from "./components/UserSideBar/UserSideBar";
+import UserInfo from "./components/UserInfo/UserInfo";
+import ImportVoucherTabs from "./components/ImportVoucherTabs/ImportVoucherTabs";
+import EmployeeTabs from "./components/EmployeeTabs/EmployeeTabs";
+import ChartTabs from "./components/ChartTabs/ChartTabs";
+import Clothes from "./components/Clothes/Clothes";
+import Import from "./components/Import/Import";
+import Employee from "./components/Employee/Employee";
 
 const Layout = () => {
   return (
@@ -19,11 +27,19 @@ const Layout = () => {
   );
 };
 const AdminLayout = () => {
-  const [open,setOpen] = useState(false)
   return (
     <div className="appAdmin">
       <Outlet />
       <AdminSideBar />
+    </div>
+  );
+};
+
+const UserLayout = () => {
+  return (
+    <div className="appUser">
+      <Outlet />
+      <UserSideBar />
     </div>
   );
 };
@@ -54,6 +70,64 @@ const router = createBrowserRouter([
       {
         path: '/admin',
         element: <WarehouseTabs />
+      },
+      {
+        path: '/admin/addClothes',
+        element: <Clothes />
+      },
+      {
+        path: '/admin/detailClothes/:id',
+        element: <Clothes />
+      },
+      {
+        path: '/admin/modifyClothes/:id',
+        element: <Clothes />
+      },
+      {
+        path: '/admin/importManagement',
+        element: <ImportVoucherTabs />
+      },
+      {
+        path: '/admin/importManagement/add',
+        element: <Import />
+      },
+      {
+        path: '/admin/importManagement/detailImport/:id',
+        element: <Import />
+      },
+      {
+        path: '/admin/importManagement/modifyImport/:id',
+        element: <Import />
+      },
+      {
+        path: '/admin/empManagement',
+        element: <EmployeeTabs />
+      },
+      {
+        path: '/admin/empManagement/add',
+        element: <Employee />
+      },
+      {
+        path: '/admin/empManagement/detailManagement/:id',
+        element: <Employee />
+      },
+      {
+        path: '/admin/empManagement/modifyManagement/:id',
+        element: <Employee />
+      },
+      {
+        path: '/admin/reports',
+        element: <ChartTabs />
+      }
+    ]
+  },
+  {
+    path: '/user/setting',
+    element: <UserLayout />,
+    children: [
+      {
+        path: '/user/setting',
+        element: <UserInfo />
       }
     ]
   }

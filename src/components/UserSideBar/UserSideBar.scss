@@ -1,0 +1,54 @@
+.userSideBar {
+    width: 20vw;
+    height: 100vh;
+    border-left: 1px solid #999;
+
+    .close {
+        cursor: pointer;
+        margin: 10px 20px 5px 10px;
+    }
+
+    .top {
+        display: flex;
+        margin: 10px 20px 5px 10px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #999;
+
+        img {
+            width: 30;
+            height: 30;
+            cursor: pointer;
+        }
+
+        .user {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+
+            .userInfo {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        .logout {
+            cursor: pointer;
+        }
+
+    }
+
+    .bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        margin: 10px 20px 5px 10px;
+
+        .item {
+            display: flex;
+            align-items: center;
+        }
+
+    }
+
+}

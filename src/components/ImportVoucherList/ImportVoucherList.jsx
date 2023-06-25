@@ -10,8 +10,9 @@ import Paper from '@mui/material/Paper';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
-import './Warehouse.scss'
 import { Link } from 'react-router-dom';
+import './ImportVoucher.scss'
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -63,9 +64,9 @@ const rows = [
     createData('Cupcake', 305, 3.7, 67, 4.3),
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
-const Warehouse = () => {
+const ImportVoucherList = () => {
     return (
-        <div className='wareHouse'>
+        <div className='ivList'>
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>
@@ -107,11 +108,11 @@ const Warehouse = () => {
             <div className="btns">
                 <div className="add">
                     <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/addClothes'><span>Thêm mới</span></Link>
+                    <Link className='link' to='/admin/importManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
         </div>
     )
 }
 
-export default Warehouse
+export default ImportVoucherList
