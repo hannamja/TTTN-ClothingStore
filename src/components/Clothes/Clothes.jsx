@@ -8,6 +8,13 @@ const Clothes = () => {
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>
+                    <img
+                        className="catImg"
+                        src="https://images.pexels.com/photos/6347533/pexels-photo-6347533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt=""
+                    />
+                </Grid>
+                <Grid xs={12} sm={12}>
                     <h1>Thông tin quần áo</h1>
                 </Grid>
 
