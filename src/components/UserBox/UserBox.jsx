@@ -4,7 +4,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { Link } from 'react-router-dom';
 import './UserBox.scss'
 const UserBox = () => {
@@ -26,7 +26,7 @@ const UserBox = () => {
                 open={openUserBox}
                 anchorEl={anchorEl}
                 onClose={handleClose}
-                
+
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',
@@ -42,6 +42,10 @@ const UserBox = () => {
                         <Link className='link' to='/admin'>Quản lí</Link>
                     </div>
                     <div className='bottom'>
+                        <div className="item">
+                            <ReceiptLongOutlinedIcon />
+                            <Link className='link' to='/'>Quản lí đơn hàng</Link>
+                        </div>
                         <div className="item">
                             <SettingsOutlinedIcon />
                             <Link className='link' to='/user/setting'>Cài đặt</Link>

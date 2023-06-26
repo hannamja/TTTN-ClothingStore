@@ -7,6 +7,13 @@ const UserInfo = () => {
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px' }}>
                 <Grid xs={12} sm={12}>
+                    <img
+                        className="catImg"
+                        src="https://images.pexels.com/photos/1725011/pexels-photo-1725011.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt=""
+                    />
+                </Grid>
+                <Grid xs={12} sm={12}>
                     <h1>Thông tin chung</h1>
                 </Grid>
                 <Grid item xs={12} sm={6}>

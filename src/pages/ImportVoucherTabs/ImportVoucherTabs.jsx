@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import ImportVoucherList from '../ImportVoucherList/ImportVoucherList';
+import ImportVoucherList from '../../components/ImportVoucherList/ImportVoucherList';
 import './ImportVoucherTabs.scss'
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

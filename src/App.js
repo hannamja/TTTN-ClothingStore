@@ -7,15 +7,18 @@ import Product from "./pages/Product/Product";
 import Products from "./pages/Products/Products";
 import "./app.scss"
 import AdminSideBar from "./components/AdminSideBar/AdminSideBar";
-import WarehouseTabs from "./components/WarehouseTabs/WarehouseTabs";
+import WarehouseTabs from "./pages/WarehouseTabs/WarehouseTabs";
 import UserSideBar from "./components/UserSideBar/UserSideBar";
 import UserInfo from "./components/UserInfo/UserInfo";
-import ImportVoucherTabs from "./components/ImportVoucherTabs/ImportVoucherTabs";
-import EmployeeTabs from "./components/EmployeeTabs/EmployeeTabs";
-import ChartTabs from "./components/ChartTabs/ChartTabs";
-import Clothes from "./components/Clothes/Clothes";
-import Import from "./components/Import/Import";
-import Employee from "./components/Employee/Employee";
+import ImportVoucherTabs from "./pages/ImportVoucherTabs/ImportVoucherTabs";
+import EmployeeTabs from "./pages/EmployeeTabs/EmployeeTabs";
+import ChartTabs from "./pages/ChartTabs/ChartTabs";
+import Clothes from "./pages/Clothes/Clothes";
+import Import from "./pages/Import/Import";
+import Employee from "./pages/Employee/Employee";
+import SignUp from "./pages/Signup/SignUp";
+import SignInSide from "./pages/Signin/SignInSide";
+import Forgot from "./pages/Forgot/Forgot";
 
 const Layout = () => {
   return (
@@ -60,6 +63,18 @@ const router = createBrowserRouter([
       {
         path: "/product/:id",
         element: <Product />,
+      },
+      {
+        path: "/signin",
+        element: <SignInSide />,
+      },
+      {
+        path: "/signup",
+        element: <SignUp />,
+      },
+      {
+        path: "/forgot",
+        element: <Forgot />,
       },
     ],
   },
