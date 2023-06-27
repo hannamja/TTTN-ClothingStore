@@ -19,6 +19,8 @@ import Employee from "./pages/Employee/Employee";
 import SignUp from "./pages/Signup/SignUp";
 import SignInSide from "./pages/Signin/SignInSide";
 import Forgot from "./pages/Forgot/Forgot";
+import OrderDetails from "./pages/OrderDetails/OrderDetails";
+import Purchase from "./pages/Purchase/Purchase";
 
 const Layout = () => {
   return (
@@ -143,6 +145,20 @@ const router = createBrowserRouter([
       {
         path: '/user/setting',
         element: <UserInfo />
+      }
+    ]
+  },
+  {
+    path: '/user/purchasee',
+    element: <UserLayout />,
+    children: [
+      {
+        path: '/user/purchasee',
+        element: <Purchase />
+      },
+      {
+        path: '/user/purchasee/order',
+        element: <OrderDetails />
       }
     ]
   }

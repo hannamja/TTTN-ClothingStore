@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import List from "../../components/List/List";
 import useFetch from "../../hooks/useFetch";
 import "./Products.scss";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 
 const Products = () => {
   const catId = parseInt(useParams().id);
@@ -42,6 +43,19 @@ const Products = () => {
               <label htmlFor={item.id}>{item.attributes.title}</label>
             </div>
           ))}
+        </div>
+        <div className="filterItem">
+          <h2>Filter by size</h2>
+          <div className="inputItem">
+            <FormGroup>
+              <FormControlLabel control={<Checkbox defaultChecked />} label="S" />
+              <FormControlLabel control={<Checkbox />} label="M" />
+              <FormControlLabel control={<Checkbox />} label="L" />
+              <FormControlLabel control={<Checkbox />} label="XS" />
+              <FormControlLabel control={<Checkbox />} label="XL" />
+            </FormGroup>
+
+          </div>
         </div>
         <div className="filterItem">
           <h2>Filter by price</h2>
@@ -86,7 +100,7 @@ const Products = () => {
           src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600"
           alt=""
         />
-        <List catId={catId} maxPrice={maxPrice} sort={sort} subCats={selectedSubCats}/>
+        <List catId={catId} maxPrice={maxPrice} sort={sort} subCats={selectedSubCats} />
       </div>
     </div>
   );

@@ -2,6 +2,8 @@
     width: 20vw;
     height: 100vh;
     border-left: 1px solid #999;
+    top: 0;
+    position: sticky;
 
     .close {
         cursor: pointer;

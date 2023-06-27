@@ -44,7 +44,7 @@ const UserBox = () => {
                     <div className='bottom'>
                         <div className="item">
                             <ReceiptLongOutlinedIcon />
-                            <Link className='link' to='/'>Quản lí đơn hàng</Link>
+                            <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>
                         </div>
                         <div className="item">
                             <SettingsOutlinedIcon />

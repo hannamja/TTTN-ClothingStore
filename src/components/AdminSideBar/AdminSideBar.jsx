@@ -20,7 +20,7 @@ const AdminSideBar = ({ isOpen }) => {
     return (
         <>
             <Fab color="inherit" aria-label="add" sx={open ? {
-                position: 'absolute',
+                position: 'fixed',
                 bottom: 16,
                 right: 16,
             } : { display: 'none' }} onClick={handleClose}>

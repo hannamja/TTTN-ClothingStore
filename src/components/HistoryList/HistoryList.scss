@@ -1,0 +1,25 @@
+.historyList {
+    width: 100%;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 7px -5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    .top {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        border-bottom: 1px solid black;
+        padding: 10px 0px;
+    }
+    .center {
+
+    }
+    .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0px;
+    }
+}
