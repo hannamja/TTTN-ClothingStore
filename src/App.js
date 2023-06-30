@@ -21,6 +21,11 @@ import SignInSide from "./pages/Signin/SignInSide";
 import Forgot from "./pages/Forgot/Forgot";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
 import Purchase from "./pages/Purchase/Purchase";
+import Export from "./pages/Export/Export";
+import ExportVoucherTabs from "./pages/ExportVoucherTabs/ExportVoucherTabs";
+import UserTabs from "./pages/UserTabs/UserTabs";
+import User from "./pages/User/User";
+import OrderBillTabs from "./pages/OrderBillTabs/OrderBillTabs";
 
 const Layout = () => {
   return (
@@ -89,6 +94,10 @@ const router = createBrowserRouter([
         element: <WarehouseTabs />
       },
       {
+        path: '/admin/orderBill',
+        element: <OrderBillTabs />
+      },
+      {
         path: '/admin/addClothes',
         element: <Clothes />
       },
@@ -115,6 +124,38 @@ const router = createBrowserRouter([
       {
         path: '/admin/importManagement/modifyImport/:id',
         element: <Import />
+      },
+      {
+        path: '/admin/exportManagement',
+        element: <ExportVoucherTabs />
+      },
+      {
+        path: '/admin/exportManagement/add',
+        element: <Export />
+      },
+      {
+        path: '/admin/exportManagement/detailExport/:id',
+        element: <Export />
+      },
+      {
+        path: '/admin/exportManagement/modifyExport/:id',
+        element: <Export />
+      },
+      {
+        path: '/admin/userManagement',
+        element: <UserTabs />
+      },
+      {
+        path: '/admin/userManagement/add',
+        element: <User />
+      },
+      {
+        path: '/admin/userManagement/detailExport/:id',
+        element: <User />
+      },
+      {
+        path: '/admin/userManagement/modifyExport/:id',
+        element: <User />
       },
       {
         path: '/admin/empManagement',
@@ -149,15 +190,15 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/user/purchasee',
+    path: '/user/purchase',
     element: <UserLayout />,
     children: [
       {
-        path: '/user/purchasee',
+        path: '/user/purchase',
         element: <Purchase />
       },
       {
-        path: '/user/purchasee/order',
+        path: '/user/purchase/order',
         element: <OrderDetails />
       }
     ]

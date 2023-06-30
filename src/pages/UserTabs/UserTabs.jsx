@@ -4,8 +4,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import './WarehouseTabs.scss'
-import Warehouse from '../../components/Warehouse/Warehouse';
+import './UserTabs.scss'
+import UserList from '../../components/UserList/UserList';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -39,7 +39,7 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-const WarehouseTabs = () => {
+const UserTabs = () => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -56,7 +56,7 @@ const WarehouseTabs = () => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Warehouse />
+                    <UserList />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     Item Two
@@ -69,4 +69,4 @@ const WarehouseTabs = () => {
     )
 }
 
-export default WarehouseTabs
+export default UserTabs

@@ -4,12 +4,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import './WarehouseTabs.scss'
-import Warehouse from '../../components/Warehouse/Warehouse';
-
+import './ExportVoucherTabs.scss'
+import ExportVoucherList from '../../components/ExportVoucherList/ExportVoucherList';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
     return (
         <div
             role="tabpanel"
@@ -39,24 +37,27 @@ function a11yProps(index) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-const WarehouseTabs = () => {
+const ExportVoucherTabs = () => {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     return (
-        <div className='wareHouseTabs'>
+        <div className='evTabs'>
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Warehouse" {...a11yProps(0)} />
-                        <Tab label="Brands" {...a11yProps(1)} />
-                        <Tab label="Categories" {...a11yProps(2)} />
+                        <Tab label="Item Two" {...a11yProps(1)} />
+                        <Tab label="Item Three" {...a11yProps(2)} />
+                        <Tab label="Item Four" {...a11yProps(3)} />
+                        <Tab label="Item Five" {...a11yProps(4)} />
+                        <Tab label="Item Six" {...a11yProps(5)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Warehouse />
+                    <ExportVoucherList />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     Item Two
@@ -69,4 +70,4 @@ const WarehouseTabs = () => {
     )
 }
 
-export default WarehouseTabs
+export default ExportVoucherTabs

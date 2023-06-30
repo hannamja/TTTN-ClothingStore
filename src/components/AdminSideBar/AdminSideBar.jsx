@@ -9,6 +9,9 @@ import WarehouseOutlinedIcon from '@mui/icons-material/WarehouseOutlined';
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import StackedLineChartOutlinedIcon from '@mui/icons-material/StackedLineChartOutlined';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import './AdminSideBar.scss'
 import { ArrowLeftOutlined, HomeOutlined } from '@mui/icons-material';
 
@@ -56,8 +59,23 @@ const AdminSideBar = ({ isOpen }) => {
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
+                        <ReceiptOutlinedIcon />
+                        <Link className='link' to='/admin'>Quản lí đơn khách</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
                         <FileCopyOutlinedIcon />
                         <Link className='link' to='/admin/importManagement'>Đơn nhập</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
+                        <FileUploadIcon />
+                        <Link className='link' to='/admin/importManagement'>Đơn xuất</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
+                        <SentimentSatisfiedAltOutlinedIcon />
+                        <Link className='link' to='/admin'>Quản lí khách</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
