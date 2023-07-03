@@ -26,6 +26,8 @@ import ExportVoucherTabs from "./pages/ExportVoucherTabs/ExportVoucherTabs";
 import UserTabs from "./pages/UserTabs/UserTabs";
 import User from "./pages/User/User";
 import OrderBillTabs from "./pages/OrderBillTabs/OrderBillTabs";
+import OrderVoucherTabs from "./pages/OrderVoucherTabs/OrderVoucherTabs";
+import OrderVoucher from "./pages/OrderVoucher/OrderVoucher";
 
 const Layout = () => {
   return (
@@ -125,6 +127,24 @@ const router = createBrowserRouter([
         path: '/admin/importManagement/modifyImport/:id',
         element: <Import />
       },
+
+      {
+        path: '/admin/orderManagement',
+        element: <OrderVoucherTabs />
+      },
+      {
+        path: '/admin/orderManagement/add',
+        element: <OrderVoucher />
+      },
+      {
+        path: '/admin/orderManagement/detailOrder/:id',
+        element: <OrderVoucher />
+      },
+      {
+        path: '/admin/orderManagement/modifyOrder/:id',
+        element: <OrderVoucher />
+      },
+
       {
         path: '/admin/exportManagement',
         element: <ExportVoucherTabs />

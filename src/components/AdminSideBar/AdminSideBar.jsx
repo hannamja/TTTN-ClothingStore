@@ -60,7 +60,7 @@ const AdminSideBar = ({ isOpen }) => {
                     </div>
                     <div className="item">
                         <ReceiptOutlinedIcon />
-                        <Link className='link' to='/admin'>Quản lí đơn khách</Link>
+                        <Link className='link' to='/admin/orderBill'>Quản lí đơn khách</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
@@ -70,12 +70,12 @@ const AdminSideBar = ({ isOpen }) => {
                     </div>
                     <div className="item">
                         <FileUploadIcon />
-                        <Link className='link' to='/admin/importManagement'>Đơn xuất</Link>
+                        <Link className='link' to='/admin/exportManagement'>Đơn xuất</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
                         <SentimentSatisfiedAltOutlinedIcon />
-                        <Link className='link' to='/admin'>Quản lí khách</Link>
+                        <Link className='link' to='/admin/userManagement'>Quản lí khách</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
