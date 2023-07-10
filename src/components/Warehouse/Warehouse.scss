@@ -16,8 +16,13 @@
             border-radius: 5px;
             color: lime;
         }
-    }
-    .del {
-        color: 'lime';
+        .del {
+            color: 'lime';
+        }
+        .detail {
+            color: cyan;
+            display: flex;
+            align-items: center;
+        }
     }
 }

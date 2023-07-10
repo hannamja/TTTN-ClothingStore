@@ -7,11 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { Link } from 'react-router-dom';
 import './UserList.scss'
+import { InfoOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -65,18 +65,17 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 const UserList = () => {
-  return (
-    <div className='userList'>
+    return (
+        <div className='userList'>
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Img</StyledTableCell>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align='center'>Ảnh</StyledTableCell>
+                            <StyledTableCell>Họ tên</StyledTableCell>
+                            <StyledTableCell align="right">SĐT</StyledTableCell>
+                            <StyledTableCell align="right">Email</StyledTableCell>
+                            <StyledTableCell align="center">Thao tác</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -88,16 +87,17 @@ const UserList = () => {
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
                                 <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                <StyledTableCell align="right">{row.protein}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
-                                        <div className='del'>
+                                        <Link className='del'>
                                             <ClearOutlinedIcon />
-                                        </div>
-                                        <div className='modify'>
+                                        </Link>
+                                        <Link to='/admin/userManagement/modifyUser/1' className='modify'>
                                             <BorderColorOutlinedIcon />
-                                        </div>
+                                        </Link>
+                                        <Link to='/admin/userManagement/detailUser/1' className='detail'>
+                                            <InfoOutlined />
+                                        </Link>
                                     </div>
                                 </StyledTableCell>
                             </StyledTableRow>
@@ -105,13 +105,7 @@ const UserList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="btns">
-                <div className="add">
-                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/userManagement/add'><span>Thêm mới</span></Link>
-                </div>
-            </div>
         </div>
-  )
+    )
 }
 export default UserList

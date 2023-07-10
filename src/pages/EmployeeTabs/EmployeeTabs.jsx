@@ -49,22 +49,11 @@ const EmployeeTabs = () => {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Warehouse" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                        <Tab label="Item Three" {...a11yProps(2)} />
-                        <Tab label="Item Four" {...a11yProps(3)} />
-                        <Tab label="Item Five" {...a11yProps(4)} />
-                        <Tab label="Item Six" {...a11yProps(5)} />
+                        <Tab label="Employees" {...a11yProps(0)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
                     <EmployeeList />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    Item Two
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Item Three
                 </TabPanel>
             </Box>
         </div>

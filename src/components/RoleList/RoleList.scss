@@ -1,0 +1,22 @@
+.roleList {
+    width: 100%;
+    height: 100%;
+    .btns {
+        margin: 10px 10px 5px 0px;
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        .MuiModal-root {
+            background-color: aqua;
+            opacity: 0;
+            color: aqua;
+        }
+    }
+    .MuiModal-root {
+        background-color: aqua;
+        opacity: 0;
+        color: aqua;
+    }
+}

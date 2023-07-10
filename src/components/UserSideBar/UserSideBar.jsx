@@ -31,7 +31,7 @@ const UserSideBar = () => {
 
                 <div className='top'>
                     <div className='user'>
-                        <img src='../img/admin.png' alt='Admin'></img>
+                        <img src='/img/admin.png' alt='Admin'></img>
                         <div className="userInfo">
                             <span className='name'>Nguyễn Văn A</span>
                             <span className='role'>Admin</span>

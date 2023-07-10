@@ -9,9 +9,10 @@ import WarehouseOutlinedIcon from '@mui/icons-material/WarehouseOutlined';
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import StackedLineChartOutlinedIcon from '@mui/icons-material/StackedLineChartOutlined';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import './AdminSideBar.scss'
 import { ArrowLeftOutlined, HomeOutlined } from '@mui/icons-material';
 
@@ -59,6 +60,11 @@ const AdminSideBar = ({ isOpen }) => {
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
+                        <SupportAgentOutlinedIcon />
+                        <Link className='link' to='/admin/providerManagement'>Quản lí nhà cung cấp</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
                         <ReceiptOutlinedIcon />
                         <Link className='link' to='/admin/orderBill'>Quản lí đơn khách</Link>
                         <ArrowRightOutlinedIcon />
@@ -69,8 +75,8 @@ const AdminSideBar = ({ isOpen }) => {
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
-                        <FileUploadIcon />
-                        <Link className='link' to='/admin/exportManagement'>Đơn xuất</Link>
+                        <DescriptionOutlinedIcon />
+                        <Link className='link' to='/admin/orderManagement'>Đơn đặt</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">

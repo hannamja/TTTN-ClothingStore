@@ -80,25 +80,20 @@ const OrderBillList = () => {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Img</StyledTableCell>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell>Mã đơn</StyledTableCell>
+                            <StyledTableCell>Mã số khách hàng</StyledTableCell>
+                            <StyledTableCell align="right">Ngày đặt</StyledTableCell>
+                            <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
                             <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
+                                <StyledTableCell align="center">01</StyledTableCell>
                                 <StyledTableCell component="th" scope="row">
                                     <Link className='link' to='/'>{row.name}</Link>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                <StyledTableCell align="right">{row.protein}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
                                         <div className='info' onClick={() => handleOpen(row.name)}>

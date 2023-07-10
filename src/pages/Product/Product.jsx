@@ -8,6 +8,7 @@ import useFetch from "../../hooks/useFetch";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
+import RatingSection from "../../components/RatingSection/RatingSection";
 
 const Product = () => {
   const id = useParams().id;
@@ -24,32 +25,37 @@ const Product = () => {
       ) : (
         <>
           <div className="left">
-            <div className="images">
-              <img
-                src={
-                  process.env.REACT_APP_UPLOAD_URL +
-                  data?.attributes?.img?.data?.attributes?.url
-                }
-                alt=""
-                onClick={(e) => setSelectedImg("img")}
-              />
-              <img
-                src={
-                  process.env.REACT_APP_UPLOAD_URL +
-                  data?.attributes?.img2?.data?.attributes?.url
-                }
-                alt=""
-                onClick={(e) => setSelectedImg("img2")}
-              />
+            <div className="top">
+              <div className="images">
+                <img
+                  src={
+                    process.env.REACT_APP_UPLOAD_URL +
+                    data?.attributes?.img?.data?.attributes?.url
+                  }
+                  alt=""
+                  onClick={(e) => setSelectedImg("img")}
+                />
+                <img
+                  src={
+                    process.env.REACT_APP_UPLOAD_URL +
+                    data?.attributes?.img2?.data?.attributes?.url
+                  }
+                  alt=""
+                  onClick={(e) => setSelectedImg("img2")}
+                />
+              </div>
+              <div className="mainImg">
+                <img
+                  src={
+                    process.env.REACT_APP_UPLOAD_URL +
+                    data?.attributes[selectedImg]?.data?.attributes?.url
+                  }
+                  alt=""
+                />
+              </div>
             </div>
-            <div className="mainImg">
-              <img
-                src={
-                  process.env.REACT_APP_UPLOAD_URL +
-                  data?.attributes[selectedImg]?.data?.attributes?.url
-                }
-                alt=""
-              />
+            <div className="bottom">
+              <RatingSection />
             </div>
           </div>
           <div className="right">

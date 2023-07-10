@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import './Warehouse.scss'
 import { Link } from 'react-router-dom';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -70,12 +71,10 @@ const Warehouse = () => {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Img</StyledTableCell>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align='center'>Ảnh</StyledTableCell>
+                            <StyledTableCell>Tên mặt hàng</StyledTableCell>
+                            <StyledTableCell align='right'>Tồn kho</StyledTableCell>
+                            <StyledTableCell align='center'>Thao tác</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -86,17 +85,17 @@ const Warehouse = () => {
                                     <Link className='link' to='/'>{row.name}</Link>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                <StyledTableCell align="right">{row.protein}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
-                                        <div className='del'>
+                                        <Link className='del'>
                                             <ClearOutlinedIcon />
-                                        </div>
-                                        <div className='modify'>
+                                        </Link>
+                                        <Link to='/admin/modifyClothes/1' className='modify'>
                                             <BorderColorOutlinedIcon />
-                                        </div>
+                                        </Link>
+                                        <Link to='/admin/detailClothes/1' className='detail'>
+                                            <InfoOutlinedIcon />
+                                        </Link>
                                     </div>
                                 </StyledTableCell>
                             </StyledTableRow>

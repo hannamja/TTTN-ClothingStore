@@ -28,6 +28,15 @@ import User from "./pages/User/User";
 import OrderBillTabs from "./pages/OrderBillTabs/OrderBillTabs";
 import OrderVoucherTabs from "./pages/OrderVoucherTabs/OrderVoucherTabs";
 import OrderVoucher from "./pages/OrderVoucher/OrderVoucher";
+import Checkout from "./components/Checkout/Checkout";
+import Provider from "./pages/Provider/Provider";
+import ProviderTabs from "./pages/ProviderTabs/ProviderTabs";
+import RoleTabs from "./pages/RoleTabs/RoleTabs";
+import Role from "./pages/Role/Role";
+import PriceManagementTabs from "./pages/PriceManagementTabs/PriceManagementTabs";
+import PriceManagement from "./pages/PriceManagement/PriceManagement";
+import KMTabs from "./pages/KMTabs/KMTabs";
+import KM from "./pages/KM/KM";
 
 const Layout = () => {
   return (
@@ -85,19 +94,22 @@ const router = createBrowserRouter([
         path: "/forgot",
         element: <Forgot />,
       },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+      },
     ],
   },
+
+  //admin usecase
   {
     path: '/admin',
     element: <AdminLayout />,
     children: [
+      // quản lí kho
       {
         path: '/admin',
         element: <WarehouseTabs />
-      },
-      {
-        path: '/admin/orderBill',
-        element: <OrderBillTabs />
       },
       {
         path: '/admin/addClothes',
@@ -111,6 +123,12 @@ const router = createBrowserRouter([
         path: '/admin/modifyClothes/:id',
         element: <Clothes />
       },
+      //quản lí đơn khách
+      {
+        path: '/admin/orderBill',
+        element: <OrderBillTabs />
+      },
+      // quản lí nhập
       {
         path: '/admin/importManagement',
         element: <ImportVoucherTabs />
@@ -127,7 +145,7 @@ const router = createBrowserRouter([
         path: '/admin/importManagement/modifyImport/:id',
         element: <Import />
       },
-
+      // quản lí đặt
       {
         path: '/admin/orderManagement',
         element: <OrderVoucherTabs />
@@ -144,7 +162,7 @@ const router = createBrowserRouter([
         path: '/admin/orderManagement/modifyOrder/:id',
         element: <OrderVoucher />
       },
-
+      // quản lí xuất
       {
         path: '/admin/exportManagement',
         element: <ExportVoucherTabs />
@@ -161,6 +179,8 @@ const router = createBrowserRouter([
         path: '/admin/exportManagement/modifyExport/:id',
         element: <Export />
       },
+
+      // quản lí khách
       {
         path: '/admin/userManagement',
         element: <UserTabs />
@@ -170,13 +190,14 @@ const router = createBrowserRouter([
         element: <User />
       },
       {
-        path: '/admin/userManagement/detailExport/:id',
+        path: '/admin/userManagement/detailUser/:id',
         element: <User />
       },
       {
-        path: '/admin/userManagement/modifyExport/:id',
+        path: '/admin/userManagement/modifyUser/:id',
         element: <User />
       },
+      //quản lí nhân viên
       {
         path: '/admin/empManagement',
         element: <EmployeeTabs />
@@ -186,19 +207,89 @@ const router = createBrowserRouter([
         element: <Employee />
       },
       {
-        path: '/admin/empManagement/detailManagement/:id',
+        path: '/admin/empManagement/detailEmp/:id',
         element: <Employee />
       },
       {
-        path: '/admin/empManagement/modifyManagement/:id',
+        path: '/admin/empManagement/modifyEmp/:id',
         element: <Employee />
       },
+      // thống kê
       {
         path: '/admin/reports',
         element: <ChartTabs />
-      }
+      },
+      // quản lí nhà cung cấp
+      {
+        path: '/admin/providerManagement',
+        element: <ProviderTabs />
+      },
+      {
+        path: '/admin/providerManagement/add',
+        element: <Provider />
+      },
+      {
+        path: '/admin/providerManagement/modifyProvider/:id',
+        element: <Provider />
+      },
+      {
+        path: '/admin/detailProvider/:id',
+        element: <Provider />
+      },
+      // quản lí role
+      {
+        path: '/admin/roleManagement',
+        element: <RoleTabs />
+      },
+      {
+        path: '/admin/roleManagement/add',
+        element: <Role />
+      },
+      {
+        path: '/admin/roleManagement/modifyRole/:id',
+        element: <Role />
+      },
+      {
+        path: '/admin/detailRole/:id',
+        element: <Role />
+      },
+      // quản lí giá
+      {
+        path: '/admin/priceManagement',
+        element: <PriceManagementTabs />
+      },
+      {
+        path: '/admin/priceManagement/add',
+        element: <PriceManagement />
+      },
+      {
+        path: '/admin/priceManagement/modifyPrice/:id',
+        element: <PriceManagement />
+      },
+      {
+        path: '/admin/priceManagement/detailPrice/:id',
+        element: <PriceManagement />
+      },
+      // quản lí km
+      {
+        path: '/admin/kmManagement',
+        element: <KMTabs />
+      },
+      {
+        path: '/admin/kmManagement/add',
+        element: <KM />
+      },
+      {
+        path: '/admin/kmManagement/modifyKM/:id',
+        element: <KM />
+      },
+      {
+        path: '/admin/kmManagement/detailKM/:id',
+        element: <KM />
+      },
     ]
   },
+  // chỉnh sửa thông tin user
   {
     path: '/user/setting',
     element: <UserLayout />,
@@ -209,6 +300,7 @@ const router = createBrowserRouter([
       }
     ]
   },
+  // quản lí đơn
   {
     path: '/user/purchase',
     element: <UserLayout />,

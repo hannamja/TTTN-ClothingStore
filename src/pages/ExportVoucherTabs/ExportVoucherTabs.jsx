@@ -48,19 +48,11 @@ const ExportVoucherTabs = () => {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Export" {...a11yProps(0)} />
-                        <Tab label="Item Two" {...a11yProps(1)} />
-                        <Tab label="Item Three" {...a11yProps(2)} />
+                        <Tab label="Export Voucher" {...a11yProps(0)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
                     <ExportVoucherList />
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    Item Two
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Item Three
                 </TabPanel>
             </Box>
         </div>

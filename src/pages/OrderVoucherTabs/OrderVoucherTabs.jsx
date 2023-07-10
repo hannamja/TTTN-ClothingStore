@@ -5,8 +5,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './OrderVoucherTabs.scss'
-import ExportVoucherList from '../../components/ExportVoucherList/ExportVoucherList';
-import OrderBillList from '../../components/OrderBillList/OrderBillList';
+import OrderVoucherList from '../../components/OrderVoucherList/OrderVoucherList';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -49,19 +48,11 @@ const OrderVoucherTabs = () => {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Export" {...a11yProps(0)} />
-                    <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} />
+                    <Tab label="Order Voucher" {...a11yProps(0)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <OrderBillList />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
+                <OrderVoucherList />
             </TabPanel>
         </Box>
     </div>

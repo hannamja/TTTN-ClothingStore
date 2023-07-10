@@ -1,0 +1,19 @@
+.rtComment {
+    width: 100%;
+    padding: 5px;
+    border-bottom: 1px solid #999;
+    .top{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        .name {
+            font-weight: bold;
+        }
+        .verification {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+    }
+}

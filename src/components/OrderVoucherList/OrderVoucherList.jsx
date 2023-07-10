@@ -7,11 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import HistoryList from '../HistoryList/HistoryList';
-import Modal from '@mui/material/Modal';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { Link } from 'react-router-dom';
 import './OrderVoucherList.scss'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { Box, Typography } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -27,10 +28,16 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
             display: 'flex',
             alignItems: 'center',
             gap: 10,
-            '.info': {
+            '.modify': {
                 display: 'flex',
                 alignItems: 'center',
                 color: 'lime',
+                cursor: 'pointer'
+            },
+            '.del': {
+                display: 'flex',
+                alignItems: 'center',
+                color: 'red',
                 cursor: 'pointer'
             }
         }
@@ -71,59 +78,48 @@ const style = {
     p: 4,
 };
 const OrderVoucherList = () => {
-    const [open, setOpen] = React.useState('');
-    const handleOpen = (e) => setOpen(e);
-    const handleClose = (e) => setOpen(e);
     return (
         <div className='orderVoucherList'>
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Img</StyledTableCell>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align="center">Mã phiếu đặt</StyledTableCell>
+                            <StyledTableCell align="right">Nhân viên lập</StyledTableCell>
+                            <StyledTableCell align="right">Ngày lập</StyledTableCell>
+                            <StyledTableCell align="center">Thao tác</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
                             <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
-                                </StyledTableCell>
+                                <StyledTableCell align="center">01</StyledTableCell>
                                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
                                 <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                <StyledTableCell align="right">{row.protein}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
-                                        <div className='info' onClick={() => handleOpen(row.name)}>
+                                        <Link className='del'>
+                                            <ClearOutlinedIcon />
+                                        </Link>
+                                        <Link to='/admin/orderManagement/detailOrder/1' className='modify'>
+                                            <BorderColorOutlinedIcon />
+                                        </Link>
+                                        <Link to='/admin/orderManagement/detailOrder/1' className='detail'>
                                             <InfoOutlinedIcon />
-                                        </div>
-                                        <Modal
-                                            open={open == row.name}
-                                            onClose={() => handleClose('')}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                        >
-                                            <Box sx={style}>
-                                                <Typography id="modal-modal-title" variant="h6" component="div">
-                                                    <HistoryList />
-                                                </Typography>
-                                            </Box>
-                                        </Modal>
+                                        </Link>
                                     </div>
                                 </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
-
             </TableContainer>
+            <div className="btns">
+                <div className="add">
+                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                    <Link className='link' to='/admin/orderManagement/add'><span>Thêm mới</span></Link>
+                </div>
+            </div>
         </div>
     )
 }
