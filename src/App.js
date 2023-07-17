@@ -37,6 +37,7 @@ import PriceManagementTabs from "./pages/PriceManagementTabs/PriceManagementTabs
 import PriceManagement from "./pages/PriceManagement/PriceManagement";
 import KMTabs from "./pages/KMTabs/KMTabs";
 import KM from "./pages/KM/KM";
+import SearchResult from "./pages/SearchResult/SearchResult";
 
 const Layout = () => {
   return (
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/products/:id",
         element: <Products />,
+      },
+      {
+        path: "/products/search",
+        element: <SearchResult />,
       },
       {
         path: "/product/:id",
@@ -250,7 +255,7 @@ const router = createBrowserRouter([
         element: <Role />
       },
       {
-        path: '/admin/detailRole/:id',
+        path: '/admin/roleManagement/detailRole/:id',
         element: <Role />
       },
       // quản lí giá

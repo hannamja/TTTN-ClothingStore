@@ -1,6 +1,8 @@
 .adminSideBar {
     width: 20vw;
-    height: auto;
+    height: 100vh;
+    position: sticky;
+    top: 0;
     border-left: 1px solid #999;
     .close {
         cursor: pointer;

@@ -8,15 +8,21 @@
         display: flex;
         justify-content: center;
         cursor: pointer;
-        .MuiModal-root {
-            background-color: aqua;
-            opacity: 0;
-            color: aqua;
+        .add {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid lime;
+            border-radius: 5px;
+            color: lime;
         }
-    }
-    .MuiModal-root {
-        background-color: aqua;
-        opacity: 0;
-        color: aqua;
+        .del {
+            color: 'lime';
+        }
+        .detail {
+            color: cyan;
+            display: flex;
+            align-items: center;
+        }
     }
 }

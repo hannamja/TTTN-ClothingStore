@@ -29,4 +29,16 @@
         display: flex;
         align-items: center;
     }
+
+    .access {
+        color: gold;
+        display: flex;
+        align-items: center;
+
+        .center {
+            .option {
+                background-color: aquamarine;
+            }
+        }
+    }
 }

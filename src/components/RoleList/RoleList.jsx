@@ -12,6 +12,7 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import { Link } from 'react-router-dom';
 import './RoleList.scss'
+import { InfoOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -71,33 +72,27 @@ const RoleList = () => {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell>Img</StyledTableCell>
-                            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-                            <StyledTableCell align="right">Calories</StyledTableCell>
-                            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-                            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+                            <StyledTableCell align='center'>Mã Role</StyledTableCell>
+                            <StyledTableCell>Tên Role</StyledTableCell>
+                            <StyledTableCell align="center">Thao tác</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.map((row) => (
                             <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                                <StyledTableCell align="right">{row.protein}</StyledTableCell>
+                                <StyledTableCell align="center">01</StyledTableCell>
+                                <StyledTableCell>{row.calories}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
-                                        <div className='del'>
+                                        <Link className='del'>
                                             <ClearOutlinedIcon />
-                                        </div>
-                                        <div className='modify'>
+                                        </Link>
+                                        <Link to='/admin/roleManagement/modifyRole/1' className='modify'>
                                             <BorderColorOutlinedIcon />
-                                        </div>
+                                        </Link>
+                                        <Link to='/admin/roleManagement/detailRole/1' className='detail'>
+                                            <InfoOutlined />
+                                        </Link>
                                     </div>
                                 </StyledTableCell>
                             </StyledTableRow>
@@ -108,7 +103,7 @@ const RoleList = () => {
             <div className="btns">
                 <div className="add">
                     <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/userManagement/add'><span>Thêm mới</span></Link>
+                    <Link className='link' to='/admin/roleManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
         </div>

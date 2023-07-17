@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Button, Input } from '@mui/material';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Button } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import './OrderVoucher.scss'
+
+const options = ['Option 1', 'Option 2'];
 const OrderVoucher = () => {
+    const [value, setValue] = React.useState(options[0]);
+    const [inputValue, setInputValue] = React.useState('');
+
+    const [rows, setRows] = useState([])
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -15,51 +30,96 @@ const OrderVoucher = () => {
                     />
                 </Grid>
                 <Grid xs={12} sm={12}>
-                    <h1>Thông tin phiếu nhập</h1>
+                    <h1>Thông tin phiếu đặt</h1>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
+                    <h5>Nhân viên lập</h5>
                     <TextField
-                        required
                         id="firstName"
                         name="firstName"
-                        label="First name"
+                        label="Nguyễn Văn A"
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
+                        disabled
                     />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
+                    <h5>Mã số nhân viên</h5>
                     <TextField
-                        required
                         id="lastName"
                         name="lastName"
-                        label="Last name"
+                        label="EMP01"
                         fullWidth
                         autoComplete="family-name"
                         variant="standard"
+                        disabled
                     />
                 </Grid>
                 <Grid item xs={12}>
+                    <h5>Mã số phiếu</h5>
                     <TextField
-                        required
                         id="address1"
                         name="address1"
-                        label="Address line 1"
+                        label='PD01'
                         fullWidth
                         autoComplete="shipping address-line1"
                         variant="standard"
+                        disabled
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        id="address2"
-                        name="address2"
-                        label="Address line 2"
-                        fullWidth
-                        autoComplete="shipping address-line2"
-                        variant="standard"
+                    <h5>Danh sách sản phẩm được nhập</h5>
+                    <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
+                                <TableRow>
+                                    <TableCell>Mã sản phẩm</TableCell>
+                                    <TableCell align="right">Tên sản phẩm</TableCell>
+                                    <TableCell align="right">Số lượng</TableCell>
+                                    <TableCell align="right">Đơn giá</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rows.map((row) => (
+                                    <TableRow
+                                        key={row.name}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {row.id}
+                                        </TableCell>
+                                        <TableCell align="right">{row.ten}</TableCell>
+                                        <TableCell align="right">{row.sl}</TableCell>
+                                        <TableCell align="right">{row.gia}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={12}>
+                    <Autocomplete
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+                        }}
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                            setInputValue(newInputValue);
+                        }}
+                        id="controllable-states-demo"
+                        options={options}
+                        sx={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button variant="outlined" onClick={() => setRows([...rows, { id: '01', ten: 'Name', sl: 10, gia: 10000 }])}>
+                        Thêm sản phẩm
+                    </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
@@ -69,37 +129,6 @@ const OrderVoucher = () => {
                         label="City"
                         fullWidth
                         autoComplete="shipping address-level2"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        id="state"
-                        name="state"
-                        label="State/Province/Region"
-                        fullWidth
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="zip"
-                        name="zip"
-                        label="Zip / Postal code"
-                        fullWidth
-                        autoComplete="shipping postal-code"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="country"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        autoComplete="shipping country"
                         variant="standard"
                     />
                 </Grid>

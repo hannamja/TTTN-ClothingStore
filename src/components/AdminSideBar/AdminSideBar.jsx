@@ -13,6 +13,9 @@ import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
+import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
+import MoneyOutlinedIcon from '@mui/icons-material/MoneyOutlined';
+import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
 import './AdminSideBar.scss'
 import { ArrowLeftOutlined, HomeOutlined } from '@mui/icons-material';
 
@@ -60,6 +63,16 @@ const AdminSideBar = ({ isOpen }) => {
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
+                        <MoneyOutlinedIcon />
+                        <Link className='link' to='/admin/priceManagement'>Quản lí giá mặt hàng</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
+                        <DiscountOutlinedIcon />
+                        <Link className='link' to='/admin/kmManagement'>Quản lí khuyến mãi</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
                         <SupportAgentOutlinedIcon />
                         <Link className='link' to='/admin/providerManagement'>Quản lí nhà cung cấp</Link>
                         <ArrowRightOutlinedIcon />
@@ -87,6 +100,11 @@ const AdminSideBar = ({ isOpen }) => {
                     <div className="item">
                         <BadgeOutlinedIcon />
                         <Link className='link' to='/admin/empManagement'>Quản lí nhân viên</Link>
+                        <ArrowRightOutlinedIcon />
+                    </div>
+                    <div className="item">
+                        <LockPersonOutlinedIcon />
+                        <Link className='link' to='/admin/roleManagement'>Quản lí quyền</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">

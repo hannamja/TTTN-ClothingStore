@@ -59,6 +59,18 @@ const Import = () => {
                     />
                 </Grid>
                 <Grid item xs={12}>
+                    <h5>Mã số phiếu</h5>
+                    <TextField
+                        id="address1"
+                        name="address1"
+                        label='PN01'
+                        fullWidth
+                        autoComplete="shipping address-line1"
+                        variant="standard"
+                        disabled
+                    />
+                </Grid>
+                <Grid item xs={12}>
                     <h5>Phiếu đặt</h5>
                     <TextField
                         id="address1"
@@ -74,7 +86,7 @@ const Import = () => {
                     <h5>Danh sách sản phẩm được nhập</h5>
                     <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead sx={{position: 'sticky', top: 0, backgroundColor: 'yellow'}}>
+                            <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
                                 <TableRow>
                                     <TableCell>Mã sản phẩm</TableCell>
                                     <TableCell align="right">Tên sản phẩm</TableCell>

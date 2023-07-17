@@ -1,5 +1,5 @@
-import React from 'react'
-import { createTheme, styled } from '@mui/material/styles';
+import React, { useState } from 'react'
+import { styled, alpha } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -7,12 +7,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase'
+import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './OrderVoucherList.scss'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { Box, Typography } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -66,20 +69,78 @@ const rows = [
     createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
+const Search = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
+    marginBottom: 10,
+}));
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer'
+}));
+const BackspaceIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer'
+}));
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '80%',
+        [theme.breakpoints.up('sm')]: {
+            width: '30ch',
+            '&:focus': {
+                width: '40ch',
+                borderBottom: '1px solid black'
+            },
+        },
+    },
+}));
 const OrderVoucherList = () => {
+    const [input, setInput] = useState('')
+    const handldeChange = (e) => {
+        setInput(e)
+    }
     return (
         <div className='orderVoucherList'>
+            <Search>
+                <SearchIconWrapper>
+                    <SearchIcon onClick={() => setInput('search')} />
+                </SearchIconWrapper>
+
+                <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                    onChange={(e) => { handldeChange(e.value) }}
+                    value={input}
+                />
+                <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                    <BackspaceOutlinedIcon />
+                </BackspaceIconWrapper>
+            </Search>
             <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                     <TableHead>

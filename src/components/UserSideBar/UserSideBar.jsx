@@ -50,7 +50,7 @@ const UserSideBar = () => {
                     </div>
                     <div className="item">
                         <InfoOutlinedIcon />
-                        <Link className='link' to='/admin'>Thông tin chung</Link>
+                        <Link className='link' to='/user/setting'>Thông tin chung</Link>
                         <ArrowRightOutlinedIcon />
                     </div>
 
