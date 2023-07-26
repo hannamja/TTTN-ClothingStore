@@ -15,12 +15,12 @@ const PriceManagement = () => {
                     />
                 </Grid>
                 <Grid xs={12} sm={12}>
-                    <h1>Thông tin nhân viên</h1>
+                    <h1>Thông tin giá sản phẩm</h1>
                 </Grid>
 
 
                 <Grid item xs={12} sm={1}>
-                    <h5>Ảnh nhân viên</h5>
+                    <h5>Ảnh sản phẩm</h5>
                 </Grid>
                 <Grid item xs={12} sm={11}>
                     <Input type='file' />

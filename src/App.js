@@ -67,6 +67,7 @@ const UserLayout = () => {
 };
 
 const router = createBrowserRouter([
+  // user usecase
   {
     path: "/",
     element: <Layout />,
@@ -238,7 +239,7 @@ const router = createBrowserRouter([
         element: <Provider />
       },
       {
-        path: '/admin/detailProvider/:id',
+        path: '/admin/providerManagement/detailProvider/:id',
         element: <Provider />
       },
       // quản lí role

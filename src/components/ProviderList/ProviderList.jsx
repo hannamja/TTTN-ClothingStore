@@ -16,6 +16,7 @@ import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './ProviderList.scss'
+import useFetch from '../../hooks/useFetch';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -60,14 +61,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -124,60 +117,66 @@ const ProviderList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const { data, loading, error } = useFetch(`/nhacungcap`);
     return (
         <div className='pvdList'>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon onClick={() => setInput('search')} />
-                </SearchIconWrapper>
+            {
+                loading ? ('loading...') :
+                    (<>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon onClick={() => setInput('search')} />
+                            </SearchIconWrapper>
 
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
-                    value={input}
-                />
-                <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                    <BackspaceOutlinedIcon />
-                </BackspaceIconWrapper>
-            </Search>
-            <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='center'>Mã nhà cung cấp</StyledTableCell>
-                            <StyledTableCell align="right">Tên nhà cung cấp</StyledTableCell>
-                            <StyledTableCell align="right">Địa chỉ</StyledTableCell>
-                            <StyledTableCell align="center">Thao tác</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center">01</StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <div className='btns'>
-                                        <div className='del'>
-                                            <ClearOutlinedIcon />
-                                        </div>
-                                        <div className='modify'>
-                                            <BorderColorOutlinedIcon />
-                                        </div>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <div className="btns">
-                <div className="add">
-                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/providerManagement/add'><span>Thêm mới</span></Link>
-                </div>
-            </div>
+                            <StyledInputBase
+                                placeholder="Nhập id nhà cung cấp…"
+                                inputProps={{ 'aria-label': 'search' }}
+                                onChange={(e) => { handldeChange(e.value) }}
+                                value={input}
+                            />
+                            <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                                <BackspaceOutlinedIcon />
+                            </BackspaceIconWrapper>
+                        </Search>
+                        <TableContainer component={Paper}>
+                            <Table aria-label="customized table">
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell align='center'>Mã nhà cung cấp</StyledTableCell>
+                                        <StyledTableCell align="right">Tên nhà cung cấp</StyledTableCell>
+                                        <StyledTableCell align="right">Địa chỉ</StyledTableCell>
+                                        <StyledTableCell align="center">Thao tác</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.map((row) => (
+                                        <StyledTableRow key={row.name}>
+                                            <StyledTableCell align="center">{row.mancc}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.tenncc}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.diachi}</StyledTableCell>
+                                            <StyledTableCell align="right">
+                                                <div className='btns'>
+                                                    <div className='del'>
+                                                        <ClearOutlinedIcon />
+                                                    </div>
+                                                    <div className='modify'>
+                                                        <BorderColorOutlinedIcon />
+                                                    </div>
+                                                </div>
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <div className="btns">
+                            <div className="add">
+                                <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                                <Link className='link' to='/admin/providerManagement/add'><span>Thêm mới</span></Link>
+                            </div>
+                        </div>
+                    </>
+                    )}
         </div>
     )
 }

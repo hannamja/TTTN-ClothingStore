@@ -15,6 +15,8 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './UserList.scss'
 import { InfoOutlined } from '@mui/icons-material';
+import useFetch from '../../hooks/useFetch';
+import useSearch from '../../hooks/useSearch';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -59,14 +61,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -120,64 +114,79 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 const UserList = () => {
     const [input, setInput] = useState('')
+    const [url, setUrl] = useState(`/khachhang`)
     const handldeChange = (e) => {
         setInput(e)
     }
+    const handleSearch = () => {
+        if (input !== '') {
+            setUrl(`/khachhang/search/${input}`)
+        }
+        else {
+            setUrl(`/khachhang`)
+        }
+    }
+    const { data, loading, error } = useFetch(url);
     return (
         <div className='userList'>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon onClick={() => setInput('search')} />
-                </SearchIconWrapper>
+            {
+                loading ? ('loading') :
+                    (<>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon onClick={handleSearch} />
+                            </SearchIconWrapper>
 
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
-                    value={input}
-                />
-                <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                    <BackspaceOutlinedIcon />
-                </BackspaceIconWrapper>
-            </Search>
-            <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='center'>Ảnh</StyledTableCell>
-                            <StyledTableCell>Họ tên</StyledTableCell>
-                            <StyledTableCell align="right">SĐT</StyledTableCell>
-                            <StyledTableCell align="right">Email</StyledTableCell>
-                            <StyledTableCell align="center">Thao tác</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <div className='btns'>
-                                        <Link className='del'>
-                                            <ClearOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/userManagement/modifyUser/1' className='modify'>
-                                            <BorderColorOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/userManagement/detailUser/1' className='detail'>
-                                            <InfoOutlined />
-                                        </Link>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                            <StyledInputBase
+                                placeholder="Nhập id khách…"
+                                inputProps={{ 'aria-label': 'search' }}
+                                onChange={(e) => { handldeChange(e.target.value) }}
+                                value={input}
+                            />
+                            <BackspaceIconWrapper onClick={() => { handldeChange(''); setUrl('/khachhang')}}>
+                                <BackspaceOutlinedIcon />
+                            </BackspaceIconWrapper>
+                        </Search>
+                        <TableContainer component={Paper}>
+                            <Table aria-label="customized table">
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell align='center'>CMND</StyledTableCell>
+                                        <StyledTableCell>Họ tên</StyledTableCell>
+                                        <StyledTableCell align="right">SĐT</StyledTableCell>
+                                        <StyledTableCell align="right">Email</StyledTableCell>
+                                        <StyledTableCell align="center">Thao tác</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {error ? ('Something wrong!') : data.map((row) => (
+                                        <StyledTableRow key={row.name}>
+                                            <StyledTableCell align="center">{row.cmnd}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row">
+                                                <Link className='link' to='/'>{row.hotenkh}</Link>
+                                            </StyledTableCell>
+                                            <StyledTableCell align="right">{row.sdt}</StyledTableCell>
+                                            <StyledTableCell align="right">{row.email}</StyledTableCell>
+                                            <StyledTableCell align="right">
+                                                <div className='btns'>
+                                                    <Link className='del'>
+                                                        <ClearOutlinedIcon />
+                                                    </Link>
+                                                    <Link to='/admin/userManagement/modifyUser/1' className='modify'>
+                                                        <BorderColorOutlinedIcon />
+                                                    </Link>
+                                                    <Link to='/admin/userManagement/detailUser/1' className='detail'>
+                                                        <InfoOutlined />
+                                                    </Link>
+                                                </div>
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </>
+                    )}
         </div>
     )
 }

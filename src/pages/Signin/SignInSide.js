@@ -12,14 +12,16 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { login } from '../../redux/userReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-    <Link color="inherit" href="http://localhost:3000">
-                Hukistore
-            </Link>{' '}
+      <Link color="inherit" href="http://localhost:3000">
+        Hukistore
+      </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -27,19 +29,24 @@ function Copyright(props) {
 }
 
 // TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
+
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch()
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    dispatch(login({
+      email: data.get('email'),
+      password: data.get('password'),
+    }))
   };
-
+  const user = useSelector(state => state.user)
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

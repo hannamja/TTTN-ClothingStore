@@ -15,7 +15,7 @@ const Role = () => {
                     />
                 </Grid>
                 <Grid xs={12} sm={12}>
-                    <h1>Thông tin phiếu nhập</h1>
+                    <h1>Thông tin quyền</h1>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>

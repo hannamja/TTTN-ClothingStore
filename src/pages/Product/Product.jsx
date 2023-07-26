@@ -12,12 +12,11 @@ import RatingSection from "../../components/RatingSection/RatingSection";
 
 const Product = () => {
   const id = useParams().id;
-  const [selectedImg, setSelectedImg] = useState("img");
+  const [selectedImg, setSelectedImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   const dispatch = useDispatch();
-  const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
-
+  const { data, loading, error } = useFetch(`/mathang/${id}`);
   return (
     <div className="product">
       {loading ? (
@@ -29,29 +28,27 @@ const Product = () => {
               <div className="images">
                 <img
                   src={
-                    process.env.REACT_APP_UPLOAD_URL +
-                    data?.attributes?.img?.data?.attributes?.url
+                    data?.hinhanhDTOs[0].duongdan
                   }
                   alt=""
-                  onClick={(e) => setSelectedImg("img")}
+                  onClick={(e) => setSelectedImg(0)}
                 />
                 <img
                   src={
-                    process.env.REACT_APP_UPLOAD_URL +
-                    data?.attributes?.img2?.data?.attributes?.url
+                    data?.hinhanhDTOs[0].duongdan
                   }
                   alt=""
-                  onClick={(e) => setSelectedImg("img2")}
+                  onClick={(e) => setSelectedImg(0)}
                 />
               </div>
               <div className="mainImg">
                 <img
                   src={
-                    process.env.REACT_APP_UPLOAD_URL +
-                    data?.attributes[selectedImg]?.data?.attributes?.url
+                    data?.hinhanhDTOs[selectedImg].duongdan
                   }
                   alt=""
                 />
+
               </div>
             </div>
             <div className="bottom">
@@ -59,9 +56,9 @@ const Product = () => {
             </div>
           </div>
           <div className="right">
-            <h1>{data?.attributes?.title}</h1>
-            <span className="price">${data?.attributes?.price}</span>
-            <p>{data?.attributes?.desc}</p>
+            <h1>{data?.tenmh}</h1>
+            <span className="price">${data?.gia}</span>
+            <p>{data?.mota}</p>
             <div className="quantity">
               <button
                 onClick={() =>
@@ -78,11 +75,11 @@ const Product = () => {
               onClick={() =>
                 dispatch(
                   addToCart({
-                    id: data.id,
-                    title: data.attributes.title,
-                    desc: data.attributes.desc,
-                    price: data.attributes.price,
-                    img: data.attributes.img.data.attributes.url,
+                    id: data.mamh,
+                    title: data.tenmh,
+                    desc: data.mota,
+                    price: data.gia,
+                    img: data.hinhanhDTOs[0].duongdan,
                     quantity,
                   })
                 )

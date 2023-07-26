@@ -15,15 +15,7 @@ const KM = () => {
                     />
                 </Grid>
                 <Grid xs={12} sm={12}>
-                    <h1>Thông tin nhân viên</h1>
-                </Grid>
-
-
-                <Grid item xs={12} sm={1}>
-                    <h5>Ảnh nhân viên</h5>
-                </Grid>
-                <Grid item xs={12} sm={11}>
-                    <Input type='file' />
+                    <h1>Thông tin khuyến mãi</h1>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>

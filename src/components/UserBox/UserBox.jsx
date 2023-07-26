@@ -7,7 +7,10 @@ import Popover from '@mui/material/Popover';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import { Link } from 'react-router-dom';
 import './UserBox.scss'
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/userReducer.js'
 const UserBox = () => {
+    const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -16,8 +19,13 @@ const UserBox = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    const handleLogout = (event) => {
+        event.preventDefault()
+        dispatch(logout())
+    }
     const openUserBox = Boolean(anchorEl);
     const id = openUserBox ? 'simple-popover' : undefined;
+    const user = useSelector(state => state.user)
     return (
         <>
             <PersonOutlineOutlinedIcon aria-describedby={id} variant="contained" onClick={handleClick} />
@@ -37,24 +45,42 @@ const UserBox = () => {
                 }}
             >
                 <div className='userBox'>
-                    <div className='top'>
-                        <AdminPanelSettingsOutlinedIcon />
-                        <Link className='link' to='/admin'>Quản lí</Link>
-                    </div>
-                    <div className='bottom'>
-                        <div className="item">
-                            <ReceiptLongOutlinedIcon />
-                            <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>
-                        </div>
-                        <div className="item">
-                            <SettingsOutlinedIcon />
-                            <Link className='link' to='/user/setting'>Cài đặt</Link>
-                        </div>
-                        <div className="item">
-                            <ExitToAppOutlinedIcon />
-                            <Link className='link'>Logout</Link>
-                        </div>
-                    </div>
+                    {
+                        Object.keys(user).length == 0 ? (
+                            <>
+                                <div className='bottom'>
+                                    <div className="item">
+                                        <ExitToAppOutlinedIcon />
+                                        <Link className='link' to='/signin'>Login</Link>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {
+                                    user.info.role == 0 ? (
+                                        <div className='top'>
+                                            <AdminPanelSettingsOutlinedIcon />
+                                            <Link className='link' to='/admin'>Quản lí</Link>
+                                        </div>
+                                    ) : <></>
+                                }
+                                <div className='bottom'>
+                                    <div className="item">
+                                        <ReceiptLongOutlinedIcon />
+                                        <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>
+                                    </div>
+                                    <div className="item">
+                                        <SettingsOutlinedIcon />
+                                        <Link className='link' to='/user/setting'>Cài đặt</Link>
+                                    </div>
+                                    <div className="item">
+                                        <ExitToAppOutlinedIcon />
+                                        <Link className='link' onClick={handleLogout}>Logout</Link>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                 </div>
             </Popover >
         </>
