@@ -14,7 +14,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import './OrderVoucher.scss'
 
 const options = ['Option 1', 'Option 2'];
-const OrderVoucher = () => {
+const OrderVoucher = ({ type }) => {
     const [value, setValue] = React.useState(options[0]);
     const [inputValue, setInputValue] = React.useState('');
 
@@ -132,11 +132,15 @@ const OrderVoucher = () => {
                         variant="standard"
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained">
-                        Save
-                    </Button>
-                </Grid>
+                {
+                    type === 'detail' ? <></> :
+
+                        <Grid item xs={12}>
+                            <Button variant="contained">
+                                Save
+                            </Button>
+                        </Grid>
+                }
             </Grid>
         </React.Fragment>
     )

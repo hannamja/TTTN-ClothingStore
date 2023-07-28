@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Button, Input } from '@mui/material';
 import './Empolyee.scss'
-const Employee = () => {
+const Employee = ({ type }) => {
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -111,11 +111,15 @@ const Employee = () => {
                         variant="standard"
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained">
-                        Save
-                    </Button>
-                </Grid>
+                {
+                    type === 'detail' ? <></> :
+
+                        <Grid item xs={12}>
+                            <Button variant="contained">
+                                Save
+                            </Button>
+                        </Grid>
+                }
             </Grid>
         </React.Fragment>
     )

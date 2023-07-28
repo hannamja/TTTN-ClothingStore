@@ -38,6 +38,9 @@ import PriceManagement from "./pages/PriceManagement/PriceManagement";
 import KMTabs from "./pages/KMTabs/KMTabs";
 import KM from "./pages/KM/KM";
 import SearchResult from "./pages/SearchResult/SearchResult";
+import Brand from "./pages/Brand/Brand";
+import Type from "./pages/Type/Type";
+import Material from "./pages/Material/Material";
 
 const Layout = () => {
   return (
@@ -119,15 +122,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/addClothes',
-        element: <Clothes />
+        element: <Clothes type='add' />
       },
       {
         path: '/admin/detailClothes/:id',
-        element: <Clothes />
+        element: <Clothes type='detail' />
       },
       {
         path: '/admin/modifyClothes/:id',
-        element: <Clothes />
+        element: <Clothes type='mod' />
       },
       //quản lí đơn khách
       {
@@ -141,15 +144,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/importManagement/add',
-        element: <Import />
+        element: <Import type='add' />
       },
       {
         path: '/admin/importManagement/detailImport/:id',
-        element: <Import />
+        element: <Import type='detail' />
       },
       {
         path: '/admin/importManagement/modifyImport/:id',
-        element: <Import />
+        element: <Import type='mod' />
       },
       // quản lí đặt
       {
@@ -158,15 +161,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/orderManagement/add',
-        element: <OrderVoucher />
+        element: <OrderVoucher type='add' />
       },
       {
         path: '/admin/orderManagement/detailOrder/:id',
-        element: <OrderVoucher />
+        element: <OrderVoucher type='detail' />
       },
       {
         path: '/admin/orderManagement/modifyOrder/:id',
-        element: <OrderVoucher />
+        element: <OrderVoucher type='mod' />
       },
       // quản lí xuất
       {
@@ -175,15 +178,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/exportManagement/add',
-        element: <Export />
+        element: <Export type='add' />
       },
       {
         path: '/admin/exportManagement/detailExport/:id',
-        element: <Export />
+        element: <Export type='detail' />
       },
       {
         path: '/admin/exportManagement/modifyExport/:id',
-        element: <Export />
+        element: <Export type='mod' />
       },
 
       // quản lí khách
@@ -193,15 +196,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/userManagement/add',
-        element: <User />
+        element: <User type='add' />
       },
       {
         path: '/admin/userManagement/detailUser/:id',
-        element: <User />
+        element: <User type='detail' />
       },
       {
         path: '/admin/userManagement/modifyUser/:id',
-        element: <User />
+        element: <User type='mod' />
       },
       //quản lí nhân viên
       {
@@ -210,15 +213,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/empManagement/add',
-        element: <Employee />
+        element: <Employee type='add' />
       },
       {
         path: '/admin/empManagement/detailEmp/:id',
-        element: <Employee />
+        element: <Employee type='detail' />
       },
       {
         path: '/admin/empManagement/modifyEmp/:id',
-        element: <Employee />
+        element: <Employee type='mod' />
       },
       // thống kê
       {
@@ -232,15 +235,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/providerManagement/add',
-        element: <Provider />
+        element: <Provider type='add' />
       },
       {
         path: '/admin/providerManagement/modifyProvider/:id',
-        element: <Provider />
+        element: <Provider type='mod' />
       },
       {
         path: '/admin/providerManagement/detailProvider/:id',
-        element: <Provider />
+        element: <Provider type='detail' />
       },
       // quản lí role
       {
@@ -249,15 +252,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/roleManagement/add',
-        element: <Role />
+        element: <Role type='add' />
       },
       {
         path: '/admin/roleManagement/modifyRole/:id',
-        element: <Role />
+        element: <Role type='mod' />
       },
       {
         path: '/admin/roleManagement/detailRole/:id',
-        element: <Role />
+        element: <Role type='detail' />
       },
       // quản lí giá
       {
@@ -266,15 +269,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/priceManagement/add',
-        element: <PriceManagement />
+        element: <PriceManagement type='add' />
       },
       {
         path: '/admin/priceManagement/modifyPrice/:id',
-        element: <PriceManagement />
+        element: <PriceManagement type='mod' />
       },
       {
         path: '/admin/priceManagement/detailPrice/:id',
-        element: <PriceManagement />
+        element: <PriceManagement type='detail' />
       },
       // quản lí km
       {
@@ -283,15 +286,54 @@ const router = createBrowserRouter([
       },
       {
         path: '/admin/kmManagement/add',
-        element: <KM />
+        element: <KM type='add' />
       },
       {
         path: '/admin/kmManagement/modifyKM/:id',
-        element: <KM />
+        element: <KM type='mod' />
       },
       {
         path: '/admin/kmManagement/detailKM/:id',
-        element: <KM />
+        element: <KM type='detail' />
+      },
+      // quản lí brand
+      {
+        path: '/admin/brandManagement/add',
+        element: <Brand type='add' />
+      },
+      {
+        path: '/admin/brandManagement/modifyBrand/:id',
+        element: <Brand type='mod' />
+      },
+      {
+        path: '/admin/brandManagement/detailBrand/:id',
+        element: <Brand type='detail' />
+      },
+      // quản lí type
+      {
+        path: '/admin/typeManagement/add',
+        element: <Type type='add' />
+      },
+      {
+        path: '/admin/typeManagement/modifyType/:id',
+        element: <Type type='mod' />
+      },
+      {
+        path: '/admin/typeManagement/detailType/:id',
+        element: <Type type='detail' />
+      },
+      // quản lí chất liệu
+      {
+        path: '/admin/materialManagement/add',
+        element: <Material type='add' />
+      },
+      {
+        path: '/admin/materialManagement/modifyMaterial/:id',
+        element: <Material type='mod' />
+      },
+      {
+        path: '/admin/materialManagement/detailMaterial/:id',
+        element: <Material type='detail' />
       },
     ]
   },

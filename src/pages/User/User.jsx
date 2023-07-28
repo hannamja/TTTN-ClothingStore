@@ -3,9 +3,13 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Button, Input } from '@mui/material';
 import './User.scss'
-const User = () => {
-  return (
-    <React.Fragment>
+import useFetch from '../../hooks/useFetch';
+import { useParams } from 'react-router-dom';
+const User = ({ type }) => {
+    const { id } = useParams()
+    const { data, loading, error } = useFetch(`/khachhang/${id}`);
+    return (loading ? ('loading') :
+        <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>
                     <img
@@ -23,10 +27,11 @@ const User = () => {
                         required
                         id="firstName"
                         name="firstName"
-                        label="First name"
+                        label="Họ & tên khách"
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
+                        value={data.hotenkh}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -34,10 +39,12 @@ const User = () => {
                         required
                         id="lastName"
                         name="lastName"
-                        label="Last name"
+                        label="DoB"
                         fullWidth
                         autoComplete="family-name"
                         variant="standard"
+                        value={data.ngaysinh}
+                        type='date'
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -45,20 +52,11 @@ const User = () => {
                         required
                         id="address1"
                         name="address1"
-                        label="Address line 1"
+                        label="CMND"
                         fullWidth
                         autoComplete="shipping address-line1"
                         variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="address2"
-                        name="address2"
-                        label="Address line 2"
-                        fullWidth
-                        autoComplete="shipping address-line2"
-                        variant="standard"
+                        value={data.cmnd}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -66,51 +64,35 @@ const User = () => {
                         required
                         id="city"
                         name="city"
-                        label="City"
+                        label="Email"
                         fullWidth
                         autoComplete="shipping address-level2"
                         variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        id="state"
-                        name="state"
-                        label="State/Province/Region"
-                        fullWidth
-                        variant="standard"
+                        value={data.email}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required
-                        id="zip"
-                        name="zip"
-                        label="Zip / Postal code"
+                        id="city"
+                        name="city"
+                        label="Số điện thoại"
                         fullWidth
-                        autoComplete="shipping postal-code"
+                        autoComplete="shipping address-level2"
                         variant="standard"
+                        value={data.sdt}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="country"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        autoComplete="shipping country"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained">
-                        Save
-                    </Button>
-                </Grid>
+                {
+                    type === 'mod' ? <Grid item xs={12}>
+                        <Button variant="contained">
+                            Save
+                        </Button>
+                    </Grid> : <></>
+                }
             </Grid>
         </React.Fragment>
-  )
+    )
 }
 
 export default User

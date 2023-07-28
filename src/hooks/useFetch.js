@@ -7,15 +7,15 @@ const useFetch = (url) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const res = await fetch('http://localhost:8081/api' + url)
         const result = await res.json()
         setError(false)
+        setLoading(false);
         setData(result);
       } catch (err) {
         setError(true);
+        setLoading(true);
       }
-      setLoading(false);
     };
     fetchData();
   }, [url]);

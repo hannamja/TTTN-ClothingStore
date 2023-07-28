@@ -14,9 +14,10 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
-import './KMList.scss'
+import './TypeList.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -119,76 +120,71 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-const KMList = () => {
+const TypeList = () => {
     const [input, setInput] = useState('')
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/mathang`);
-    return (loading ? ('loading...') :
-        <>
-            <div className='kmList'>
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon onClick={() => setInput('search')} />
-                    </SearchIconWrapper>
+    const { data, loading, error } = useFetch(`/loaimh`);
+    return (loading ? ('loading...') : <>
+        <div className='typeList'>
+            <Search>
+                <SearchIconWrapper>
+                    <SearchIcon onClick={() => setInput('search')} />
+                </SearchIconWrapper>
 
-                    <StyledInputBase
-                        placeholder="Search…"
-                        inputProps={{ 'aria-label': 'search' }}
-                        onChange={(e) => { handldeChange(e.value) }}
-                        value={input}
-                    />
-                    <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                        <BackspaceOutlinedIcon />
-                    </BackspaceIconWrapper>
-                </Search>
+                <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                    onChange={(e) => { handldeChange(e.value) }}
+                    value={input}
+                />
+                <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                    <BackspaceOutlinedIcon />
+                </BackspaceIconWrapper>
+            </Search>
 
-                <TableContainer component={Paper}>
-                    <Table aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell align='center'>Mã khuyến mãi</StyledTableCell>
-                                <StyledTableCell>Tên khuyến mãi</StyledTableCell>
-                                <StyledTableCell align='right'>Lý do</StyledTableCell>
-                                <StyledTableCell align='center'>Thao tác</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                                <StyledTableRow key={row.name}>
-                                    <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                    <StyledTableCell component="th" scope="row">
-                                        <Link className='link' to='/'>{row.name}</Link>
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                    <StyledTableCell align="right">
-                                        <div className='btns'>
-                                            <Link className='del'>
-                                                <ClearOutlinedIcon />
-                                            </Link>
-                                            <Link to='/admin/kmManagement/modifyKM/1' className='modify'>
-                                                <BorderColorOutlinedIcon />
-                                            </Link>
-                                            <Link to='/admin/kmManagement/detailKM/1' className='detail'>
-                                                <InfoOutlinedIcon />
-                                            </Link>
-                                        </div>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <div className="btns">
-                    <div className="add">
-                        <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                        <Link className='link' to='/admin/kmManagement/add'><span>Thêm mới</span></Link>
-                    </div>
+            <TableContainer component={Paper}>
+                <Table aria-label="customized table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell align='center'>Mã loại</StyledTableCell>
+                            <StyledTableCell>Tên loại</StyledTableCell>
+                            <StyledTableCell align='center'>Thao tác</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data.map((row) => (
+                            <StyledTableRow key={row.name}>
+                                <StyledTableCell align="center">{row.maloaimh}</StyledTableCell>
+                                <StyledTableCell>{row.tenloadimh}</StyledTableCell>
+                                <StyledTableCell align="right">
+                                    <div className='btns'>
+                                        <Link className='del'>
+                                            <ClearOutlinedIcon />
+                                        </Link>
+                                        <Link to='/admin/typeManagement/modifyType/1' className='modify'>
+                                            <BorderColorOutlinedIcon />
+                                        </Link>
+                                        <Link to='/admin/typeManagement/detailType/1' className='detail'>
+                                            <InfoOutlinedIcon />
+                                        </Link>
+                                    </div>
+                                </StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <div className="btns">
+                <div className="add">
+                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                    <Link className='link' to='/admin/typeManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
-        </>
+        </div>
+    </>
     )
 }
 
-export default KMList
+export default TypeList

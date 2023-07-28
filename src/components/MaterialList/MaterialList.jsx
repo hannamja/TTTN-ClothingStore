@@ -7,16 +7,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
+import './MaterialList.scss'
 import { Link } from 'react-router-dom';
-import './UserList.scss'
-import { InfoOutlined } from '@mui/icons-material';
 import useFetch from '../../hooks/useFetch';
-import useSearch from '../../hooks/useSearch';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -61,6 +61,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
+
+const rows = [
+    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+    createData('Eclair', 262, 16.0, 24, 6.0),
+    createData('Cupcake', 305, 3.7, 67, 4.3),
+    createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -112,71 +120,57 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-const UserList = () => {
+const MaterialList = () => {
     const [input, setInput] = useState('')
-    const [url, setUrl] = useState(`/khachhang`)
     const handldeChange = (e) => {
         setInput(e)
     }
-    const handleSearch = () => {
-        if (input !== '') {
-            setUrl(`/khachhang/search/${input}`)
-        }
-        else {
-            setUrl(`/khachhang`)
-        }
-    }
-    const { data, loading, error } = useFetch(url);
+    const { data, loading, error } = useFetch(`/chatlieu`);
     return (
-        <div className='userList'>
-            {
-                loading ? ('loading') :
-                    (<>
+        loading ? ('loading...') :
+            (
+                <>
+                    <div className='materialList'>
                         <Search>
                             <SearchIconWrapper>
-                                <SearchIcon onClick={handleSearch} />
-                            </SearchIconWrapper>
+                                <SearchIcon onClick={() => setInput('search')} />
+                            </SearchIconWrapper >
 
                             <StyledInputBase
-                                placeholder="Tìm theo tên khách…"
+                                placeholder="Search…"
                                 inputProps={{ 'aria-label': 'search' }}
-                                onChange={(e) => { handldeChange(e.target.value) }}
+                                onChange={(e) => { handldeChange(e.value) }}
                                 value={input}
                             />
-                            <BackspaceIconWrapper onClick={() => { handldeChange(''); setUrl('/khachhang')}}>
+                            <BackspaceIconWrapper onClick={() => { setInput('') }}>
                                 <BackspaceOutlinedIcon />
                             </BackspaceIconWrapper>
-                        </Search>
+                        </Search >
+
                         <TableContainer component={Paper}>
                             <Table aria-label="customized table">
                                 <TableHead>
                                     <TableRow>
-                                        <StyledTableCell align='center'>CMND</StyledTableCell>
-                                        <StyledTableCell>Họ tên</StyledTableCell>
-                                        <StyledTableCell align="right">SĐT</StyledTableCell>
-                                        <StyledTableCell align="right">Email</StyledTableCell>
-                                        <StyledTableCell align="center">Thao tác</StyledTableCell>
+                                        <StyledTableCell align='center'>Mã chất liệu</StyledTableCell>
+                                        <StyledTableCell>Tên chất liệu</StyledTableCell>
+                                        <StyledTableCell align='center'>Thao tác</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {error ? ('Something wrong!') : data.map((row) => (
-                                        <StyledTableRow key={row.name}>
-                                            <StyledTableCell align="center">{row.cmnd}</StyledTableCell>
-                                            <StyledTableCell component="th" scope="row">
-                                                <Link className='link' to='/'>{row.hotenkh}</Link>
-                                            </StyledTableCell>
-                                            <StyledTableCell align="right">{row.sdt}</StyledTableCell>
-                                            <StyledTableCell align="right">{row.email}</StyledTableCell>
+                                    {data.map((row) => (
+                                        <StyledTableRow key={row.macl}>
+                                            <StyledTableCell align="center">{row.macl}</StyledTableCell>
+                                            <StyledTableCell>{row.tenvai}</StyledTableCell>
                                             <StyledTableCell align="right">
                                                 <div className='btns'>
                                                     <Link className='del'>
                                                         <ClearOutlinedIcon />
                                                     </Link>
-                                                    <Link to='/admin/userManagement/modifyUser/1' className='modify'>
+                                                    <Link to='/admin/materialManagement/modifyMaterial/1' className='modify'>
                                                         <BorderColorOutlinedIcon />
                                                     </Link>
-                                                    <Link to='/admin/userManagement/detailUser/1' className='detail'>
-                                                        <InfoOutlined />
+                                                    <Link to='/admin/materialManagement/detailMaterial/1' className='detail'>
+                                                        <InfoOutlinedIcon />
                                                     </Link>
                                                 </div>
                                             </StyledTableCell>
@@ -185,9 +179,16 @@ const UserList = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </>
-                    )}
-        </div>
+                        <div className="btns">
+                            <div className="add">
+                                <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                                <Link className='link' to='/admin/materialManagement/add'><span>Thêm mới</span></Link>
+                            </div>
+                        </div>
+                    </div >
+                </>
+            )
     )
 }
-export default UserList
+
+export default MaterialList

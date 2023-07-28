@@ -16,6 +16,7 @@ import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './PriceManagementList.scss'
 import { Link } from 'react-router-dom';
+import useFetch from '../../hooks/useFetch';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -123,69 +124,74 @@ const PriceManagementList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const { data, loading, error } = useFetch(`/mathang`);
     return (
         <div className='pm'>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon onClick={() => setInput('search')} />
-                </SearchIconWrapper>
+            {
+                loading ? ('loading...') :
+                    (<>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon onClick={() => setInput('search')} />
+                            </SearchIconWrapper>
 
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
-                    value={input}
-                />
-                <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                    <BackspaceOutlinedIcon />
-                </BackspaceIconWrapper>
-            </Search>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ 'aria-label': 'search' }}
+                                onChange={(e) => { handldeChange(e.value) }}
+                                value={input}
+                            />
+                            <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                                <BackspaceOutlinedIcon />
+                            </BackspaceIconWrapper>
+                        </Search>
 
-
-            <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='center'>Ảnh</StyledTableCell>
-                            <StyledTableCell>Tên mặt hàng</StyledTableCell>
-                            <StyledTableCell align='right'>Giá</StyledTableCell>
-                            <StyledTableCell align='right'>Ngày áp dụng</StyledTableCell>
-                            <StyledTableCell align='center'>Thao tác</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <div className='btns'>
-                                        <Link className='del'>
-                                            <ClearOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/priceManagement/modifyPrice/1' className='modify'>
-                                            <BorderColorOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/priceManagement/detailPrice/1' className='detail'>
-                                            <InfoOutlinedIcon />
-                                        </Link>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <div className="btns">
-                <div className="add">
-                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/priceManagement/add'><span>Thêm mới</span></Link>
-                </div>
-            </div>
+                        <TableContainer component={Paper} sx={{ height: '80vh', overflow: 'scroll' }}>
+                            <Table aria-label="customized table" sx={{ minWidth: 650 }}>
+                                <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'black' }}>
+                                    <TableRow>
+                                        <StyledTableCell align='center'>Ảnh</StyledTableCell>
+                                        <StyledTableCell>Tên mặt hàng</StyledTableCell>
+                                        <StyledTableCell align='right'>Giá</StyledTableCell>
+                                        <StyledTableCell align='center'>Thao tác</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        data.map((row) => (
+                                            <StyledTableRow key={row.manh}>
+                                                <StyledTableCell align="center"><img src={row.hinhanhDTOs[0].duongdan} alt='Goods' style={{ width: 60, height: 60 }}></img></StyledTableCell>
+                                                <StyledTableCell component="th" scope="row">
+                                                    <Link className='link' to='/'>{row.tenmh}</Link>
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">{row.gia}</StyledTableCell>
+                                                <StyledTableCell align="right">
+                                                    <div className='btns'>
+                                                        <Link className='del'>
+                                                            <ClearOutlinedIcon />
+                                                        </Link>
+                                                        <Link to='/admin/priceManagement/modifyPrice/1' className='modify'>
+                                                            <BorderColorOutlinedIcon />
+                                                        </Link>
+                                                        <Link to='/admin/priceManagement/detailPrice/1' className='detail'>
+                                                            <InfoOutlinedIcon />
+                                                        </Link>
+                                                    </div>
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <div className="btns">
+                            <div className="add">
+                                <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                                <Link className='link' to='/admin/priceManagement/add'><span>Thêm mới</span></Link>
+                            </div>
+                        </div>
+                    </>
+                    )}
         </div>
     )
 }

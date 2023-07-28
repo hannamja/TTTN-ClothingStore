@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './ProviderList.scss'
 import useFetch from '../../hooks/useFetch';
+import { InfoOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -156,12 +157,15 @@ const ProviderList = () => {
                                             <StyledTableCell align="right">{row.diachi}</StyledTableCell>
                                             <StyledTableCell align="right">
                                                 <div className='btns'>
-                                                    <div className='del'>
+                                                    <Link className='del'>
                                                         <ClearOutlinedIcon />
-                                                    </div>
-                                                    <div className='modify'>
+                                                    </Link>
+                                                    <Link to='/admin/priceManagement/modifyPrice/1' className='modify'>
                                                         <BorderColorOutlinedIcon />
-                                                    </div>
+                                                    </Link>
+                                                    <Link to='/admin/priceManagement/detailPrice/1' className='detail'>
+                                                        <InfoOutlined />
+                                                    </Link>
                                                 </div>
                                             </StyledTableCell>
                                         </StyledTableRow>

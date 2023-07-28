@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Button, Input } from '@mui/material';
 import './KM.scss'
-const KM = () => {
+const KM = ({ type }) => {
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -23,7 +23,7 @@ const KM = () => {
                         required
                         id="firstName"
                         name="firstName"
-                        label="First name"
+                        label="Mã khuyến mãi"
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
@@ -34,80 +34,58 @@ const KM = () => {
                         required
                         id="lastName"
                         name="lastName"
-                        label="Last name"
+                        label="Tên khuyến mãi"
                         fullWidth
                         autoComplete="family-name"
                         variant="standard"
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={12}>
                     <TextField
                         required
-                        id="address1"
-                        name="address1"
-                        label="Address line 1"
+                        id="firstName"
+                        name="firstName"
+                        label="Lý do"
                         fullWidth
-                        autoComplete="shipping address-line1"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="address2"
-                        name="address2"
-                        label="Address line 2"
-                        fullWidth
-                        autoComplete="shipping address-line2"
+                        autoComplete="given-name"
                         variant="standard"
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
+                    <h5>Ngày bắt đầu</h5>
                     <TextField
                         required
-                        id="city"
-                        name="city"
-                        label="City"
+                        id="lastName"
+                        name="lastName"
+                        label=""
                         fullWidth
-                        autoComplete="shipping address-level2"
+                        autoComplete="family-name"
                         variant="standard"
+                        type='date'
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        id="state"
-                        name="state"
-                        label="State/Province/Region"
-                        fullWidth
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
+                    <h5>Ngày kết thúc</h5>
                     <TextField
                         required
-                        id="zip"
-                        name="zip"
-                        label="Zip / Postal code"
+                        id="firstName"
+                        name="firstName"
+                        label=""
                         fullWidth
-                        autoComplete="shipping postal-code"
+                        autoComplete="given-name"
                         variant="standard"
+                        type='date'
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="country"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        autoComplete="shipping country"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="contained">
-                        Save
-                    </Button>
-                </Grid>
+                {
+                    type === 'detail' ? <></> :
+
+                        <Grid item xs={12}>
+                            <Button variant="contained">
+                                Save
+                            </Button>
+                        </Grid>
+                }
             </Grid>
         </React.Fragment>
     )
