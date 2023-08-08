@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './MaterialList.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -120,12 +121,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
-const MaterialList = () => {
+const MaterialList = ({ type }) => {
     const [input, setInput] = useState('')
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/chatlieu`);
+    const { data, loading, error } = useFetchAdmin(`/chatlieu`);
     return (
         loading ? ('loading...') :
             (
@@ -166,10 +167,10 @@ const MaterialList = () => {
                                                     <Link className='del'>
                                                         <ClearOutlinedIcon />
                                                     </Link>
-                                                    <Link to='/admin/materialManagement/modifyMaterial/1' className='modify'>
+                                                    <Link to={`/admin/materialManagement/modifyMaterial/${row.macl}`} className='modify'>
                                                         <BorderColorOutlinedIcon />
                                                     </Link>
-                                                    <Link to='/admin/materialManagement/detailMaterial/1' className='detail'>
+                                                    <Link to={`/admin/materialManagement/detailMaterial/${row.macl}`} className='detail'>
                                                         <InfoOutlinedIcon />
                                                     </Link>
                                                 </div>

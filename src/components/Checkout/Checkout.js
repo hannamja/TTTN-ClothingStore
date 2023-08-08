@@ -15,6 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, resetCart } from "../../redux/cartReducer";
 
 function Copyright() {
   return (
@@ -52,12 +54,81 @@ export default function Checkout() {
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
+    if (activeStep === steps.length - 1) {
+      handleCheckout()
+    }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
 
+  const products = useSelector((state) => state.cart.products);
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const handleCheckout = async () => {
+    const khachhang = {
+      "makh": user.info.khachhang.makh,
+      "hotenkh": user.info.khachhang.hotenkh,
+      "gioitinh": null,
+      "ngaysinh": null,
+      "sdt": null,
+      "email": user.info.khachhang.email,
+      "diachi": null,
+      "cmnd": null
+    }
+    const defaultNV = {
+      "manv": 1,
+      "tennv": null,
+      "gioitinh": null,
+      "ngaysinh": null,
+      "sdt": null,
+      "diachi": null,
+      "email": null,
+      "cmnd": null,
+      "trangthai": null
+    }
+    const defaultTT = {
+      "hoadonDTO": {
+        "khachhang": null,
+        "nhanvien": null,
+        "ngaytao": null,
+        "tongtien": null,
+        "chitietTrangThaiDTO": null,
+        "chitietHoadonDTO": null
+      },
+      "trangthai": {
+        "matthd": 3,
+      },
+      "ngaytao": new Date().toISOString().slice(0, 10)
+    }
+
+    const productsList = []
+    products.forEach(element => {
+      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.price }
+      productsList.push(ele)
+    });
+    const cart = {
+      "khachhang": khachhang,
+      "nhanvien": defaultNV,
+      "ngaytao": new Date().toISOString().slice(0, 10),
+      "tongtien": products.reduce((total, cur) => total + cur.price, 0),
+      "chitietTrangThaiDTO": defaultTT,
+      "chitietHoadonDTO": productsList
+    }
+    fetch('http://localhost:8081/api/hoadon', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      },
+      body: JSON.stringify(cart)
+    }).then(res => res.json()).then(data => {
+      dispatch(resetCart())
+    }
+    )
+  }
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />

@@ -16,7 +16,7 @@ import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './BrandList.scss'
 import { Link } from 'react-router-dom';
-import useFetch from '../../hooks/useFetch';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -125,7 +125,7 @@ const BrandList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/nhanhieu`);
+    const { data, loading, error } = useFetchAdmin(`/nhanhieu`);
     return (loading ? ('loading...') : <>
         <div className='brandList'>
             <Search>

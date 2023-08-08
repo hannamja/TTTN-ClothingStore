@@ -63,11 +63,6 @@ const AdminSideBar = ({ isOpen }) => {
                         <ArrowRightOutlinedIcon />
                     </div>
                     <div className="item">
-                        <MoneyOutlinedIcon />
-                        <Link className='link' to='/admin/priceManagement'>Quản lí giá mặt hàng</Link>
-                        <ArrowRightOutlinedIcon />
-                    </div>
-                    <div className="item">
                         <DiscountOutlinedIcon />
                         <Link className='link' to='/admin/kmManagement'>Quản lí khuyến mãi</Link>
                         <ArrowRightOutlinedIcon />

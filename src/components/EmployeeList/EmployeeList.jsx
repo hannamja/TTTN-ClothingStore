@@ -202,7 +202,7 @@ const EmployeeList = () => {
                                         <Link className='del'>
                                             <ClearOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/emprManagement/modifyEmp/1' className='modify'>
+                                        <Link to='/admin/empManagement/modifyEmp/1' className='modify'>
                                             <BorderColorOutlinedIcon />
                                         </Link>
                                         <Link to='/admin/empManagement/detailEmp/1' className='detail'>

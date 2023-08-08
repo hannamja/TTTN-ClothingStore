@@ -2,19 +2,18 @@ import { VerifiedOutlined } from '@mui/icons-material'
 import { Rating } from '@mui/material'
 import React from 'react'
 import './RatingComment.scss'
-const RatingComment = () => {
+const RatingComment = ({comment}) => {
     return (
         <div className='rtComment'>
             <div className="top">
-                <span className='name'>Nguyễn Văn A</span>
-                <div className="verification"><VerifiedOutlined style={{ color: 'lime' }}></VerifiedOutlined> Đã mua tại @Hukistore</div>
-            </div>
-            <div className="center">
-                <Rating value={5} readOnly></Rating>
+                <span className='name'>{comment.taikhoanDTO.email}</span>
+                <div className="verification">{comment.ngaybl}</div>
             </div>
             <div className="bottom">
                 <span className='comment'>
-                    Rất đẹp!
+                    {
+                        comment.noidung
+                    }
                 </span>
             </div>
         </div>

@@ -1,9 +1,101 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Autocomplete from '@mui/material/Autocomplete';
 import { Button, Input } from '@mui/material';
 import './KM.scss'
+import { useParams } from 'react-router-dom';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
+import useFetch from '../../hooks/useFetch';
+import { ClearOutlined } from '@mui/icons-material';
 const KM = ({ type }) => {
+    const { id } = useParams()
+    const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `/km` : `/km/` + id}`);
+    const user = useSelector(state => state.user)
+    const mh = useFetch('/mathang')
+
+    const [ten, setTen] = useState('')
+    const [value, setValue] = React.useState(null);
+    const [inputValue, setInputValue] = React.useState('');
+    const [ctkmRows, setCtkmRows] = useState([])
+    const [ld, setLd] = useState('')
+    const [bd, setBd] = useState(`${type === 'add' ? new Date().toISOString().slice(0, 10) : ' '}`)
+    const [kt, setKt] = useState(' ')
+    const [mucgiam, setMucgiam] = useState('')
+    const [mucgiamInput, setMucgiamInput] = useState('')
+
+    useEffect(() => {
+        if (data) {
+            if (type !== 'add') {
+                setBd(data.ctKhuyenmais.ngaybd)
+                setKt(data.ctKhuyenmais.ngaykt)
+                setLd(data.lydo)
+                setCtkmRows(data.ctKhuyenmais)
+            }
+        }
+    }, [loading])
+
+    const handleAdd = () => {
+        const km = {
+            "lydo": ld,
+            "nhanvien": { 'manv': user.info.nhanvien.manv },
+            "ctKhuyenmais": ctkmRows
+        }
+        console.log(km)
+        fetch('http://localhost:8081/api/km', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(km)
+        }).then(res => res.json()).then(data => console.log(data))
+    }
+
+    const handleMod = () => {
+        const km = {
+            "makm": data.makm,
+            "lydo": ld,
+            "nhanvien": { 'manv': user.info.nhanvien.manv },
+            "ctKhuyenmais": ctkmRows
+        }
+
+        fetch('http://localhost:8081/api/km', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(km)
+        }).then(res => res.json()).then(data => console.log(data))
+    }
+
+
+    const handleDelCtmh = (i) => {
+        const filtered = ctkmRows.filter(item => item.id.mamh !== i.id.mamh)
+        setCtkmRows(filtered)
+    }
+    const handleAddCtmh = (i) => {
+        console.log(i)
+        let filtered = ctkmRows.filter(item => item.id.mamh === i.id.mamh)
+
+        if (filtered.length > 0) {
+            setCtkmRows([...ctkmRows.filter(item => item.id.mamh !== i.id.mamh), i])
+        }
+        else {
+            setCtkmRows([...ctkmRows, i])
+        }
+    }
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -18,28 +110,6 @@ const KM = ({ type }) => {
                     <h1>Thông tin khuyến mãi</h1>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="firstName"
-                        name="firstName"
-                        label="Mã khuyến mãi"
-                        fullWidth
-                        autoComplete="given-name"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        name="lastName"
-                        label="Tên khuyến mãi"
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                    />
-                </Grid>
                 <Grid item xs={12} sm={12}>
                     <TextField
                         required
@@ -49,39 +119,127 @@ const KM = ({ type }) => {
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
+                        value={ld}
+                        onChange={(e) => setLd(e.target.value)}
                     />
                 </Grid>
+                <Grid item xs={12}>
+                    <h5>Chi tiết khuyến mãi</h5>
+                    <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
+                                <TableRow>
+                                    <TableCell>Mã sản phẩm</TableCell>
+                                    <TableCell align="right">Mức giảm</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {ctkmRows.map((row) => (
+                                    <TableRow
+                                        key={row.id.mamh}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {row.id.mamh}
+                                        </TableCell>
+                                        <TableCell align="right">{row.mucgiam}</TableCell>
+                                        <TableCell><ClearOutlined onClick={
+                                            () => handleDelCtmh(row)
+                                        } sx={{ color: 'red' }} /></TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+                <Grid item xs={12}>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+
+                        }}
+
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                            setInputValue(newInputValue);
+                        }}
+                        options={mh.data === null ? { lable: 'none' } : mh.data}
+                        getOptionLabel={option => mh.data === null ? option.lable : option.tenmh + ' ' + `(mamh: ${option.mamh})`}
+                        sx={{ width: 300 }}
+
+                        renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
+                    />
+                </Grid>
+
                 <Grid item xs={12} sm={6}>
-                    <h5>Ngày bắt đầu</h5>
                     <TextField
                         required
                         id="lastName"
                         name="lastName"
-                        label=""
+                        label="Ngày bắt đầu"
                         fullWidth
                         autoComplete="family-name"
                         variant="standard"
                         type='date'
+                        value={bd}
+                        onChange={(e) => setBd(e.target.value)}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <h5>Ngày kết thúc</h5>
                     <TextField
                         required
                         id="firstName"
                         name="firstName"
-                        label=""
+                        label="Ngày kết thúc"
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
                         type='date'
+                        value={kt}
+                        onChange={(e) => setKt(e.target.value)}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        value={mucgiam}
+                        onChange={(event, newValue) => {
+                            setMucgiam(newValue);
+
+                        }}
+
+                        inputValue={mucgiamInput}
+                        onInputChange={(event, newInputValue) => {
+                            setMucgiamInput(newInputValue);
+                        }}
+                        options={['10%', '20%', '30%', '40%', '50%', '70%', '80%']}
+                        sx={{ width: 300 }}
+
+                        renderInput={(params) => <TextField {...params} label="Mức giảm" />}
+                    />
+                </Grid>
+
+
+                <Grid item xs={12}>
+                    <Button variant="outlined" onClick={() => {
+                        handleAddCtmh({
+                            id: {
+                                "mamh": value.mamh
+                            }, ngaybd: new Date(bd), ngaykt: new Date(kt), mucgiam: mucgiam
+                        });
+                    }}>
+                        Thêm sản phẩm
+                    </Button>
                 </Grid>
                 {
                     type === 'detail' ? <></> :
 
                         <Grid item xs={12}>
-                            <Button variant="contained">
+                            <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
                                 Save
                             </Button>
                         </Grid>

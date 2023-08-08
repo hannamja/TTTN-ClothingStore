@@ -14,7 +14,7 @@ const NavBar = () => {
   const [open, setOpen] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)
   const products = useSelector((state) => state.cart.products);
-
+  const user = useSelector(state => state.user)
   return (
     <>
       <div className="navbar">
@@ -60,11 +60,22 @@ const NavBar = () => {
                 <UserBox />
               </div>
 
-              <FavoriteBorderOutlinedIcon />
-              <div className="cartIcon" onClick={() => setOpen(!open)}>
-                <ShoppingCartOutlinedIcon />
-                <span>{products.length}</span>
-              </div>
+              {
+                Object.keys(user).length === 0 ? <>
+                  <FavoriteBorderOutlinedIcon />
+                  <div className="cartIcon" onClick={() => setOpen(!open)}>
+                    <ShoppingCartOutlinedIcon />
+                    <span>{products.length}</span>
+                  </div>
+                </> : user.info.role[user.info.role.length - 1] === 2 ? <>
+                  <FavoriteBorderOutlinedIcon />
+                  <div className="cartIcon" onClick={() => setOpen(!open)}>
+                    <ShoppingCartOutlinedIcon />
+                    <span>{products.length}</span>
+                  </div>
+                </> :
+                  <></>
+              }
             </div>
           </div>
         </div>

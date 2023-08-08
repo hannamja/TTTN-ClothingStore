@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './TypeList.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -125,7 +126,7 @@ const TypeList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/loaimh`);
+    const { data, loading, error } = useFetchAdmin(`/loaimh`);
     return (loading ? ('loading...') : <>
         <div className='typeList'>
             <Search>

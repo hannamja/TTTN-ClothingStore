@@ -1,119 +1,91 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import { Button, Input } from '@mui/material';
 import './Role.scss'
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const Role = ({ type }) => {
+    const { id } = useParams()
+    const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `/role` : `/role/` + id}`);
+    const user = useSelector(state => state.user)
+    const handleAdd = () => {
+        const role = {
+            "tenquyen": ten
+        }
+
+        fetch('http://localhost:8081/api/role', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(role)
+        }).then(res => res.json()).then()
+    }
+
+    const handleMod = () => {
+        const role = {
+            "maquyen": data.maquyen,
+            "tenquyen": ten
+        }
+
+        fetch('http://localhost:8081/api/role', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(role)
+        }).then(res => res.json()).then()
+    }
+    const [ten, setTen] = useState('')
+    useEffect(() => {
+        if (data) setTen(data.tenquyen)
+    }, [loading])
     return (
-        <React.Fragment>
-            <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
-                <Grid xs={12} sm={12}>
-                    <img
-                        className="catImg"
-                        src="https://images.pexels.com/photos/7679456/pexels-photo-7679456.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt=""
-                    />
-                </Grid>
-                <Grid xs={12} sm={12}>
-                    <h1>Thông tin quyền</h1>
-                </Grid>
+        loading ? 'loading...' :
+            <React.Fragment>
+                <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
+                    <Grid xs={12} sm={12}>
+                        <img
+                            className="catImg"
+                            src="https://images.pexels.com/photos/7679456/pexels-photo-7679456.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            alt=""
+                        />
+                    </Grid>
+                    <Grid xs={12} sm={12}>
+                        <h1>Thông tin quyền</h1>
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="firstName"
-                        name="firstName"
-                        label="First name"
-                        fullWidth
-                        autoComplete="given-name"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        name="lastName"
-                        label="Last name"
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="address1"
-                        name="address1"
-                        label="Address line 1"
-                        fullWidth
-                        autoComplete="shipping address-line1"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="address2"
-                        name="address2"
-                        label="Address line 2"
-                        fullWidth
-                        autoComplete="shipping address-line2"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="city"
-                        name="city"
-                        label="City"
-                        fullWidth
-                        autoComplete="shipping address-level2"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        id="state"
-                        name="state"
-                        label="State/Province/Region"
-                        fullWidth
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="zip"
-                        name="zip"
-                        label="Zip / Postal code"
-                        fullWidth
-                        autoComplete="shipping postal-code"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="country"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        autoComplete="shipping country"
-                        variant="standard"
-                    />
-                </Grid>
-                {
-                    type === 'detail' ? <></> :
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="firstName"
+                            name="firstName"
+                            label="Tên quyền"
+                            fullWidth
+                            autoComplete="given-name"
+                            variant="standard"
+                            value={ten}
+                            onChange={(e) => setTen(e.target.value)}
+                        />
+                    </Grid>
 
-                        <Grid item xs={12}>
-                            <Button variant="contained">
-                                Save
-                            </Button>
-                        </Grid>
-                }
-            </Grid>
-        </React.Fragment>
+                    {
+                        type === 'detail' ? <></> :
+
+                            <Grid item xs={12}>
+                                <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
+                                    Save
+                                </Button>
+                            </Grid>
+                    }
+                </Grid>
+            </React.Fragment>
     )
 }
 

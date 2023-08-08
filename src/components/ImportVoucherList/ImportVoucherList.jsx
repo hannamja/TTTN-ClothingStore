@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './ImportVoucher.scss'
 import { InfoOutlined } from '@mui/icons-material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -125,65 +126,68 @@ const ImportVoucherList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+
+    const { data, loading, error } = useFetchAdmin(`/phieunhap`);
     return (
-        <div className='ivList'>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon onClick={() => setInput('search')} />
-                </SearchIconWrapper>
+        loading ? 'loading...' :
+            <div className='ivList'>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon onClick={() => setInput('search')} />
+                    </SearchIconWrapper>
 
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
-                    value={input}
-                />
-                <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                    <BackspaceOutlinedIcon />
-                </BackspaceIconWrapper>
-            </Search>
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                        onChange={(e) => { handldeChange(e.value) }}
+                        value={input}
+                    />
+                    <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                        <BackspaceOutlinedIcon />
+                    </BackspaceIconWrapper>
+                </Search>
 
-            <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align="center">Mã phiếu nhập</StyledTableCell>
-                            <StyledTableCell align="right">Nhân viên lập</StyledTableCell>
-                            <StyledTableCell align="right">Ngày lập</StyledTableCell>
-                            <StyledTableCell align="center">Thao tác</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center">01</StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <div className='btns'>
-                                        <Link className='del'>
-                                            <ClearOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/importManagement/detailImport/1' className='modify'>
-                                            <BorderColorOutlinedIcon />
-                                        </Link>
-                                        <Link to='/admin/importManagement/detailImport/1' className='detail'>
-                                            <InfoOutlined />
-                                        </Link>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <div className="btns">
-                <div className="add">
-                    <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
-                    <Link className='link' to='/admin/importManagement/add'><span>Thêm mới</span></Link>
+                <TableContainer component={Paper}>
+                    <Table aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell align="center">Mã phiếu nhập</StyledTableCell>
+                                <StyledTableCell align="right">Nhân viên lập</StyledTableCell>
+                                <StyledTableCell align="right">Ngày lập</StyledTableCell>
+                                <StyledTableCell align="center">Thao tác</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((row) => (
+                                <StyledTableRow key={row.mapn}>
+                                    <StyledTableCell align="center">{row.mapn}</StyledTableCell>
+                                    <StyledTableCell align="right">{row.nhanvienDTO.manv}</StyledTableCell>
+                                    <StyledTableCell align="right">{row.ngaynhap}</StyledTableCell>
+                                    <StyledTableCell align="right">
+                                        <div className='btns'>
+                                            <Link className='del'>
+                                                <ClearOutlinedIcon />
+                                            </Link>
+                                            <Link to={`/admin/importManagement/modifyImport/${row.mapn}`} className='modify'>
+                                                <BorderColorOutlinedIcon />
+                                            </Link>
+                                            <Link to={`/admin/importManagement/detailImport/${row.mapn}`} className='detail'>
+                                                <InfoOutlined />
+                                            </Link>
+                                        </div>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <div className="btns">
+                    <div className="add">
+                        <AddCircleOutlineOutlinedIcon style={{ width: 30, height: 30, color: 'lime' }} />
+                        <Link className='link' to='/admin/importManagement/add'><span>Thêm mới</span></Link>
+                    </div>
                 </div>
             </div>
-        </div>
     )
 }
 

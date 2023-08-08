@@ -1,20 +1,20 @@
 import React from 'react'
 import './HistoryCard.scss'
-const HistoryCard = () => {
+const HistoryCard = ({ data }) => {
   return (
     <div className='historyCard'>
       <div className="item">
         <div className='itemImg'>
-          <img src='https://images.pexels.com/photos/1040424/pexels-photo-1040424.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'></img>
+          <img src={data.chitietMathangDTO.mathangDTO.hinhanhDTOs.length === 0 ? '' : data.chitietMathangDTO.mathangDTO.hinhanhDTOs[0].duongdan}></img>
         </div>
         <div className="itemDetail">
-          <span className='itemName'>Name</span>
-          <span className='itemSize'>S</span>
-          <span className='total'>x1</span>
+          <span className='itemName'>{data.chitietMathangDTO.mathangDTO.tenmh}</span>
+          <span className='itemSize'>{data.chitietMathangDTO.color} - {data.chitietMathangDTO.size}</span>
+          <span className='total'>x{data.soluong}</span>
         </div>
       </div>
       <div className="price">
-        <span className='itemPrice'>199.000</span>
+        <span className='itemPrice'>{data.gia}</span>
       </div>
     </div>
   )

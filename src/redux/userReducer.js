@@ -3,12 +3,24 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const login = createAsyncThunk('user/login', async (data, { rejectWithValue }) => {
-    const user = await new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve({ info: { userName: 'thanh hung', role: 0 }, token: '123' })
-        }, 1000)
+
+    const res = await fetch('http://localhost:8081/api/auth/signin', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
     })
-    return user
+    const user = await res.json()
+    console.log(user)
+    const listRole = user.ctQuyens.reduce((arr, cur) => { arr.push(cur.quyen.maquyen); return arr }, [])
+
+    listRole.sort()
+
+    const newState = { matk: user.matk, info: { khachhang: user.khachhang, nhanvien: user.nhanvien, role: listRole }, token: user.accessToken }
+    console.log(newState)
+    return newState
 })
 
 const initialState = {}

@@ -1,5 +1,5 @@
 import { Children, useState } from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import NavBar from "./components/NavBar/Navbar";
 import Home from "./pages/Home/Home";
@@ -41,6 +41,7 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import Brand from "./pages/Brand/Brand";
 import Type from "./pages/Type/Type";
 import Material from "./pages/Material/Material";
+import { useSelector } from "react-redux";
 
 const Layout = () => {
   return (
@@ -69,306 +70,407 @@ const UserLayout = () => {
   );
 };
 
-const router = createBrowserRouter([
-  // user usecase
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/products/:id",
-        element: <Products />,
-      },
-      {
-        path: "/products/search",
-        element: <SearchResult />,
-      },
-      {
-        path: "/product/:id",
-        element: <Product />,
-      },
-      {
-        path: "/signin",
-        element: <SignInSide />,
-      },
-      {
-        path: "/signup",
-        element: <SignUp />,
-      },
-      {
-        path: "/forgot",
-        element: <Forgot />,
-      },
-      {
-        path: "/checkout",
-        element: <Checkout />,
-      },
-    ],
-  },
 
-  //admin usecase
-  {
-    path: '/admin',
-    element: <AdminLayout />,
-    children: [
-      // quản lí kho
-      {
-        path: '/admin',
-        element: <WarehouseTabs />
-      },
-      {
-        path: '/admin/addClothes',
-        element: <Clothes type='add' />
-      },
-      {
-        path: '/admin/detailClothes/:id',
-        element: <Clothes type='detail' />
-      },
-      {
-        path: '/admin/modifyClothes/:id',
-        element: <Clothes type='mod' />
-      },
-      //quản lí đơn khách
-      {
-        path: '/admin/orderBill',
-        element: <OrderBillTabs />
-      },
-      // quản lí nhập
-      {
-        path: '/admin/importManagement',
-        element: <ImportVoucherTabs />
-      },
-      {
-        path: '/admin/importManagement/add',
-        element: <Import type='add' />
-      },
-      {
-        path: '/admin/importManagement/detailImport/:id',
-        element: <Import type='detail' />
-      },
-      {
-        path: '/admin/importManagement/modifyImport/:id',
-        element: <Import type='mod' />
-      },
-      // quản lí đặt
-      {
-        path: '/admin/orderManagement',
-        element: <OrderVoucherTabs />
-      },
-      {
-        path: '/admin/orderManagement/add',
-        element: <OrderVoucher type='add' />
-      },
-      {
-        path: '/admin/orderManagement/detailOrder/:id',
-        element: <OrderVoucher type='detail' />
-      },
-      {
-        path: '/admin/orderManagement/modifyOrder/:id',
-        element: <OrderVoucher type='mod' />
-      },
-      // quản lí xuất
-      {
-        path: '/admin/exportManagement',
-        element: <ExportVoucherTabs />
-      },
-      {
-        path: '/admin/exportManagement/add',
-        element: <Export type='add' />
-      },
-      {
-        path: '/admin/exportManagement/detailExport/:id',
-        element: <Export type='detail' />
-      },
-      {
-        path: '/admin/exportManagement/modifyExport/:id',
-        element: <Export type='mod' />
-      },
-
-      // quản lí khách
-      {
-        path: '/admin/userManagement',
-        element: <UserTabs />
-      },
-      {
-        path: '/admin/userManagement/add',
-        element: <User type='add' />
-      },
-      {
-        path: '/admin/userManagement/detailUser/:id',
-        element: <User type='detail' />
-      },
-      {
-        path: '/admin/userManagement/modifyUser/:id',
-        element: <User type='mod' />
-      },
-      //quản lí nhân viên
-      {
-        path: '/admin/empManagement',
-        element: <EmployeeTabs />
-      },
-      {
-        path: '/admin/empManagement/add',
-        element: <Employee type='add' />
-      },
-      {
-        path: '/admin/empManagement/detailEmp/:id',
-        element: <Employee type='detail' />
-      },
-      {
-        path: '/admin/empManagement/modifyEmp/:id',
-        element: <Employee type='mod' />
-      },
-      // thống kê
-      {
-        path: '/admin/reports',
-        element: <ChartTabs />
-      },
-      // quản lí nhà cung cấp
-      {
-        path: '/admin/providerManagement',
-        element: <ProviderTabs />
-      },
-      {
-        path: '/admin/providerManagement/add',
-        element: <Provider type='add' />
-      },
-      {
-        path: '/admin/providerManagement/modifyProvider/:id',
-        element: <Provider type='mod' />
-      },
-      {
-        path: '/admin/providerManagement/detailProvider/:id',
-        element: <Provider type='detail' />
-      },
-      // quản lí role
-      {
-        path: '/admin/roleManagement',
-        element: <RoleTabs />
-      },
-      {
-        path: '/admin/roleManagement/add',
-        element: <Role type='add' />
-      },
-      {
-        path: '/admin/roleManagement/modifyRole/:id',
-        element: <Role type='mod' />
-      },
-      {
-        path: '/admin/roleManagement/detailRole/:id',
-        element: <Role type='detail' />
-      },
-      // quản lí giá
-      {
-        path: '/admin/priceManagement',
-        element: <PriceManagementTabs />
-      },
-      {
-        path: '/admin/priceManagement/add',
-        element: <PriceManagement type='add' />
-      },
-      {
-        path: '/admin/priceManagement/modifyPrice/:id',
-        element: <PriceManagement type='mod' />
-      },
-      {
-        path: '/admin/priceManagement/detailPrice/:id',
-        element: <PriceManagement type='detail' />
-      },
-      // quản lí km
-      {
-        path: '/admin/kmManagement',
-        element: <KMTabs />
-      },
-      {
-        path: '/admin/kmManagement/add',
-        element: <KM type='add' />
-      },
-      {
-        path: '/admin/kmManagement/modifyKM/:id',
-        element: <KM type='mod' />
-      },
-      {
-        path: '/admin/kmManagement/detailKM/:id',
-        element: <KM type='detail' />
-      },
-      // quản lí brand
-      {
-        path: '/admin/brandManagement/add',
-        element: <Brand type='add' />
-      },
-      {
-        path: '/admin/brandManagement/modifyBrand/:id',
-        element: <Brand type='mod' />
-      },
-      {
-        path: '/admin/brandManagement/detailBrand/:id',
-        element: <Brand type='detail' />
-      },
-      // quản lí type
-      {
-        path: '/admin/typeManagement/add',
-        element: <Type type='add' />
-      },
-      {
-        path: '/admin/typeManagement/modifyType/:id',
-        element: <Type type='mod' />
-      },
-      {
-        path: '/admin/typeManagement/detailType/:id',
-        element: <Type type='detail' />
-      },
-      // quản lí chất liệu
-      {
-        path: '/admin/materialManagement/add',
-        element: <Material type='add' />
-      },
-      {
-        path: '/admin/materialManagement/modifyMaterial/:id',
-        element: <Material type='mod' />
-      },
-      {
-        path: '/admin/materialManagement/detailMaterial/:id',
-        element: <Material type='detail' />
-      },
-    ]
-  },
-  // chỉnh sửa thông tin user
-  {
-    path: '/user/setting',
-    element: <UserLayout />,
-    children: [
-      {
-        path: '/user/setting',
-        element: <UserInfo />
-      }
-    ]
-  },
-  // quản lí đơn
-  {
-    path: '/user/purchase',
-    element: <UserLayout />,
-    children: [
-      {
-        path: '/user/purchase',
-        element: <Purchase />
-      },
-      {
-        path: '/user/purchase/order',
-        element: <OrderDetails />
-      }
-    ]
-  }
-]);
 
 function App() {
+  const user = useSelector(state => state.user)
+
+  const visitorRoutes = createBrowserRouter([
+    // user usecase
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/products/:id",
+          element: <Products />,
+        },
+        {
+          path: "/products/search",
+          element: <SearchResult />,
+        },
+        {
+          path: "/product/:id",
+          element: <Product />,
+        },
+        {
+          path: "/signin",
+          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/forgot",
+          element: <Forgot />,
+        },
+        {
+          path: "/search/:q",
+          element: <SearchResult />,
+        },
+      ],
+    },
+  ])
+  const userRoutes = createBrowserRouter([
+    // user usecase
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/products/:id",
+          element: <Products />,
+        },
+        {
+          path: "/products/search",
+          element: <SearchResult />,
+        },
+        {
+          path: "/product/:id",
+          element: <Product />,
+        },
+        {
+          path: "/signin",
+          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/forgot",
+          element: <Forgot />,
+        },
+        {
+          path: "/checkout",
+          element: <Checkout />,
+        },
+        {
+          path: "/search/:q",
+          element: <SearchResult />,
+        },
+      ],
+    },
+    // chỉnh sửa thông tin user
+    {
+      path: '/user/setting',
+      element: <UserLayout />,
+      children: [
+        {
+          path: '/user/setting',
+          element: <UserInfo />
+        }
+      ]
+    },
+    // quản lí đơn
+    {
+      path: '/user/purchase',
+      element: <UserLayout />,
+      children: [
+        {
+          path: '/user/purchase',
+          element: <Purchase />
+        },
+        {
+          path: '/user/purchase/order/:id',
+          element: <OrderDetails />
+        }
+      ]
+    }
+  ])
+  const adminRoutes = createBrowserRouter([
+    // user usecase
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/products/:id",
+          element: <Products />,
+        },
+        {
+          path: "/products/search",
+          element: <SearchResult />,
+        },
+        {
+          path: "/product/:id",
+          element: <Product />,
+        },
+        {
+          path: "/signin",
+          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/forgot",
+          element: <Forgot />,
+        },
+        {
+          path: "/search/:q",
+          element: <SearchResult />,
+        },
+      ],
+    },
+    // chỉnh sửa thông tin user
+    {
+      path: '/user/setting',
+      element: <UserLayout />,
+      children: [
+        {
+          path: '/user/setting',
+          element: <UserInfo />
+        }
+      ]
+    },
+
+    //admin usecase
+    {
+      path: '/admin',
+      element: <AdminLayout />,
+      children: [
+        // quản lí kho
+        {
+          path: '/admin',
+          element: <WarehouseTabs />
+        },
+        {
+          path: '/admin/addClothes',
+          element: <Clothes type='add' />
+        },
+        {
+          path: '/admin/detailClothes/:id',
+          element: <Clothes type='detail' />
+        },
+        {
+          path: '/admin/modifyClothes/:id',
+          element: <Clothes type='mod' />
+        },
+        //quản lí đơn khách
+        {
+          path: '/admin/orderBill',
+          element: <OrderBillTabs />
+        },
+        // quản lí nhập
+        {
+          path: '/admin/importManagement',
+          element: <ImportVoucherTabs />
+        },
+        {
+          path: '/admin/importManagement/add',
+          element: <Import type='add' />
+        },
+        {
+          path: '/admin/importManagement/detailImport/:id',
+          element: <Import type='detail' />
+        },
+        {
+          path: '/admin/importManagement/modifyImport/:id',
+          element: <Import type='mod' />
+        },
+        // quản lí đặt
+        {
+          path: '/admin/orderManagement',
+          element: <OrderVoucherTabs />
+        },
+        {
+          path: '/admin/orderManagement/add',
+          element: <OrderVoucher type='add' />
+        },
+        {
+          path: '/admin/orderManagement/detailOrder/:id',
+          element: <OrderVoucher type='detail' />
+        },
+        {
+          path: '/admin/orderManagement/modifyOrder/:id',
+          element: <OrderVoucher type='mod' />
+        },
+        // quản lí xuất
+        {
+          path: '/admin/exportManagement',
+          element: <ExportVoucherTabs />
+        },
+        {
+          path: '/admin/exportManagement/add',
+          element: <Export type='add' />
+        },
+        {
+          path: '/admin/exportManagement/detailExport/:id',
+          element: <Export type='detail' />
+        },
+        {
+          path: '/admin/exportManagement/modifyExport/:id',
+          element: <Export type='mod' />
+        },
+
+        // quản lí khách
+        {
+          path: '/admin/userManagement',
+          element: <UserTabs />
+        },
+        {
+          path: '/admin/userManagement/add',
+          element: <User type='add' />
+        },
+        {
+          path: '/admin/userManagement/detailUser/:id',
+          element: <User type='detail' />
+        },
+        {
+          path: '/admin/userManagement/modifyUser/:id',
+          element: <User type='mod' />
+        },
+        //quản lí nhân viên
+        {
+          path: '/admin/empManagement',
+          element: <EmployeeTabs />
+        },
+        {
+          path: '/admin/empManagement/add',
+          element: <Employee type='add' />
+        },
+        {
+          path: '/admin/empManagement/detailEmp/:id',
+          element: <Employee type='detail' />
+        },
+        {
+          path: '/admin/empManagement/modifyEmp/:id',
+          element: <Employee type='mod' />
+        },
+        // thống kê
+        {
+          path: '/admin/reports',
+          element: <ChartTabs />
+        },
+        // quản lí nhà cung cấp
+        {
+          path: '/admin/providerManagement',
+          element: <ProviderTabs />
+        },
+        {
+          path: '/admin/providerManagement/add',
+          element: <Provider type='add' />
+        },
+        {
+          path: '/admin/providerManagement/modifyProvider/:id',
+          element: <Provider type='mod' />
+        },
+        {
+          path: '/admin/providerManagement/detailProvider/:id',
+          element: <Provider type='detail' />
+        },
+        // quản lí role
+        {
+          path: '/admin/roleManagement',
+          element: <RoleTabs />
+        },
+        {
+          path: '/admin/roleManagement/add',
+          element: <Role type='add' />
+        },
+        {
+          path: '/admin/roleManagement/modifyRole/:id',
+          element: <Role type='mod' />
+        },
+        {
+          path: '/admin/roleManagement/detailRole/:id',
+          element: <Role type='detail' />
+        },
+        // quản lí giá
+        {
+          path: '/admin/priceManagement',
+          element: <PriceManagementTabs />
+        },
+        {
+          path: '/admin/priceManagement/add',
+          element: <PriceManagement type='add' />
+        },
+        {
+          path: '/admin/priceManagement/modifyPrice/:id',
+          element: <PriceManagement type='mod' />
+        },
+        {
+          path: '/admin/priceManagement/detailPrice/:id',
+          element: <PriceManagement type='detail' />
+        },
+        // quản lí km
+        {
+          path: '/admin/kmManagement',
+          element: <KMTabs />
+        },
+        {
+          path: '/admin/kmManagement/add',
+          element: <KM type='add' />
+        },
+        {
+          path: '/admin/kmManagement/modifyKM/:id',
+          element: <KM type='mod' />
+        },
+        {
+          path: '/admin/kmManagement/detailKM/:id',
+          element: <KM type='detail' />
+        },
+        // quản lí brand
+        {
+          path: '/admin/brandManagement/add',
+          element: <Brand type='add' />
+        },
+        {
+          path: '/admin/brandManagement/modifyBrand/:id',
+          element: <Brand type='mod' />
+        },
+        {
+          path: '/admin/brandManagement/detailBrand/:id',
+          element: <Brand type='detail' />
+        },
+        // quản lí type
+        {
+          path: '/admin/typeManagement/add',
+          element: <Type type='add' />
+        },
+        {
+          path: '/admin/typeManagement/modifyType/:id',
+          element: <Type type='mod' />
+        },
+        {
+          path: '/admin/typeManagement/detailType/:id',
+          element: <Type type='detail' />
+        },
+        // quản lí chất liệu
+        {
+          path: '/admin/materialManagement/add',
+          element: <Material type='add' />
+        },
+        {
+          path: '/admin/materialManagement/modifyMaterial/:id',
+          element: <Material type='mod' />
+        },
+        {
+          path: '/admin/materialManagement/detailMaterial/:id',
+          element: <Material type='detail' />
+        },
+      ]
+    }
+  ])
+
   return (
     <div>
-      <RouterProvider router={router} />
+      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length-1] === 2 ? userRoutes  : adminRoutes} />
     </div>
   );
 }

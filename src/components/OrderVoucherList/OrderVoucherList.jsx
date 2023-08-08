@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './OrderVoucherList.scss'
 import { Box, Typography } from '@mui/material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -57,17 +58,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -124,8 +114,10 @@ const OrderVoucherList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+
+    const { data, loading, error } = useFetchAdmin(`/phieudat`);
     return (
-        <div className='orderVoucherList'>
+        loading ? 'loading...' : <div className='orderVoucherList'>
             <Search>
                 <SearchIconWrapper>
                     <SearchIcon onClick={() => setInput('search')} />
@@ -152,20 +144,20 @@ const OrderVoucherList = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center">01</StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                        {data.map((row) => (
+                            <StyledTableRow key={row.mapd}>
+                                <StyledTableCell align="center">{row.mapd}</StyledTableCell>
+                                <StyledTableCell align="right">{row.nhanvienDTO.manv}</StyledTableCell>
+                                <StyledTableCell align="right">{row.ngaydat}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
                                         <Link className='del'>
                                             <ClearOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/orderManagement/detailOrder/1' className='modify'>
+                                        <Link to={`/admin/orderManagement/modifyOrder/${row.mapd}`} className='modify'>
                                             <BorderColorOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/orderManagement/detailOrder/1' className='detail'>
+                                        <Link to={`/admin/orderManagement/detailOrder/${row.mapd}`} className='detail'>
                                             <InfoOutlinedIcon />
                                         </Link>
                                     </div>

@@ -3,7 +3,7 @@ import "./Card.scss";
 import { Link } from "react-router-dom";
 
 const Card = ({ item }) => {
-  console.log(item.hinhanhDTOs[0]["duongdan"]);
+
   return (
     <Link className="link" to={`/product/${item.mamh}`}>
       <div className="card">
@@ -11,14 +11,14 @@ const Card = ({ item }) => {
           <span>New Season</span>
           <img
             src={
-              item?.hinhanhDTOs[0]["duongdan"]
+              item?.hinhanhDTOs.length === 0 ? '' : item?.hinhanhDTOs[0]["duongdan"]
             }
             alt=""
             className="mainImg"
           />
           <img
             src={
-              item?.hinhanhDTOs[0]["duongdan"]
+              item?.hinhanhDTOs.length === 0 ? '' : item?.hinhanhDTOs[0]["duongdan"]
             }
             alt=""
             className="secondImg"
@@ -26,7 +26,7 @@ const Card = ({ item }) => {
         </div>
         <h2>{item?.tenmh}</h2>
         <div className="prices">
-          <h3>${item?.gia + 1000}</h3>
+          <h3>{item?.chitietKhuyenmaiDTO === null ? '' : `$${item.gia - item.gia * 0.1}`}</h3>
           <h3>${item?.gia}</h3>
         </div>
       </div>

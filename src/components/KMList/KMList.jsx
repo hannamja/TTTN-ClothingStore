@@ -17,6 +17,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './KMList.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -124,7 +125,8 @@ const KMList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/mathang`);
+    const { data, loading, error } = useFetchAdmin(`/km`);
+    console.log(data)
     return (loading ? ('loading...') :
         <>
             <div className='kmList'>
@@ -149,28 +151,28 @@ const KMList = () => {
                         <TableHead>
                             <TableRow>
                                 <StyledTableCell align='center'>Mã khuyến mãi</StyledTableCell>
-                                <StyledTableCell>Tên khuyến mãi</StyledTableCell>
                                 <StyledTableCell align='right'>Lý do</StyledTableCell>
                                 <StyledTableCell align='center'>Thao tác</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <StyledTableRow key={row.name}>
-                                    <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
-                                    <StyledTableCell component="th" scope="row">
-                                        <Link className='link' to='/'>{row.name}</Link>
+                            {data.map((row) => (
+                                <StyledTableRow key={row.makm}>
+
+                                    <StyledTableCell align='center' scope="row">
+                                        {row.makm}
                                     </StyledTableCell>
-                                    <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                    <StyledTableCell align="right">{row.lydo}</StyledTableCell>
+                            
                                     <StyledTableCell align="right">
                                         <div className='btns'>
                                             <Link className='del'>
                                                 <ClearOutlinedIcon />
                                             </Link>
-                                            <Link to='/admin/kmManagement/modifyKM/1' className='modify'>
+                                            <Link to={`/admin/kmManagement/modifyKM/${row.makm}`} className='modify'>
                                                 <BorderColorOutlinedIcon />
                                             </Link>
-                                            <Link to='/admin/kmManagement/detailKM/1' className='detail'>
+                                            <Link to={`/admin/kmManagement/detailKM/${row.makm}`} className='detail'>
                                                 <InfoOutlinedIcon />
                                             </Link>
                                         </div>

@@ -151,8 +151,8 @@ const Warehouse = () => {
                                 <TableBody>
                                     {
                                         data.map((row) => (
-                                            <StyledTableRow key={row.manh}>
-                                                <StyledTableCell align="center"><img src={row.hinhanhDTOs[0].duongdan} alt='Goods' style={{ width: 60, height: 60 }}></img></StyledTableCell>
+                                            <StyledTableRow key={row.mamh}>
+                                                <StyledTableCell align="center"><img src={row.hinhanhDTOs.length === 0 ? '' : row.hinhanhDTOs[0].duongdan} alt='Goods' style={{ width: 60, height: 60 }}></img></StyledTableCell>
                                                 <StyledTableCell component="th" scope="row">
                                                     <Link className='link' to='/'>{row.tenmh}</Link>
                                                 </StyledTableCell>
@@ -162,10 +162,10 @@ const Warehouse = () => {
                                                         <Link className='del'>
                                                             <ClearOutlinedIcon />
                                                         </Link>
-                                                        <Link to='/admin/modifyClothes/1' className='modify'>
+                                                        <Link to={`/admin/modifyClothes/${row.mamh}`} className='modify'>
                                                             <BorderColorOutlinedIcon />
                                                         </Link>
-                                                        <Link to='/admin/detailClothes/1' className='detail'>
+                                                        <Link to={`/admin/detailClothes/${row.mamh}`} className='detail'>
                                                             <InfoOutlinedIcon />
                                                         </Link>
                                                     </div>

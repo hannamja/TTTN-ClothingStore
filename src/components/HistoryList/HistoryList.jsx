@@ -7,26 +7,34 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Button } from '@mui/material';
 import HistoryCard from '../HistoryCard/HistoryCard';
 import './HistoryList.scss'
-const HistoryList = () => {
+const HistoryList = ({ data }) => {
     return (
         <div className='historyList'>
             <div className="top">
                 <LocalShippingOutlinedIcon />
-                <span className='step'>Đơn hàng đã được giao thành công</span>
-                <span> | </span>
-                <span className='status'>HOÀN THÀNH</span>
+
+                <span className='step'>
+                    {data.chitietTrangThaiDTO.trangthai.matthd < 3 ? 'Đang đợi duyệt' : ''}
+                    {data.chitietTrangThaiDTO.trangthai.matthd === 3 ? 'Đã duyệt' : ''}
+                    {data.chitietTrangThaiDTO.trangthai.matthd === 4 ? 'Đang giao' : ''}
+                    {data.chitietTrangThaiDTO.trangthai.matthd === 5 ? 'Đã giao' : ''}
+                </span>
+                {
+                    data.chitietTrangThaiDTO.trangthai.matthd === 5 ?
+                        <><span> | </span>
+                            <span className='status'>HOÀN THÀNH</span></>
+                        : <></>
+                }
             </div>
             <div className="center">
-                <HistoryCard />
-                <HistoryCard />
-                <HistoryCard />
-                <HistoryCard />
+                {
+                    data.chitietHoadonDTO.map(i => <HistoryCard data={i} />)
+                }
             </div>
             <div className="bottom">
-                <span className='rating'>Không có đánh giá</span>
                 <Button variant="contained">Mua lại</Button>
             </div>
-        </div>
+        </div >
     )
 }
 

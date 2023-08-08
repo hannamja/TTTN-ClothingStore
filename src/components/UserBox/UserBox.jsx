@@ -58,7 +58,7 @@ const UserBox = () => {
                         ) : (
                             <>
                                 {
-                                    user.info.role == 0 ? (
+                                    user.info.role[user.info.role.length-1] !== 2 ? (
                                         <div className='top'>
                                             <AdminPanelSettingsOutlinedIcon />
                                             <Link className='link' to='/admin'>Quản lí</Link>
@@ -66,10 +66,15 @@ const UserBox = () => {
                                     ) : <></>
                                 }
                                 <div className='bottom'>
-                                    <div className="item">
-                                        <ReceiptLongOutlinedIcon />
-                                        <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>
-                                    </div>
+
+                                    {
+                                        user.info.role[user.info.role.length-1] === 2 ? <>
+                                            <div className="item">
+                                                <ReceiptLongOutlinedIcon />
+                                                <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>
+                                            </div>
+                                        </> : <></>
+                                    }
                                     <div className="item">
                                         <SettingsOutlinedIcon />
                                         <Link className='link' to='/user/setting'>Cài đặt</Link>

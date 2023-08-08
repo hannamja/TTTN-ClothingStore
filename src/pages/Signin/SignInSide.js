@@ -37,16 +37,13 @@ export default function SignInSide() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+ 
     dispatch(login({
       email: data.get('email'),
       password: data.get('password'),
     }))
   };
-  const user = useSelector(state => state.user)
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

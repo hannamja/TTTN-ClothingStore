@@ -4,30 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-
-const products = [
-  {
-    name: 'Product 1',
-    desc: 'A nice thing',
-    price: '$9.99',
-  },
-  {
-    name: 'Product 2',
-    desc: 'Another thing',
-    price: '$3.45',
-  },
-  {
-    name: 'Product 3',
-    desc: 'Something else',
-    price: '$6.51',
-  },
-  {
-    name: 'Product 4',
-    desc: 'Best thing of all',
-    price: '$14.11',
-  },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
+import { useDispatch, useSelector } from 'react-redux';
 
 const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 const payments = [
@@ -38,6 +15,8 @@ const payments = [
 ];
 
 export default function Review() {
+  const products = useSelector((state) => state.cart.products);
+  
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -45,15 +24,18 @@ export default function Review() {
       </Typography>
       <List disablePadding>
         {products.map((product) => (
-          <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+          <ListItem key={product.title} sx={{ py: 1, px: 0 }}>
+            <ListItemText primary={product.title} secondary={product.desc} />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="body2">Quantity: {product.quantity}</Typography>
+              <Typography variant="body2">Price: {product.price}</Typography>
+            </div>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            $34.06
+            {products.reduce((total, ct) => total + ct.price, 0)}
           </Typography>
         </ListItem>
       </List>
