@@ -103,7 +103,7 @@ function App() {
         },
         {
           path: "/signup",
-          element: <SignUp />,
+          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
         },
         {
           path: "/forgot",
@@ -144,7 +144,7 @@ function App() {
         },
         {
           path: "/signup",
-          element: <SignUp />,
+          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
         },
         {
           path: "/forgot",
@@ -215,7 +215,7 @@ function App() {
         },
         {
           path: "/signup",
-          element: <SignUp />,
+          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
         },
         {
           path: "/forgot",
@@ -470,7 +470,7 @@ function App() {
 
   return (
     <div>
-      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length-1] === 2 ? userRoutes  : adminRoutes} />
+      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length-1] === 3 ? userRoutes  : adminRoutes} />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import TaskAltOutlinedIcon from '@mui/icons-material/TaskAltOutlined';
 import { Button } from '@mui/material';
 import HistoryCard from '../HistoryCard/HistoryCard';
 import './HistoryList.scss'
-const HistoryList = ({ data }) => {
+const HistoryList = ({ data, type }) => {
     return (
         <div className='historyList'>
             <div className="top">
@@ -18,6 +18,7 @@ const HistoryList = ({ data }) => {
                     {data.chitietTrangThaiDTO.trangthai.matthd === 3 ? 'Đã duyệt' : ''}
                     {data.chitietTrangThaiDTO.trangthai.matthd === 4 ? 'Đang giao' : ''}
                     {data.chitietTrangThaiDTO.trangthai.matthd === 5 ? 'Đã giao' : ''}
+                    {data.chitietTrangThaiDTO.trangthai.matthd === 6 ? 'Đã hủy' : ''}
                 </span>
                 {
                     data.chitietTrangThaiDTO.trangthai.matthd === 5 ?
@@ -31,9 +32,11 @@ const HistoryList = ({ data }) => {
                     data.chitietHoadonDTO.map(i => <HistoryCard data={i} />)
                 }
             </div>
-            <div className="bottom">
-                <Button variant="contained">Mua lại</Button>
-            </div>
+            {
+                type !== 'admin' ? <div className="bottom">
+                    <Button variant="contained">Mua lại</Button>
+                </div> : <></>
+            }
         </div >
     )
 }

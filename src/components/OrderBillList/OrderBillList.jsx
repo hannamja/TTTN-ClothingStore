@@ -18,7 +18,10 @@ import HistoryList from '../HistoryList/HistoryList';
 import Modal from '@mui/material/Modal';
 import { Link } from 'react-router-dom';
 import './OrderBillList.scss'
-import { Box, Typography } from '@mui/material';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
+import { CheckOutlined, DeliveryDiningOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -53,17 +56,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const style = {
     position: 'absolute',
@@ -136,68 +128,206 @@ const OrderBillList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const { data, loading, error } = useFetchAdmin(`/hoadon`);
+    const user = useSelector(state => state.user)
+
+    const [open1, setOpen1] = React.useState(false);
+
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+
+    const [open10, setOpen10] = React.useState(false);
+
+    const handleClose10 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen10(false);
+    };
+
+    const [open01, setOpen01] = React.useState(false);
+
+    const handleClose01 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen01(false);
+    };
+
+    const [open100, setOpen100] = React.useState(false);
+
+    const handleClose100 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen100(false);
+    };
+    const handleConfirm = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/confirm', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            setOpen1(true)
+        })
+    }
+    const handleComplete = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/complete', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            setOpen01(true)
+        })
+    }
+    const handleCancle = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/cancel', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            setOpen10(true)
+        })
+    }
+
+    const handleProcessing = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/processing', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            setOpen100(true)
+        })
+    }
     return (
-        <div className='orderBillList'>
-            <Search>
-                <SearchIconWrapper>
-                    <SearchIcon onClick={() => setInput('search')} />
-                </SearchIconWrapper>
+        loading ? 'loading...' :
+            <div className='orderBillList'>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon onClick={() => setInput('search')} />
+                    </SearchIconWrapper>
 
-                <StyledInputBase
-                    placeholder="Search…"
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
-                    value={input}
-                />
-                <BackspaceIconWrapper onClick={() => { setInput('') }}>
-                    <BackspaceOutlinedIcon />
-                </BackspaceIconWrapper>
-            </Search>
-            
-            <TableContainer component={Paper}>
-                <Table aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='center'>Mã đơn</StyledTableCell>
-                            <StyledTableCell>Mã số khách hàng</StyledTableCell>
-                            <StyledTableCell align="right">Ngày đặt</StyledTableCell>
-                            <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center">01</StyledTableCell>
-                                <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <div className='btns'>
-                                        <div className='info' onClick={() => handleOpen(row.name)}>
-                                            <InfoOutlinedIcon />
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                        onChange={(e) => { handldeChange(e.value) }}
+                        value={input}
+                    />
+                    <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                        <BackspaceOutlinedIcon />
+                    </BackspaceIconWrapper>
+                </Search>
+
+                <TableContainer component={Paper}>
+                    <Table aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell align='center'>Mã đơn</StyledTableCell>
+                                <StyledTableCell>Mã số khách hàng</StyledTableCell>
+                                <StyledTableCell align="right">Ngày đặt</StyledTableCell>
+                                <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((row) => (
+                                <StyledTableRow key={row.mahd}>
+                                    <StyledTableCell align="center">01</StyledTableCell>
+                                    <StyledTableCell component="th" scope="row">
+                                        <Link className='link' to='/'>{row.mahd}</Link>
+                                    </StyledTableCell>
+                                    <StyledTableCell align="right">{row.ngaytao}</StyledTableCell>
+                                    <StyledTableCell align="right">
+                                        <div className='btns'>
+                                            <div className='info' onClick={() => handleOpen(row.mahd)}>
+                                                <InfoOutlinedIcon />
+                                            </div>
+                                            <Modal
+                                                open={open == row.mahd}
+                                                onClose={() => handleClose('')}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                            >
+                                                <Box sx={style}>
+                                                    <Typography id="modal-modal-title" variant="h6" component="div">
+                                                        <HistoryList data={row} type='admin' />
+                                                    </Typography>
+                                                    {
+                                                        row.chitietTrangThaiDTO.trangthai.matthd < 3 && row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? <div style={{ display: 'flex', gap: 5, justifyContent: 'end' }}>
+                                                            <CheckOutlined style={{ color: 'lime' }} onClick={() => handleConfirm(row)} />
+                                                            <ClearOutlinedIcon style={{ color: 'red' }} onClick={() => handleCancle(row)} />
+                                                        </div>
+                                                            : row.chitietTrangThaiDTO.trangthai.matthd === 4 ?
+                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems:'center' }}>
+                                                                    <CheckOutlined color='success' onClick={() => handleComplete(row)} /> Xác nhận hoàn thành
+                                                                </div>
+                                                                : row.chitietTrangThaiDTO.trangthai.matthd === 3 ?
+                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems:'center' }}>
+                                                                    <DeliveryDiningOutlined color='success' onClick={() => handleProcessing(row)} /> Xác nhận đang giao
+                                                                </div> :<></>
+                                                    }
+
+                                                </Box>
+                                            </Modal>
                                         </div>
-                                        <Modal
-                                            open={open == row.name}
-                                            onClose={() => handleClose('')}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                        >
-                                            <Box sx={style}>
-                                                <Typography id="modal-modal-title" variant="h6" component="div">
-                                                    <HistoryList />
-                                                </Typography>
-                                            </Box>
-                                        </Modal>
-                                    </div>
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
 
-            </TableContainer>
-        </div>
+                    <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                        Đã xác nhận đơn!
+                    </Alert>
+
+                </Snackbar>
+                <Snackbar open={open100} autoHideDuration={6000} onClose={handleClose100}>
+
+                    <Alert onClose={handleClose100} severity="success" sx={{ width: '100%' }}>
+                        Đã xác nhận đơn đang được giao!
+                    </Alert>
+
+                </Snackbar>
+                <Snackbar open={open01} autoHideDuration={6000} onClose={handleClose01}>
+
+                    <Alert onClose={handleClose01} severity="info" sx={{ width: '100%' }}>
+                        Đã xác nhận hoàn thành đơn đơn!
+                    </Alert>
+
+                </Snackbar>
+                <Snackbar open={open10} autoHideDuration={6000} onClose={handleClose10}>
+
+                    <Alert onClose={handleClose10} severity="error" sx={{ width: '100%' }}>
+                        Đã hủy đơn!
+                    </Alert>
+
+                </Snackbar>
+            </div>
     )
 }
 

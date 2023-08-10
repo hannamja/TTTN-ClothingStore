@@ -98,7 +98,7 @@ export default function Checkout() {
         "chitietHoadonDTO": null
       },
       "trangthai": {
-        "matthd": 3,
+        "matthd": 1,
       },
       "ngaytao": new Date().toISOString().slice(0, 10)
     }

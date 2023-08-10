@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import './EmployeeList.scss'
 import { CheckBox, InfoOutlined, LockPersonOutlined } from '@mui/icons-material';
 import { Box, Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -59,18 +60,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const style = {
     position: 'absolute',
@@ -160,8 +149,9 @@ const EmployeeList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const { data, loading, error } = useFetchAdmin(`/nhanvien`);
     return (
-        <div className='empList'>
+        loading ? 'loading...' : <div className='empList'>
             <Search>
                 <SearchIconWrapper>
                     <SearchIcon onClick={() => setInput('search')} />
@@ -181,65 +171,31 @@ const EmployeeList = () => {
                 <Table aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <StyledTableCell align='center'>Ảnh</StyledTableCell>
-                            <StyledTableCell>Họ</StyledTableCell>
-                            <StyledTableCell align="right">Tên</StyledTableCell>
+                            <StyledTableCell align='center'>Mã nhân viên</StyledTableCell>
+                            <StyledTableCell>Họ tên</StyledTableCell>
                             <StyledTableCell align="right">SĐT</StyledTableCell>
                             <StyledTableCell align="center">Thao tác</StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.name}>
-                                <StyledTableCell align="center"><img src='img/admin.png' alt='Admin'></img></StyledTableCell>
+                        {data.map((row) => (
+                            <StyledTableRow key={row.manv}>
+                                <StyledTableCell align="center">{row.manv}</StyledTableCell>
                                 <StyledTableCell component="th" scope="row">
-                                    <Link className='link' to='/'>{row.name}</Link>
+                                    {row.tennv}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                                <StyledTableCell align="right">{row.sdt}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
                                         <Link className='del'>
                                             <ClearOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/empManagement/modifyEmp/1' className='modify'>
+                                        <Link to={`/admin/empManagement/modifyEmp/${row.manv}`} className='modify'>
                                             <BorderColorOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/empManagement/detailEmp/1' className='detail'>
+                                        <Link to={`/admin/empManagement/detailEmp/${row.manv}`} className='detail'>
                                             <InfoOutlined />
                                         </Link>
-                                        <div className='access'>
-                                            <LockPersonOutlined onClick={() => handleOpen(row.name)} />
-                                            <Modal
-                                                open={open == row.name}
-                                                onClose={() => handleClose('')}
-                                                aria-labelledby="modal-modal-title"
-                                                aria-describedby="modal-modal-description"
-                                            >
-                                                <Box sx={style}>
-                                                    <div className='top' style={topStyle}>
-                                                        <img src='/img/admin.png' alt='Admin' style={topStyle.img}></img>
-                                                        <div className="userInfo" style={topStyle.userInfo}>
-                                                            <span className='name'>Nguyễn Văn A</span>
-                                                            <span className='role'>Admin</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="center">
-                                                        <span>Các quyền của tài khoản</span>
-                                                        <div className='option'>
-                                                            <FormGroup>
-                                                                <FormControlLabel control={<Checkbox />} label='SA' />
-                                                                <FormControlLabel control={<Checkbox />} label='Nhân viên duyệt đơn' />
-                                                                <FormControlLabel control={<Checkbox />} label='Nhân viên kho' />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="bottom">
-
-                                                    </div>
-                                                </Box>
-                                            </Modal>
-                                        </div>
                                     </div>
                                 </StyledTableCell>
                             </StyledTableRow>

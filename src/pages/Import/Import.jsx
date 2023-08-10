@@ -19,7 +19,6 @@ import { ClearOutlined } from '@mui/icons-material';
 
 
 const Import = ({ type }) => {
-    console.log(type)
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/phieunhap/` + id}`);
 

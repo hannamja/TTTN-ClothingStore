@@ -29,7 +29,7 @@ const Product = () => {
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
   const [hds, setHds] = useState(null)
-  console.log(user)
+  
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -44,8 +44,11 @@ const Product = () => {
     }
   }, [])
   const checkBuy = (item) => {
-    console.log(item)
-    return hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === parseInt(item)).length !== 0).length !== 0
+    const filtered = hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === parseInt(item)).length !== 0)
+    if(filtered.length>0) {
+      if(filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
+    }
+    return false
   }
   return (
     <div className="product">
@@ -221,7 +224,7 @@ const Product = () => {
                 </div>
               </div>
             </> :
-              user.info.role[user.info.role.length - 1] === 2 ?
+              user.info.role[user.info.role.length - 1] === 3 ?
                 <>
                   <div className="quantity">
                     <button
