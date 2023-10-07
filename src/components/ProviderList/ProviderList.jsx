@@ -18,6 +18,9 @@ import { Link } from 'react-router-dom';
 import './ProviderList.scss'
 import useFetch from '../../hooks/useFetch';
 import { InfoOutlined } from '@mui/icons-material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
+import { Alert, Snackbar } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -118,7 +121,45 @@ const ProviderList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
-    const { data, loading, error } = useFetch(`/nhacungcap`);
+    const { data, loading, error } = useFetchAdmin(`/nhacungcap`);
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+
+    const handleDel = (id) => {
+        if (window.confirm('Bạn có muốn xóa nhà cung cấp có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/nhacungcap/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) setOpen1(true)
+                else {
+                    setOpen(true)
+                    window.location.reload()
+                }
+            }
+            )
+        else return
+    }
     return (
         <div className='pvdList'>
             {
@@ -158,12 +199,12 @@ const ProviderList = () => {
                                             <StyledTableCell align="right">
                                                 <div className='btns'>
                                                     <Link className='del'>
-                                                        <ClearOutlinedIcon />
+                                                        <ClearOutlinedIcon onClick={() => handleDel(row.mancc)} />
                                                     </Link>
-                                                    <Link to='/admin/priceManagement/modifyPrice/1' className='modify'>
+                                                    <Link to={`/admin/providerManagement/modifyProvider/${row.mancc}`} className='modify'>
                                                         <BorderColorOutlinedIcon />
                                                     </Link>
-                                                    <Link to='/admin/priceManagement/detailPrice/1' className='detail'>
+                                                    <Link to={`/admin/providerManagement/detailProvider/${row.mancc}`} className='detail'>
                                                         <InfoOutlined />
                                                     </Link>
                                                 </div>
@@ -179,6 +220,17 @@ const ProviderList = () => {
                                 <Link className='link' to='/admin/providerManagement/add'><span>Thêm mới</span></Link>
                             </div>
                         </div>
+                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                                Xóa nhà cung cấp thành công!
+                            </Alert>
+                        </Snackbar>
+
+                        <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                            <Alert onClose={handleClose1} severity="error" sx={{ width: '100%' }}>
+                                Lỗi!
+                            </Alert>
+                        </Snackbar>
                     </>
                     )}
         </div>

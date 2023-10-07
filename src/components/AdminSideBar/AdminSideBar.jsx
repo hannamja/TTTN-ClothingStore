@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Fab from '@mui/material/Fab';
@@ -14,15 +14,23 @@ import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSati
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
-import MoneyOutlinedIcon from '@mui/icons-material/MoneyOutlined';
 import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
 import './AdminSideBar.scss'
 import { ArrowLeftOutlined, HomeOutlined } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/userReducer.js'
 
 const AdminSideBar = ({ isOpen }) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const handleClose = () => {
         setOpen(!open)
+    }
+    const handleLogout = (event) => {
+        event.preventDefault()
+        dispatch(logout())
+        navigate('/')
     }
     return (
         <>
@@ -47,7 +55,7 @@ const AdminSideBar = ({ isOpen }) => {
                         </div>
                     </div>
 
-                    <div className='logout'>
+                    <div className='logout' onClick={handleLogout}>
                         <ExitToAppOutlinedIcon style={{ color: "red" }} />
                     </div>
                 </div>

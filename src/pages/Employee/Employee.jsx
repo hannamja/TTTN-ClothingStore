@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Button, Input } from '@mui/material';
+import { Alert, Button, Input, Snackbar } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -61,6 +61,10 @@ const Employee = ({ type }) => {
     }, [loading])
 
     const handleAdd = () => {
+        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == null || cmnd == null) {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const nhanvien = {
             "tennv": ten,
             "gioitinh": gt,
@@ -82,6 +86,10 @@ const Employee = ({ type }) => {
             },
             body: JSON.stringify(nhanvien)
         }).then(res => res.json()).then(data => {
+            if (data.status == 404) {
+                setOpen404(true)
+                return
+            }
             fetch('http://localhost:8081/api/ctquyen/' + email, {
                 method: 'POST',
                 headers: {
@@ -92,12 +100,17 @@ const Employee = ({ type }) => {
                 body: JSON.stringify(ctqRows)
             }).then(res => res.json()).then(data => {
                 console.log(data)
+                setOpen(true)
             })
         })
 
 
     }
     const handleMod = () => {
+        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == null || cmnd == null) {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const nhanvien = {
             "manv": data.manv,
             "tennv": ten,
@@ -130,6 +143,7 @@ const Employee = ({ type }) => {
                 body: JSON.stringify(ctqRows)
             }).then(res => res.json()).then(data => {
                 console.log(data)
+                setOpen1(true)
             })
         })
 
@@ -151,6 +165,33 @@ const Employee = ({ type }) => {
             setCtqRows([...ctqRows, i])
         }
     }
+
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+
+    const [open404, setOpen404] = React.useState(false);
+
+    const handleClose404 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen404(false);
+    };
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -236,7 +277,7 @@ const Employee = ({ type }) => {
                         onChange={e => setDc(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                     <TextField
                         required
                         id="city"
@@ -247,6 +288,7 @@ const Employee = ({ type }) => {
                         variant="standard"
                         value={email}
                         onChange={e => setEmaol(e.target.value)}
+                        disabled={type !== 'add'}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -350,6 +392,21 @@ const Employee = ({ type }) => {
                         </Grid>
                 }
             </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Thêm nhân viên thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                    Sửa nhân viên thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
+                <Alert onClose={handleClose404} severity="error" sx={{ width: '100%' }}>
+                    Email tồn tại!
+                </Alert>
+            </Snackbar>
         </React.Fragment>
     )
 }

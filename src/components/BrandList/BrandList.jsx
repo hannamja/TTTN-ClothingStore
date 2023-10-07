@@ -17,6 +17,8 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './BrandList.scss'
 import { Link } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
+import { Alert, Snackbar } from '@mui/material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -125,6 +127,44 @@ const BrandList = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+
+    const handleDel = (id) => {
+        fetch('http://localhost:8081/api/nhanhieu/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+        }).then(res => res.json()).then(data => {
+            console.log(data)
+            if (data.status == 404) setOpen1(true)
+            else {
+                setOpen(true)
+                window.location.reload()
+            }
+        }
+        )
+
+    }
     const { data, loading, error } = useFetchAdmin(`/nhanhieu`);
     return (loading ? ('loading...') : <>
         <div className='brandList'>
@@ -161,12 +201,12 @@ const BrandList = () => {
                                 <StyledTableCell align="right">
                                     <div className='btns'>
                                         <Link className='del'>
-                                            <ClearOutlinedIcon />
+                                            <ClearOutlinedIcon onClick={() => handleDel(row.manh)} />
                                         </Link>
-                                        <Link to='/admin/brandManagement/modifyBrand/1' className='modify'>
+                                        <Link to={`/admin/brandManagement/modifyBrand/${row.manh}`} className='modify'>
                                             <BorderColorOutlinedIcon />
                                         </Link>
-                                        <Link to='/admin/brandManagement/detailBrand/1' className='detail'>
+                                        <Link to={`/admin/brandManagement/detailBrand/${row.manh}`} className='detail'>
                                             <InfoOutlinedIcon />
                                         </Link>
                                     </div>
@@ -182,6 +222,17 @@ const BrandList = () => {
                     <Link className='link' to='/admin/brandManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Xóa nhãn hiệu thành công!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="error" sx={{ width: '100%' }}>
+                    Lỗi!
+                </Alert>
+            </Snackbar>
         </div>
     </>
     )

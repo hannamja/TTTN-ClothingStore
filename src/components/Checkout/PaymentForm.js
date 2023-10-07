@@ -4,62 +4,61 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { FormControl, FormLabel, Radio, RadioGroup } from '@mui/material';
 
-export default function PaymentForm() {
+export default function PaymentForm({ setIsPaid }) {
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event) => {
+    setValue(event.target.value);
+    console.log(event.target.value == 1)
+    if (event.target.value == 1) setIsPaid(true)
+    else setIsPaid(false)
+  };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Payment method
       </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cardName"
-            label="Name on card"
-            fullWidth
-            autoComplete="cc-name"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cardNumber"
-            label="Card number"
-            fullWidth
-            autoComplete="cc-number"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="expDate"
-            label="Expiry date"
-            fullWidth
-            autoComplete="cc-exp"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
-            fullWidth
-            autoComplete="cc-csc"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
-          />
-        </Grid>
-      </Grid>
-    </React.Fragment>
+      <FormControl>
+        <FormLabel id="demo-controlled-radio-buttons-group">Chọn phương thức thanh toán</FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-controlled-radio-buttons-group"
+          name="controlled-radio-buttons-group"
+          value={value}
+          onChange={handleChange}
+        >
+          <FormControlLabel value={0} control={<Radio />} label="COD" />
+          <FormControlLabel value={1} control={<Radio />} label="CHUYỂN KHOẢN" />
+        </RadioGroup>
+      </FormControl>
+      {
+        value == 1 ? <div>
+          <span style={{ fontWeight: "bolder" }}>Thông tin chuyển khoản</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, borderTop: '2px black solid' }}>
+            <span style={{ fontWeight: "bolder" }}>Ngân hàng: Agribank</span>
+            <span style={{ fontWeight: "bolder" }}>Số tài khoản: 123456789</span>
+            <span>Chủ thẻ: Hukistore</span>
+            <span>Nội dung nhắn: {`[Số điện thọai]+"Chuyển khoản thanh toán"`}</span>
+          </div>
+          <br></br>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, borderTop: '2px black solid' }}>
+            <span style={{ fontWeight: "bolder" }}>Ngân hàng: TP Bank</span>
+            <span style={{ fontWeight: "bolder" }}>Số tài khoản: 123456789</span>
+            <span>Chủ thẻ: Hukistore</span>
+            <span>Nội dung nhắn: {`[Số điện thọai]+"Chuyển khoản thanh toán"`}</span>
+          </div>
+          <br></br>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, borderTop: '2px black solid' }}>
+            <span style={{ fontWeight: "bolder" }}>Momo: 0123456789</span>
+            <span>Nội dung nhắn: {`[Số điện thọai]+"Chuyển khoản thanh toán"`}</span>
+          </div>
+          <br></br>
+        </div> : <></>
+      }
+      <div>
+        Chúng tôi sẽ liên hệ bạn theo số diện thoại để xác minh đơn.
+      </div>
+    </React.Fragment >
   );
 }

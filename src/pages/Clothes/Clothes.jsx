@@ -35,6 +35,7 @@ const Clothes = ({ type }) => {
     const [name, setName] = useState('default name')
     const [price, setPrice] = useState()
     const [cachlam, setCachlam] = useState('')
+    const [cachlamInput, setCachlamInput] = useState('')
 
     const [tt, setTT] = useState(ttOpt[0])
     const [ttInput, setTTInput] = useState()
@@ -75,6 +76,10 @@ const Clothes = ({ type }) => {
     };
 
     const handleAdd = () => {
+        if (cl == '' || loai == '' || brand == '' || name == '' || tt == null || price == null) {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const sp = {
             "chatlieuDTO": cl,
             "loaimhDTO": loai,
@@ -100,6 +105,10 @@ const Clothes = ({ type }) => {
     }
 
     const handleMod = () => {
+        if (cl == '' || loai == '' || brand == '' || name == '' || tt == null || price == null) {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const sp = {
             "mamh": manh,
             "chatlieuDTO": cl,
@@ -216,17 +225,20 @@ const Clothes = ({ type }) => {
                         onChange={e => setPrice(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="address1"
-                        name="address1"
-                        label="Cách làm"
-                        fullWidth
-                        autoComplete="shipping address-line1"
-                        variant="standard"
+                <Grid item xs={12} sm={4}>
+                    <Autocomplete
                         value={cachlam}
-                        onChange={e => setCachlam(e.target.value)}
+                        onChange={(event, newValue) => {
+                            setCachlam(newValue);
+                        }}
+                        inputValue={cachlamInput}
+                        onInputChange={(event, newInputValue) => {
+                            setCachlamInput(newInputValue);
+                        }}
+                        id="controllable-states-demo"
+                        options={['HAND', 'MACHINE']}
+                        sx={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Chọn cách làm" />}
                     />
                 </Grid>
                 <Grid item xs={12} sm={4}>

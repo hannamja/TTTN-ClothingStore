@@ -20,7 +20,7 @@ const FeaturedProducts = ({ type, dataSet }) => {
         </p>
       </div>
       <div className="bottom">
-        {dataSet?.slice(0, 4).map((item) => <Card item={item} key={item.mamh} />)}
+        {dataSet?.map((item) => <Card item={item} key={item.mamh} />)}
       </div>
     </div>
   );

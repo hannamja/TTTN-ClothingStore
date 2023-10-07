@@ -29,13 +29,13 @@ const NavBar = () => {
               <KeyboardArrowDownIcon />
             </div>
             <div className="item">
-              <Link className="link" to="/products/1">Women</Link>
+              <Link className="link" to="/products/2">ÁO SƠ MI</Link>
             </div>
             <div className="item">
-              <Link className="link" to="/products/2">Men</Link>
+              <Link className="link" to="/products/5">QUẦN TÂY</Link>
             </div>
             <div className="item">
-              <Link className="link" to="/products/3">Children</Link>
+              <Link className="link" to="/products/1">ÁO THUN</Link>
             </div>
           </div>
           <div className="center">
@@ -79,7 +79,7 @@ const NavBar = () => {
             </div>
           </div>
         </div>
-        {open && <Cart />}
+        {open && <Cart open={setOpen} />}
       </div>
       {openSearch &&
         <div className="search">

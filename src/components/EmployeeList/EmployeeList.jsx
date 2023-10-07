@@ -18,8 +18,9 @@ import Modal from '@mui/material/Modal';
 import { Link } from 'react-router-dom';
 import './EmployeeList.scss'
 import { CheckBox, InfoOutlined, LockPersonOutlined } from '@mui/icons-material';
-import { Box, Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
+import { Alert, Box, Checkbox, FormControl, FormControlLabel, FormGroup, Snackbar } from '@mui/material';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -72,23 +73,6 @@ const style = {
     boxShadow: 24,
     p: 2,
 };
-const topStyle = {
-    display: 'flex',
-    gap: '15px',
-    alignItems: 'center',
-    borderBottom: '1px solid #999',
-    padding: 10,
-    img: {
-        width: 30,
-        height: 30,
-        cursor: 'pointer'
-    },
-    userInfo: {
-        display: 'flex',
-        flexDirection: 'column',
-    }
-
-}
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -141,13 +125,43 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 const EmployeeList = () => {
-    const [open, setOpen] = React.useState('');
-    const handleOpen = (e) => setOpen(e);
-    const handleClose = (e) => setOpen(e);
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
 
     const [input, setInput] = useState('')
     const handldeChange = (e) => {
         setInput(e)
+    }
+    const user = useSelector(state => state.user)
+    const handleDel = (id) => {
+        if (window.confirm('Bạn có muốn xóa nhân viên có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/nhanvien/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) setOpen1(true)
+                else setOpen(true)
+            }
+            )
+        else return
     }
     const { data, loading, error } = useFetchAdmin(`/nhanvien`);
     return (
@@ -187,12 +201,19 @@ const EmployeeList = () => {
                                 <StyledTableCell align="right">{row.sdt}</StyledTableCell>
                                 <StyledTableCell align="right">
                                     <div className='btns'>
-                                        <Link className='del'>
-                                            <ClearOutlinedIcon />
-                                        </Link>
-                                        <Link to={`/admin/empManagement/modifyEmp/${row.manv}`} className='modify'>
-                                            <BorderColorOutlinedIcon />
-                                        </Link>
+                                        {
+                                            row.trangthai != '1' ?
+                                                <>
+                                                    <Link className='del'>
+                                                        <ClearOutlinedIcon onClick={() => handleDel(row.manv)} />
+                                                    </Link>
+                                                    <Link to={`/admin/empManagement/modifyEmp/${row.manv}`} className='modify'>
+                                                        <BorderColorOutlinedIcon />
+                                                    </Link>
+                                                </>
+                                                : <></>
+                                        }
+
                                         <Link to={`/admin/empManagement/detailEmp/${row.manv}`} className='detail'>
                                             <InfoOutlined />
                                         </Link>
@@ -209,6 +230,17 @@ const EmployeeList = () => {
                     <Link className='link' to='/admin/empManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Xóa nhân viên thành công!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                    Lỗi!
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

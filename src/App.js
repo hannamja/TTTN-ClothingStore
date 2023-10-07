@@ -1,4 +1,4 @@
-import { Children, useState } from "react";
+import { Children, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import NavBar from "./components/NavBar/Navbar";
@@ -41,7 +41,10 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import Brand from "./pages/Brand/Brand";
 import Type from "./pages/Type/Type";
 import Material from "./pages/Material/Material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "./redux/userReducer";
+import jwt_decode from "jwt-decode";
+import { Alert, Snackbar } from "@mui/material";
 
 const Layout = () => {
   return (
@@ -467,10 +470,44 @@ function App() {
       ]
     }
   ])
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (Object.keys(user).length !== 0) {
+      let token = user.token;
+      let decodedToken = jwt_decode(token);
+      console.log("Decoded Token", decodedToken);
+      let currentDate = new Date();
 
+      // JWT exp is in seconds
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        console.log("Token expired.");
+        dispatch(logout())
+      } else {
+        console.log("Valid token");
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (Object.keys(user).length !== 0) setOpen(true)
+    return () => setOpen(false)
+  }, [user])
+  const [open, setOpen] = useState(false)
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
   return (
     <div>
-      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length-1] === 3 ? userRoutes  : adminRoutes} />
+      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length - 1] === 3 ? userRoutes : adminRoutes} />
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Đã đăng nhập thành công!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
