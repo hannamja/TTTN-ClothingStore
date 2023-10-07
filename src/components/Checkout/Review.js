@@ -28,14 +28,14 @@ export default function Review() {
             <ListItemText primary={product.title} secondary={product.desc} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <Typography variant="body2">Quantity: {product.quantity}</Typography>
-              <Typography variant="body2">Price: {product.price}</Typography>
+              <Typography variant="body2">Price: {product.price * product.quantity}</Typography>
             </div>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {products.reduce((total, ct) => total + ct.price, 0)}
+            {products.reduce((total, ct) => total + ct.price*ct.quantity, 0)}
           </Typography>
         </ListItem>
       </List>

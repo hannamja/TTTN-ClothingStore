@@ -17,6 +17,7 @@ import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, resetCart } from "../../redux/cartReducer";
+import { Alert, Snackbar } from '@mui/material';
 
 function Copyright() {
   return (
@@ -33,12 +34,12 @@ function Copyright() {
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-function getStepContent(step) {
+function getStepContent(step, setIsPaid) {
   switch (step) {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm />;
+      return <PaymentForm setIsPaid={setIsPaid} />;
     case 2:
       return <Review />;
     default:
@@ -53,7 +54,7 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    if (activeStep !== steps.length - 1) setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleCheckout()
     }
@@ -62,7 +63,7 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
+  const [isPaid, setIsPaid] = React.useState(false)
   const products = useSelector((state) => state.cart.products);
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
@@ -88,6 +89,7 @@ export default function Checkout() {
       "cmnd": null,
       "trangthai": null
     }
+    
     const defaultTT = {
       "hoadonDTO": {
         "khachhang": null,
@@ -98,7 +100,7 @@ export default function Checkout() {
         "chitietHoadonDTO": null
       },
       "trangthai": {
-        "matthd": 1,
+        "matthd": isPaid ? 2 : 1,
       },
       "ngaytao": new Date().toISOString().slice(0, 10)
     }
@@ -112,7 +114,7 @@ export default function Checkout() {
       "khachhang": khachhang,
       "nhanvien": defaultNV,
       "ngaytao": new Date().toISOString().slice(0, 10),
-      "tongtien": products.reduce((total, cur) => total + cur.price, 0),
+      "tongtien": products.reduce((total, cur) => total + cur.price*cur.quantity, 0),
       "chitietTrangThaiDTO": defaultTT,
       "chitietHoadonDTO": productsList
     }
@@ -125,10 +127,24 @@ export default function Checkout() {
       },
       body: JSON.stringify(cart)
     }).then(res => res.json()).then(data => {
-      dispatch(resetCart())
+      if(data.mahd !== null) {
+        dispatch(resetCart())
+        setActiveStep(activeStep+1)
+      }
+      else setOpen404(true)
     }
     )
   }
+
+  const [open404, setOpen404] = React.useState(false);
+
+  const handleClose404 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen404(false);
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -172,7 +188,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {getStepContent(activeStep, setIsPaid)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -193,6 +209,11 @@ export default function Checkout() {
         </Paper>
         <Copyright />
       </Container>
+      <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
+        <Alert onClose={handleClose404} severity="error" sx={{ width: '100%' }}>
+          Số lượng tồn không đủ!
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

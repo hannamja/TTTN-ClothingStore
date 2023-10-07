@@ -167,10 +167,11 @@ const OrderBillList = () => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen100(false);
     };
     const handleConfirm = (hd) => {
+        hd.nhanvien.manv = user.info.nhanvien.manv
+        console.log(hd)
         fetch('http://localhost:8081/api/hoadon/confirm', {
             method: 'POST',
             headers: {
@@ -181,6 +182,8 @@ const OrderBillList = () => {
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
             setOpen1(true)
+            handleClose('')
+            window.location.reload()
         })
     }
     const handleComplete = (hd) => {
@@ -194,20 +197,26 @@ const OrderBillList = () => {
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
             setOpen01(true)
+            handleClose('')
+            window.location.reload()
         })
     }
     const handleCancle = (hd) => {
-        fetch('http://localhost:8081/api/hoadon/cancel', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.token
-            },
-            body: JSON.stringify(hd)
-        }).then(res => res.json()).then(data => {
-            setOpen10(true)
-        })
+        if (window.confirm('Bạn có muốn hủy hóa đơn có id: ' + hd.mahd + '?'))
+            fetch('http://localhost:8081/api/hoadon/cancel', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+                body: JSON.stringify(hd)
+            }).then(res => res.json()).then(data => {
+                setOpen10(true)
+                handleClose('')
+                window.location.reload()
+            })
+        else return
     }
 
     const handleProcessing = (hd) => {
@@ -221,8 +230,11 @@ const OrderBillList = () => {
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
             setOpen100(true)
+            handleClose('')
+            window.location.reload()
         })
     }
+
     return (
         loading ? 'loading...' :
             <div className='orderBillList'>
@@ -246,8 +258,8 @@ const OrderBillList = () => {
                     <Table aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align='center'>Mã đơn</StyledTableCell>
                                 <StyledTableCell>Mã số khách hàng</StyledTableCell>
+                                <StyledTableCell align='center'>Mã đơn</StyledTableCell>
                                 <StyledTableCell align="right">Ngày đặt</StyledTableCell>
                                 <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
                             </TableRow>
@@ -255,7 +267,7 @@ const OrderBillList = () => {
                         <TableBody>
                             {data.map((row) => (
                                 <StyledTableRow key={row.mahd}>
-                                    <StyledTableCell align="center">01</StyledTableCell>
+                                    <StyledTableCell align="center">{row.khachhang.makh}</StyledTableCell>
                                     <StyledTableCell component="th" scope="row">
                                         <Link className='link' to='/'>{row.mahd}</Link>
                                     </StyledTableCell>
@@ -281,13 +293,13 @@ const OrderBillList = () => {
                                                             <ClearOutlinedIcon style={{ color: 'red' }} onClick={() => handleCancle(row)} />
                                                         </div>
                                                             : row.chitietTrangThaiDTO.trangthai.matthd === 4 ?
-                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems:'center' }}>
+                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems: 'center' }}>
                                                                     <CheckOutlined color='success' onClick={() => handleComplete(row)} /> Xác nhận hoàn thành
                                                                 </div>
                                                                 : row.chitietTrangThaiDTO.trangthai.matthd === 3 ?
-                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems:'center' }}>
-                                                                    <DeliveryDiningOutlined color='success' onClick={() => handleProcessing(row)} /> Xác nhận đang giao
-                                                                </div> :<></>
+                                                                    <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems: 'center' }}>
+                                                                        <DeliveryDiningOutlined color='success' onClick={() => handleProcessing(row)} /> Xác nhận đang giao
+                                                                    </div> : <></>
                                                     }
 
                                                 </Box>

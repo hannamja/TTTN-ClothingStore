@@ -18,6 +18,8 @@ import './MaterialList.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { Alert, Snackbar } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -63,13 +65,6 @@ function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -126,6 +121,45 @@ const MaterialList = ({ type }) => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+
+    const handleDel = (id) => {
+        if (window.confirm('Bạn có muốn xóa chất liệu có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/chatlieu/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) setOpen1(true)
+                else {
+                    setOpen(true)
+                    window.location.reload()
+                }
+
+            }
+            )
+        else return
+    }
     const { data, loading, error } = useFetchAdmin(`/chatlieu`);
     return (
         loading ? ('loading...') :
@@ -165,7 +199,7 @@ const MaterialList = ({ type }) => {
                                             <StyledTableCell align="right">
                                                 <div className='btns'>
                                                     <Link className='del'>
-                                                        <ClearOutlinedIcon />
+                                                        <ClearOutlinedIcon onClick={() => handleDel(row.macl)} />
                                                     </Link>
                                                     <Link to={`/admin/materialManagement/modifyMaterial/${row.macl}`} className='modify'>
                                                         <BorderColorOutlinedIcon />
@@ -186,6 +220,17 @@ const MaterialList = ({ type }) => {
                                 <Link className='link' to='/admin/materialManagement/add'><span>Thêm mới</span></Link>
                             </div>
                         </div>
+                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                                Xóa chất liệu thành công!
+                            </Alert>
+                        </Snackbar>
+
+                        <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                            <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                                Lỗi!
+                            </Alert>
+                        </Snackbar>
                     </div >
                 </>
             )

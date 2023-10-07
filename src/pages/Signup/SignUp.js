@@ -171,6 +171,7 @@ export default function SignUp() {
                   id="city"
                   name="city"
                   label="Mật khẩu"
+                  type='password'
                   fullWidth
                   autoComplete="shipping address-level2"
                   variant="standard"
@@ -184,6 +185,7 @@ export default function SignUp() {
                   id="city"
                   name="city"
                   label="Nhập lại mật khẩu"
+                  type='password'
                   fullWidth
                   autoComplete="shipping address-level2"
                   variant="standard"

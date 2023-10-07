@@ -9,7 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Button, Input } from '@mui/material';
+import { Alert, Button, Input, Snackbar } from '@mui/material';
 import './KM.scss'
 import { useParams } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
@@ -22,13 +22,12 @@ const KM = ({ type }) => {
     const user = useSelector(state => state.user)
     const mh = useFetch('/mathang')
 
-    const [ten, setTen] = useState('')
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [ctkmRows, setCtkmRows] = useState([])
     const [ld, setLd] = useState('')
-    const [bd, setBd] = useState(`${type === 'add' ? new Date().toISOString().slice(0, 10) : ' '}`)
-    const [kt, setKt] = useState(' ')
+    const [bd, setBd] = useState(`${type === 'add' ? new Date().toISOString().slice(0, 10) : ''}`)
+    const [kt, setKt] = useState('')
     const [mucgiam, setMucgiam] = useState('')
     const [mucgiamInput, setMucgiamInput] = useState('')
 
@@ -43,13 +42,33 @@ const KM = ({ type }) => {
         }
     }, [loading])
 
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+
     const handleAdd = () => {
+        if (ld == '') {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const km = {
             "lydo": ld,
             "nhanvien": { 'manv': user.info.nhanvien.manv },
             "ctKhuyenmais": ctkmRows
         }
-        console.log(km)
         fetch('http://localhost:8081/api/km', {
             method: 'POST',
             headers: {
@@ -58,10 +77,14 @@ const KM = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(km)
-        }).then(res => res.json()).then(data => console.log(data))
+        }).then(res => res.json()).then(data => { setOpen(true) })
     }
 
     const handleMod = () => {
+        if (ld == '') {
+            alert('Vui lòng nhập đầy đủ thông tin')
+            return
+        }
         const km = {
             "makm": data.makm,
             "lydo": ld,
@@ -77,7 +100,7 @@ const KM = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(km)
-        }).then(res => res.json()).then(data => console.log(data))
+        }).then(res => res.json()).then(data => setOpen1(true))
     }
 
 
@@ -86,7 +109,6 @@ const KM = ({ type }) => {
         setCtkmRows(filtered)
     }
     const handleAddCtmh = (i) => {
-        console.log(i)
         let filtered = ctkmRows.filter(item => item.id.mamh === i.id.mamh)
 
         if (filtered.length > 0) {
@@ -96,6 +118,8 @@ const KM = ({ type }) => {
             setCtkmRows([...ctkmRows, i])
         }
     }
+
+
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -226,6 +250,11 @@ const KM = ({ type }) => {
 
                 <Grid item xs={12}>
                     <Button variant="outlined" onClick={() => {
+
+                        if (bd == '' || kt == '' || value == null || mucgiam == '') {
+                            alert('Vui lòng nhập đủ thông tin sản phẩm, mức giảm, ngày bắt đầu và kết thúc')
+                            return
+                        }
                         handleAddCtmh({
                             id: {
                                 "mamh": value.mamh
@@ -245,6 +274,16 @@ const KM = ({ type }) => {
                         </Grid>
                 }
             </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Thêm khuyến mãi thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                    Sửa khuyến mãi thành công!
+                </Alert>
+            </Snackbar>
         </React.Fragment>
     )
 }

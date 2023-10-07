@@ -5,10 +5,11 @@ import { Button, Input } from '@mui/material';
 import './User.scss'
 import useFetch from '../../hooks/useFetch';
 import { useParams } from 'react-router-dom';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 const User = ({ type }) => {
     const { id } = useParams()
-    const { data, loading, error } = useFetch(`/khachhang/${id}`);
-    return (loading ? ('loading') :
+    const { data, loading, error } = useFetchAdmin(`/khachhang/${id}`);
+    return (loading ? ('loading...') :
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>
@@ -47,19 +48,8 @@ const User = ({ type }) => {
                         type='date'
                     />
                 </Grid>
+
                 <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="address1"
-                        name="address1"
-                        label="CMND"
-                        fullWidth
-                        autoComplete="shipping address-line1"
-                        variant="standard"
-                        value={data.cmnd}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
                     <TextField
                         required
                         id="city"
@@ -69,6 +59,18 @@ const User = ({ type }) => {
                         autoComplete="shipping address-level2"
                         variant="standard"
                         value={data.email}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="address1"
+                        name="address1"
+                        label="CMND"
+                        fullWidth
+                        autoComplete="shipping address-line1"
+                        variant="standard"
+                        value={data.cmnd}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>

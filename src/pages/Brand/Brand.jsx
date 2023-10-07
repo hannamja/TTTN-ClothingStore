@@ -1,9 +1,72 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Button, Input } from '@mui/material';
+import { Alert, Button, Input, Snackbar } from '@mui/material';
 import './Brand.scss'
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const Brand = ({ type }) => {
+    const { id } = useParams()
+    const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/nhanhieu/` + id}`);
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const handleAdd = () => {
+        const nh = {
+            "tennh": ten
+        }
+
+        fetch('http://localhost:8081/api/nhanhieu', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(nh)
+        }).then(res => res.json()).then(()=>{
+            setOpen(true)
+        })
+    }
+
+    const handleMod = () => {
+        const nh = {
+            "manh": data.manh,
+            "tennh": ten
+        }
+
+        fetch('http://localhost:8081/api/nhanhieu', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(nh)
+        }).then(res => res.json()).then(()=>{
+            setOpen1(true)
+        })
+    }
+
+    const user = useSelector(state => state.user)
+    const [ten, setTen] = useState('')
+    useEffect(() => {
+        if (data) setTen(data.tennh)
+    }, [loading])
     return (
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
@@ -23,96 +86,35 @@ const Brand = ({ type }) => {
                         required
                         id="firstName"
                         name="firstName"
-                        label="First name"
+                        label="Tên nhãn hiệu"
                         fullWidth
                         autoComplete="given-name"
                         variant="standard"
+                        value={ten}
+                        onChange={(e)=>setTen(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        name="lastName"
-                        label="Last name"
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="address1"
-                        name="address1"
-                        label="Address line 1"
-                        fullWidth
-                        autoComplete="shipping address-line1"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="address2"
-                        name="address2"
-                        label="Address line 2"
-                        fullWidth
-                        autoComplete="shipping address-line2"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="city"
-                        name="city"
-                        label="City"
-                        fullWidth
-                        autoComplete="shipping address-level2"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        id="state"
-                        name="state"
-                        label="State/Province/Region"
-                        fullWidth
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="zip"
-                        name="zip"
-                        label="Zip / Postal code"
-                        fullWidth
-                        autoComplete="shipping postal-code"
-                        variant="standard"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="country"
-                        name="country"
-                        label="Country"
-                        fullWidth
-                        autoComplete="shipping country"
-                        variant="standard"
-                    />
-                </Grid>
+                
                 {
                     type === 'detail' ? <></> :
 
                         <Grid item xs={12}>
-                            <Button variant="contained">
+                            <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
                                 Save
                             </Button>
                         </Grid>
                 }
             </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Thêm nhãn hiệu thành công!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                    Sửa nhãn hiệu thành công!
+                </Alert>
+            </Snackbar>
         </React.Fragment>
     )
 }

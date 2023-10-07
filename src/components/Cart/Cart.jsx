@@ -6,12 +6,13 @@ import { removeItem, resetCart } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
 import { makeRequest } from "../../makeRequest";
 import { loadStripe } from "@stripe/stripe-js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Cart = () => {
+const Cart = ({ open }) => {
   const products = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => state.user)
+  const navigate = useNavigate()
   const totalPrice = () => {
     let total = 0;
     products.forEach((item) => {
@@ -60,7 +61,7 @@ const Cart = () => {
         <span>SUBTOTAL</span>
         <span>${totalPrice()}</span>
       </div>
-      <Link className="link" to='/checkout'>
+      <Link className="link" to={Object.keys(user).length == 0 ? '/signin' : '/checkout'} onClick={() => { open(false) }}>
         <button>PROCEED TO CHECKOUT</button>
       </Link>
       <span className="reset" onClick={() => dispatch(resetCart())}>

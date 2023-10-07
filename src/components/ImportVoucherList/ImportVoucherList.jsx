@@ -18,6 +18,8 @@ import { Link } from 'react-router-dom';
 import './ImportVoucher.scss'
 import { InfoOutlined } from '@mui/icons-material';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { Alert, Snackbar } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -58,18 +60,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -121,12 +111,46 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
+
 const ImportVoucherList = () => {
     const [input, setInput] = useState('')
     const handldeChange = (e) => {
         setInput(e)
     }
 
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const handleDel = (id) => {
+        fetch('http://localhost:8081/api/phieunhap/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+        }).then(res => res.json()).then(data => {
+            console.log(data)
+            if (data.status == 404) setOpen1(true)
+            else setOpen(true)
+        }
+        )
+    }
     const { data, loading, error } = useFetchAdmin(`/phieunhap`);
     return (
         loading ? 'loading...' :
@@ -165,9 +189,9 @@ const ImportVoucherList = () => {
                                     <StyledTableCell align="right">{row.ngaynhap}</StyledTableCell>
                                     <StyledTableCell align="right">
                                         <div className='btns'>
-                                            <Link className='del'>
-                                                <ClearOutlinedIcon />
-                                            </Link>
+                                            {/* <Link className='del'>
+                                                <ClearOutlinedIcon onClick={() => handleDel(row.mapn)} />
+                                            </Link> */}
                                             <Link to={`/admin/importManagement/modifyImport/${row.mapn}`} className='modify'>
                                                 <BorderColorOutlinedIcon />
                                             </Link>
@@ -187,6 +211,18 @@ const ImportVoucherList = () => {
                         <Link className='link' to='/admin/importManagement/add'><span>Thêm mới</span></Link>
                     </div>
                 </div>
+
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        Xóa phiếu nhập thành công!
+                    </Alert>
+                </Snackbar>
+
+                <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                    <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                        Lỗi!
+                    </Alert>
+                </Snackbar>
             </div>
     )
 }

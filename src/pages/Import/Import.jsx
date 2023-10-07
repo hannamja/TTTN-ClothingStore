@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button } from '@mui/material';
+import { Alert, Button, Snackbar } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import './Import.scss'
 import { useSelector } from 'react-redux';
@@ -44,6 +44,14 @@ const Import = ({ type }) => {
 
         setOpen(false);
     };
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,6 +81,10 @@ const Import = ({ type }) => {
 
 
     const handleAdd = () => {
+        if (pdValue == null) {
+            alert('Vui lòng nhập phiếu đặt')
+            return
+        }
         const defaultNV = {
             "manv": user.info.nhanvien.manv,
             "tennv": null,
@@ -103,11 +115,16 @@ const Import = ({ type }) => {
             body: JSON.stringify(phieunhap)
         }).then(res => res.json()).then(data => {
             console.log(data)
+            setOpen(true)
         }
         )
     }
 
     const handleMod = () => {
+        if (pdValue == null) {
+            alert('Vui lòng nhập phiếu đặt')
+            return
+        }
         const defaultNV = {
             "manv": user.info.nhanvien.manv,
             "tennv": null,
@@ -138,6 +155,7 @@ const Import = ({ type }) => {
             body: JSON.stringify(phieunhap)
         }).then(res => res.json()).then(data => {
             console.log(data)
+            setOpen1(true)
         }
         )
     }
@@ -243,6 +261,8 @@ const Import = ({ type }) => {
                                 <TableRow>
                                     <TableCell>Mã sản phẩm</TableCell>
                                     <TableCell align="right">Tên sản phẩm</TableCell>
+                                    <TableCell align="right">Màu sắc</TableCell>
+                                    <TableCell align="right">Kích cỡ</TableCell>
                                     <TableCell align="right">Số lượng</TableCell>
                                     <TableCell align="right">Đơn giá</TableCell>
                                 </TableRow>
@@ -257,6 +277,8 @@ const Import = ({ type }) => {
                                             {row.ctMathangDTO.mathangDTO.mamh}
                                         </TableCell>
                                         <TableCell align="right">{row.ctMathangDTO.mathangDTO.tenmh}</TableCell>
+                                        <TableCell align="right">{row.ctMathangDTO.color}</TableCell>
+                                        <TableCell align="right">{row.ctMathangDTO.size}</TableCell>
                                         <TableCell align="right">{row.soluong}</TableCell>
                                         <TableCell align="right">{row.dongia}</TableCell>
                                         <TableCell><ClearOutlined onClick={
@@ -297,7 +319,13 @@ const Import = ({ type }) => {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Button variant="outlined" onClick={() => {  handleAddCtmh({ ctMathangDTO: value, soluong: sl, dongia: gia }); setValue(null); setGia(null); setSl(null) }}>
+                    <Button variant="outlined" onClick={() => {
+                        if (value == null || gia == null || sl == null) {
+                            alert('Vui lòng nhập đầy đủ thông tin')
+                            return
+                        }
+                        handleAddCtmh({ ctMathangDTO: value, soluong: sl, dongia: gia }); setValue(null); setGia(null); setSl(null)
+                    }}>
                         Thêm sản phẩm
                     </Button>
                 </Grid>
@@ -310,6 +338,16 @@ const Import = ({ type }) => {
                             </Button>
                         </Grid>
                 }
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        Thêm phiếu nhập thành công!
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                    <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                        Sửa phiếu nhập thành công!
+                    </Alert>
+                </Snackbar>
             </Grid>
         </React.Fragment>
     )
