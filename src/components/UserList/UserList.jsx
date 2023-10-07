@@ -17,6 +17,7 @@ import './UserList.scss'
 import { InfoOutlined } from '@mui/icons-material';
 import useFetch from '../../hooks/useFetch';
 import useSearch from '../../hooks/useSearch';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -126,11 +127,12 @@ const UserList = () => {
             setUrl(`/khachhang`)
         }
     }
-    const { data, loading, error } = useFetch(url);
+    const { data, loading, error } = useFetchAdmin(url);
+    
     return (
         <div className='userList'>
             {
-                loading ? ('loading') :
+                loading ? ('loading...') :
                     (<>
                         <Search>
                             <SearchIconWrapper>
@@ -160,7 +162,7 @@ const UserList = () => {
                                 </TableHead>
                                 <TableBody>
                                     {error ? ('Something wrong!') : data.map((row) => (
-                                        <StyledTableRow key={row.name}>
+                                        <StyledTableRow key={row.makh}>
                                             <StyledTableCell align="center">{row.cmnd}</StyledTableCell>
                                             <StyledTableCell component="th" scope="row">
                                                 <Link className='link' to='/'>{row.hotenkh}</Link>
@@ -169,12 +171,6 @@ const UserList = () => {
                                             <StyledTableCell align="right">{row.email}</StyledTableCell>
                                             <StyledTableCell align="right">
                                                 <div className='btns'>
-                                                    <Link className='del'>
-                                                        <ClearOutlinedIcon />
-                                                    </Link>
-                                                    <Link to='/admin/userManagement/modifyUser/1' className='modify'>
-                                                        <BorderColorOutlinedIcon />
-                                                    </Link>
                                                     <Link to='/admin/userManagement/detailUser/1' className='detail'>
                                                         <InfoOutlined />
                                                     </Link>

@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { login } from '../../redux/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Alert, Snackbar } from '@mui/material';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -37,13 +38,22 @@ export default function SignInSide() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
- 
+
     dispatch(login({
       email: data.get('email'),
       password: data.get('password'),
-    }))
+    })).unwrap(data => data.json()).then(data => console.log(data)).catch(()=>setOpen1(true))
   };
 
+  const [open1, setOpen1] = React.useState(false);
+
+  const handleClose1 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen1(false);
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -128,6 +138,12 @@ export default function SignInSide() {
           </Box>
         </Grid>
       </Grid>
+
+      <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+        <Alert onClose={handleClose1} severity="warning" sx={{ width: '100%' }}>
+          Sai thông tin!
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

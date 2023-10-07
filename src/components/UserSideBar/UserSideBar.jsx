@@ -1,6 +1,6 @@
 import React from 'react'
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Fab from '@mui/material/Fab';
@@ -10,10 +10,19 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import './UserSideBar.scss'
 import { ArrowLeftOutlined } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/userReducer.js'
 const UserSideBar = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)
     const handleClose = () => {
         setOpen(!open)
+    }
+    const handleLogout = (event) => {
+        event.preventDefault()
+        dispatch(logout())
+        navigate('/')
     }
     return (
         <>
@@ -38,7 +47,7 @@ const UserSideBar = () => {
                         </div>
                     </div>
 
-                    <div className='logout'>
+                    <div className='logout' onClick={handleLogout}>
                         <ExitToAppOutlinedIcon style={{ color: "red" }} />
                     </div>
                 </div>

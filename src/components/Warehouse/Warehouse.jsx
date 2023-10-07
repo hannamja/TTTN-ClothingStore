@@ -17,6 +17,8 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './Warehouse.scss'
 import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
+import { useSelector } from 'react-redux';
+import { Alert, Snackbar } from '@mui/material';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -57,9 +59,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -116,6 +115,42 @@ const Warehouse = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+
+    const handleDel = (id) => {
+        if (window.confirm('Bạn có muốn xóa quần áo có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/mathang/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) setOpen1(true)
+                else setOpen(true)
+            }
+            )
+        else return
+    }
     const { data, loading, error } = useFetch(`/mathang`);
     return (
         <div className='wareHouse'>
@@ -160,7 +195,7 @@ const Warehouse = () => {
                                                 <StyledTableCell align="right">
                                                     <div className='btns'>
                                                         <Link className='del'>
-                                                            <ClearOutlinedIcon />
+                                                            <ClearOutlinedIcon onClick={() => handleDel(row.mamh)} />
                                                         </Link>
                                                         <Link to={`/admin/modifyClothes/${row.mamh}`} className='modify'>
                                                             <BorderColorOutlinedIcon />
@@ -184,6 +219,18 @@ const Warehouse = () => {
                         </div>
                     </>
                     )}
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Xóa sản phẩm thành công!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                    Lỗi!
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

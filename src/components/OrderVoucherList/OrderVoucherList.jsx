@@ -16,8 +16,9 @@ import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { Link } from 'react-router-dom';
 import './OrderVoucherList.scss'
-import { Box, Typography } from '@mui/material';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -115,6 +116,44 @@ const OrderVoucherList = () => {
         setInput(e)
     }
 
+    const [open, setOpen] = React.useState(false);
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const [open1, setOpen1] = React.useState(false);
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen1(false);
+    };
+    const user = useSelector(state => state.user)
+
+    const handleDel = (id) => {
+        if (window.confirm('Bạn có muốn xóa phiếu đặt có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/phieudat/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) setOpen1(true)
+                else {
+                    window.location.reload()
+                    setOpen(true)
+                }
+            }
+            )
+        else return
+    }
     const { data, loading, error } = useFetchAdmin(`/phieudat`);
     return (
         loading ? 'loading...' : <div className='orderVoucherList'>
@@ -152,7 +191,7 @@ const OrderVoucherList = () => {
                                 <StyledTableCell align="right">
                                     <div className='btns'>
                                         <Link className='del'>
-                                            <ClearOutlinedIcon />
+                                            <ClearOutlinedIcon onClick={() => handleDel(row.mapd)} />
                                         </Link>
                                         <Link to={`/admin/orderManagement/modifyOrder/${row.mapd}`} className='modify'>
                                             <BorderColorOutlinedIcon />
@@ -173,6 +212,18 @@ const OrderVoucherList = () => {
                     <Link className='link' to='/admin/orderManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Xóa phiếu đặt thành công!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                <Alert onClose={handleClose1} severity="error" sx={{ width: '100%' }}>
+                    Lỗi!
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

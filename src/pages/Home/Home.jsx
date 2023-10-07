@@ -5,18 +5,23 @@ import FeaturedProducts from '../../components/FeaturedProducts/FeaturedProducts
 import Slider from '../../components/Slider/Slider'
 import "./Home.scss"
 import clothesServices from '../../services/clothesServices'
+import { Alert, Snackbar } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
   const [featured, setFeatured] = useState([])
+  const user = useSelector(state => state.user)
   useEffect(() => {
     clothesServices.getAllClothes().then(data => setFeatured(data))
   }, [])
+
+
   return (
     <div className='home'>
       <Slider />
       <FeaturedProducts type="featured" dataSet={featured} />
       <Categories />
-      <FeaturedProducts type="trending" dataSet={featured}/>
+      <FeaturedProducts type="trending" dataSet={featured} />
       <Contact />
     </div>
   )
