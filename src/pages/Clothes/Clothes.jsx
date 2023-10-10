@@ -9,7 +9,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Autocomplete, Button } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import "./Clothes.scss";
 import useFetch from "../../hooks/useFetch";
 import { useParams } from "react-router-dom";
@@ -47,9 +54,9 @@ const Clothes = ({ type }) => {
   const [colorValue, setColorValue] = React.useState("");
 
   const [manh, setMamh] = useState();
-  const [cl, setCl] = useState();
-  const [brand, setBrand] = useState();
-  const [loai, setLoai] = useState();
+  const [cl, setCl] = useState("none");
+  const [brand, setBrand] = useState("none");
+  const [loai, setLoai] = useState("none");
   const [pl, setPl] = useState(null);
   const [clInput, setClInput] = useState();
   const [brandInput, setBrandInput] = useState();
@@ -85,7 +92,7 @@ const Clothes = ({ type }) => {
       brand === undefined ||
       name === "" ||
       tt == null ||
-      price == null
+      !price
     ) {
       alert("Vui lòng nhập đầy đủ thông tin");
       return;
@@ -117,7 +124,24 @@ const Clothes = ({ type }) => {
       body: JSON.stringify(sp),
     })
       .then((res) => res.json())
-      .then((data) => setOpen(true));
+      .then((data) => {
+        setOpen(true);
+        // console.log(data);
+        setName("");
+        setCachlam(null);
+        setTT(null);
+
+        setPrice("");
+
+        // setTT(ttOpt[0]);
+        setCl(undefined);
+        setBrand(undefined);
+        setLoai(undefined);
+        // ctmh
+        setColor(null);
+        setSize(null);
+        setSl(0);
+      });
   };
 
   const handleMod = () => {
@@ -185,7 +209,7 @@ const Clothes = ({ type }) => {
   };
   const handleAddCtmh = (i) => {
     console.log("handleAddCtmh", i);
-    if (!i.color || !i.size) {
+    if (!i.color || !i.size || parseInt(i.currentNumbeer) < 0) {
       console.log("handleAddCtmh", "FAIL");
       return;
     }
@@ -241,7 +265,7 @@ const Clothes = ({ type }) => {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Autocomplete
+          {/* <Autocomplete
             value={tt}
             onChange={(event, newValue) => {
               setTT(newValue);
@@ -257,7 +281,29 @@ const Clothes = ({ type }) => {
             renderInput={(params) => (
               <TextField {...params} label="Trạng thái" />
             )}
-          />
+          /> */}
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="add-clothes-status-select-label">
+              Trạng thái
+            </InputLabel>
+            <Select
+              labelId="add-clothes-status-select-label"
+              id="add-clothes-status-select"
+              value={tt}
+              label="Trạng thái"
+              onChange={(event) => {
+                setTT(event.target.value);
+              }}
+            >
+              {ttOpt.map((e, i) => {
+                return (
+                  <MenuItem key={i} value={e}>
+                    {e.ttName}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -274,7 +320,7 @@ const Clothes = ({ type }) => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Autocomplete
+          {/* <Autocomplete
             value={cachlam}
             onChange={(event, newValue) => {
               setCachlam(newValue);
@@ -289,10 +335,32 @@ const Clothes = ({ type }) => {
             renderInput={(params) => (
               <TextField {...params} label="Chọn cách làm" />
             )}
-          />
+          /> */}
+          <FormControl fullWidth sx={{ width: 300 }}>
+            <InputLabel id="add-clothes-cach-lam-select-label">
+              Chọn cách làm
+            </InputLabel>
+            <Select
+              labelId="add-clothes-cach-lam-select-label"
+              id="add-clothes-cach-lam-select"
+              value={cachlam}
+              label="Chọn cách làm"
+              onChange={(event) => {
+                setCachlam(event.target.value);
+              }}
+            >
+              {["HAND", "MACHINE"].map((e, i) => {
+                return (
+                  <MenuItem key={i} value={e}>
+                    {e}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Autocomplete
+          {/* <Autocomplete
             value={brand}
             onChange={(event, newValue) => {
               setBrand(newValue);
@@ -308,12 +376,35 @@ const Clothes = ({ type }) => {
             renderInput={(params) => (
               <TextField {...params} label="Chọn thương hiệu" />
             )}
-          />
+          /> */}
+          <FormControl fullWidth>
+            <InputLabel id="add-clothes-brand-select-label">
+              Chọn thương hiệu
+            </InputLabel>
+            <Select
+              labelId="add-clothes-brand-select-label"
+              id="add-clothes-brand-select"
+              value={brand}
+              label="Chọn thương hiệu"
+              onChange={(event) => {
+                setBrand(event.target.value);
+              }}
+            >
+              {brandData.data.map((e, i) => {
+                return (
+                  <MenuItem key={i} value={e}>
+                    {e.tennh}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Autocomplete
+          {/* <Autocomplete
             value={loai}
             onChange={(event, newValue) => {
+              // object newValue
               setLoai(newValue);
             }}
             inputValue={loaiInput}
@@ -327,10 +418,32 @@ const Clothes = ({ type }) => {
             renderInput={(params) => (
               <TextField {...params} label="Chọn loại" />
             )}
-          />
+          /> */}
+          <FormControl fullWidth>
+            <InputLabel id="add-clothes-type-select-label">
+              Chọn loại
+            </InputLabel>
+            <Select
+              labelId="add-clothes-type-select-label"
+              id="add-clothes-type-select"
+              value={loai}
+              label="Chọn loại"
+              onChange={(event) => {
+                setLoai(event.target.value);
+              }}
+            >
+              {typeData.data.map((e, i) => {
+                return (
+                  <MenuItem key={i} value={e}>
+                    {e.tenloadimh}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={2}>
-          <Autocomplete
+          {/* <Autocomplete
             value={cl}
             onChange={(event, newValue) => {
               setCl(newValue);
@@ -346,7 +459,30 @@ const Clothes = ({ type }) => {
             renderInput={(params) => (
               <TextField {...params} label="Chọn chất liệu" />
             )}
-          />
+          /> */}
+          <FormControl fullWidth>
+            <InputLabel id="add-clothes-chat-lieu-select-label">
+              Chọn chất liệu
+            </InputLabel>
+            <Select
+              sx={{ width: 300 }}
+              labelId="add-clothes-chat-lieu-select-label"
+              id="add-clothes-chat-lieu-select"
+              value={cl}
+              label="Chọn chất liệu"
+              onChange={(event) => {
+                setCl(event.target.value);
+              }}
+            >
+              {clData.data.map((e, i) => {
+                return (
+                  <MenuItem key={i} value={e}>
+                    {e.tenvai}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Grid>
         <Grid container item xs={12} sm={6}>
           <h5>Chi tiết kích thước sản phẩm</h5>
@@ -523,7 +659,13 @@ const Clothes = ({ type }) => {
           <Grid item xs={12}>
             <Button
               variant="contained"
-              onClick={type === "add" ? handleAdd : handleMod}
+              onClick={
+                type === "add"
+                  ? () => {
+                      handleAdd();
+                    }
+                  : handleMod
+              }
             >
               Save
             </Button>
