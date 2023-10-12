@@ -8,7 +8,7 @@ const useFetchAdmin = (url) => {
     const user = useSelector(state => state.user)
     useEffect(() => {
         const fetchData = async () => {
-            if(url == '') return
+            if(url === '') return
             try {
                 const res = await fetch('http://localhost:8081/api' + url, {
                     headers: {

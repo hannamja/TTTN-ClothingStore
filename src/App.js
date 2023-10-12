@@ -502,7 +502,7 @@ function App() {
   };
   return (
     <div>
-      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length - 1] === 3 ? userRoutes : adminRoutes} />
+      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length - 1] === 'QU004' ? userRoutes : adminRoutes} />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           Đã đăng nhập thành công!

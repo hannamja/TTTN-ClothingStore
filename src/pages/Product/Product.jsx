@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
 
+const PRODUCT_NOT_ENOUGH = 'Sản phẩm không đủ'
+const BELOW_1_AMOUNT = 'Chọn ít nhất 1 sản phẩm'
 const Product = () => {
   const id = useParams().id;
   const [selectedImg, setSelectedImg] = useState(0);
@@ -23,13 +25,16 @@ const Product = () => {
 
   const handleChange = (event) => {
     setIdCtmh(event.target.value);
+    console.log(event.target.value)
     setQuantity(1);
   };
+
   const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
   const [hds, setHds] = useState(null)
-
+  const [notEnough, setNotEnough] = useState(false)
+  const [below1, setBelow1] = useState(false)
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -39,7 +44,10 @@ const Product = () => {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + user.token
           }
-        }).then(data => data.json()).then(data => { setHds(data) })
+        }).then(data => data.json()).then(data => { 
+          setHds(data)
+          console.log(data)
+        })
       }
     }
   }, [])
@@ -47,21 +55,16 @@ const Product = () => {
   useEffect(() => {
     if (data) {
       if (data.chitietKhuyenmaiDTO) {
-        if (data.chitietKhuyenmaiDTO.mucgiam == '10%') setKm(0.1)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '20%') setKm(0.2)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '30%') setKm(0.3)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '40%') setKm(0.4)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '50%') setKm(0.5)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '60%') setKm(0.6)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '70%') setKm(0.7)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '80%') setKm(0.8)
+        setKm(data.chitietKhuyenmaiDTO.mucgiam)
       }
 
     }
   }, [loading])
 
   const checkBuy = (item) => {
-    const filtered = hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === parseInt(item)).length !== 0)
+  
+    const filtered = hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === item) !== 0)
+
     if (filtered.length > 0) {
       if (filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
     }
@@ -76,20 +79,18 @@ const Product = () => {
           <div className="left">
             <div className="top">
               <div className="images">
-                <img
-                  src={
-                    data?.hinhanhDTOs.length === 0 ? '' : data?.hinhanhDTOs[0].duongdan
-                  }
-                  alt=""
-                  onClick={(e) => setSelectedImg(0)}
-                />
-                <img
-                  src={
-                    data?.hinhanhDTOs.length === 0 ? '' : data?.hinhanhDTOs[0].duongdan
-                  }
-                  alt=""
-                  onClick={(e) => setSelectedImg(0)}
-                />
+                {
+                  data?.hinhanhDTOs.length === 0 ? <></> :
+                    data?.hinhanhDTOs.map((ha, idx) => <img
+                      src={
+                        ha.duongdan
+                      }
+                      alt=""
+                      onClick={(e) => setSelectedImg(idx)}
+                    />
+                    )
+                }
+
               </div>
               <div className="mainImg">
                 <img
@@ -109,7 +110,9 @@ const Product = () => {
           </div>
           <div className="right">
             <h1>{data?.tenmh}</h1>
-            <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia}`}</span>
+            {
+              data?.chitietKhuyenmaiDTO === null ? '' : <span className="price-1">{`$${data.gia}`}</span>
+            }
             <span className="price">${data?.gia - data.gia * km}</span>
             <p>{data?.mota}</p>
             <Box sx={{ width: 150 }}>
@@ -124,67 +127,39 @@ const Product = () => {
                 >
                   {
                     data.ctMathangs.map((ct, index) => (
-                      <MenuItem value={index}>{ct.color} - {ct.size}</MenuItem>
+                      <MenuItem value={index}>{ct.colorDTO.tenmau} - {ct.sizeDTO.tensize}</MenuItem>
                     ))
                   }
                 </Select>
               </FormControl>
             </Box>
             {Object.keys(user).length === 0 ? <>
+              {notEnough ? PRODUCT_NOT_ENOUGH : ''}
+              {below1 ? BELOW_1_AMOUNT : ''}
               <div className="quantity">
                 <button
-                  onClick={() =>
-                    setQuantity((prev) => (prev === 1 ? 1 : prev - 1))
+                  onClick={() => {
+                    setNotEnough(false)
+                    quantity === 1 ? setBelow1(true) :
+                      setQuantity((prev) => (prev - 1))
+                  }
                   }
                   disabled={idCtmh === null}
                 >
                   -
                 </button>
                 {quantity}
-                <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
+                <button onClick={
+                  () => {
+                    setBelow1(false)
+                    data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setNotEnough(true) : setQuantity((prev) => prev + 1)
+                  }
+                } disabled={idCtmh === null}>+</button>
               </div>
               {
                 data.ctMathangs.length === 0 ?
                   <button
-                    disabled={data.ctMathangs.length === 0}
-                    className="add"
-                    onClick={() =>
-                      dispatch(
-                        addToCart({
-                          id: data.mamh,
-                          title: data.tenmh,
-                          desc: data.mota,
-                          img: data.hinhanhDTOs[0].duongdan,
-                          "hoadonDTO": {
-                            "khachhang": null,
-                            "nhanvien": null,
-                            "ngaytao": null,
-                            "tongtien": null,
-                            "chitietTrangThaiDTO": null,
-                            "chitietHoadonDTO": null
-                          },
-                          "chitietMathangDTO": {
-                            ...data.ctMathangs[idCtmh],
-                            "mathangDTO": {
-                              "mamh": data.mamh,
-                              "chatlieuDTO": null,
-                              "loaimhDTO": null,
-                              "nhanhieuDTO": null,
-                              "tenmh": data.tenmh,
-                              "mota": null,
-                              "trangthai": null,
-                              "cachlam": null,
-                              "phanloai": null,
-                              "gia": null,
-                              "hinhanhDTOs": null,
-                              "ctMathangs": null
-                            }
-                          },
-                          quantity,
-                          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
-                        })
-                      )
-                    }
+                    disabled={true}
                   >
                     <AddShoppingCartIcon /> OUT OF STOCK
                   </button>
@@ -241,62 +216,36 @@ const Product = () => {
                 </div>
               </div>
             </> :
-              user.info.role[user.info.role.length - 1] === 3 ?
+              user.info.role[user.info.role.length - 1] === 'QU004' ?
                 <>
+                  {notEnough ? PRODUCT_NOT_ENOUGH : ''}
+                  {below1 ? BELOW_1_AMOUNT : ''}
                   <div className="quantity">
                     <button
-                      onClick={() =>
-                        setQuantity((prev) => (prev === 1 ? 1 : prev - 1))
+                      onClick={() => {
+                        setNotEnough(false)
+                        quantity === 1 ? setBelow1(true) :
+                          setQuantity((prev) => (prev - 1))
+                      }
                       }
                       disabled={idCtmh === null}
                     >
                       -
                     </button>
                     {quantity}
-                    <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
+                    <button onClick={
+                      () => {
+                        console.log(data.ctMathangs[idCtmh])
+                        setBelow1(false)
+                        data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setNotEnough(true) : setQuantity((prev) => prev + 1)
+                      }
+                    } disabled={idCtmh === null}>+</button>
                   </div>
                   {
                     data.ctMathangs.length === 0 ?
                       <button
-                        disabled={data.ctMathangs.length === 0}
+                        disabled={true}
                         className="add"
-                        onClick={() =>
-                          dispatch(
-                            addToCart({
-                              id: data.mamh,
-                              title: data.tenmh,
-                              desc: data.mota,
-                              img: data.hinhanhDTOs[0].duongdan,
-                              "hoadonDTO": {
-                                "khachhang": null,
-                                "nhanvien": null,
-                                "ngaytao": null,
-                                "tongtien": null,
-                                "chitietTrangThaiDTO": null,
-                                "chitietHoadonDTO": null
-                              },
-                              "chitietMathangDTO": {
-                                ...data.ctMathangs[idCtmh],
-                                "mathangDTO": {
-                                  "mamh": data.mamh,
-                                  "chatlieuDTO": null,
-                                  "loaimhDTO": null,
-                                  "nhanhieuDTO": null,
-                                  "tenmh": data.tenmh,
-                                  "mota": null,
-                                  "trangthai": null,
-                                  "cachlam": null,
-                                  "phanloai": null,
-                                  "gia": null,
-                                  "hinhanhDTOs": null,
-                                  "ctMathangs": null
-                                }
-                              },
-                              quantity,
-                              price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
-                            })
-                          )
-                        }
                       >
                         <AddShoppingCartIcon /> OUT OF STOCK
                       </button>

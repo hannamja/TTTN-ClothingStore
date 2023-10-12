@@ -67,7 +67,7 @@ const NavBar = () => {
                     <ShoppingCartOutlinedIcon />
                     <span>{products.length}</span>
                   </div>
-                </> : user.info.role[user.info.role.length - 1] === 3 ? <>
+                </> : user.info.role[user.info.role.length - 1] === 'QU004' ? <>
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
