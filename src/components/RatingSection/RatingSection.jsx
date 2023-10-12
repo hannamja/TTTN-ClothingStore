@@ -4,17 +4,23 @@ import './RatingSection.scss'
 import { Button, Rating, TextField } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+
+const NOT_FULL_FIELD = 'Mời bạn nhập bình luận!'
+const NOT_CHOOSE_RATING = 'Mời bạn chọn đánh giá!'
 const RatingSection = ({ data, isBuy }) => {
     const [isNotLogined, setIsNotLogined] = useState(false)
     const [open, setOpen] = useState(false)
     const [comment, setComment] = useState('')
     const [rating, setRating] = useState(0)
+    const [notFullField, setNotFullField] = useState(false)
+    const [notChooseRating, setNotChooseRating] = useState(false)
     const user = useSelector(state => state.user)
     const handleComment = () => {
         if (Object.keys(user).length === 0) setIsNotLogined(true)
         setOpen(!open)
     }
     const handlePost = () => {
+        comment == '' ? setNotFullField(true) : setNotFullField(false)
         const commentPost = {
             'ngaybl': new Date(),
             'mathangDTO': {
@@ -36,6 +42,7 @@ const RatingSection = ({ data, isBuy }) => {
         }).then(data => data.json()).then(data => console.log(data))
     }
     const handleRating = () => {
+        rating == '' ? setNotChooseRating(true) : setNotChooseRating(false)
         const commentPost = {
             'ngaybl': new Date(),
             'mathangDTO': {
@@ -67,6 +74,7 @@ const RatingSection = ({ data, isBuy }) => {
                     data.danhgias.filter(i => i.taikhoanDTO.matk === user.matk).length === 0 ? isBuy ?
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span>Mời bạn đánh giá: </span>
+                            {notChooseRating ? NOT_CHOOSE_RATING : ''}
                             <Rating onChange={(e) => setRating(e.target.value)} value={rating}></Rating>
                             {
                                 rating > 0 ? <Button onClick={handleRating} variant='outlined'>Đánh giá</Button> : <></>
@@ -102,6 +110,7 @@ const RatingSection = ({ data, isBuy }) => {
                 {
                     open ?
                         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                            {notFullField ? NOT_FULL_FIELD : ''}
                             <TextField id="outlined-basic" label="Nhập bình luận của bạn" variant="outlined" onChange={(e) => setComment(e.target.value)} />
                             <Button onClick={handlePost} variant='outlined'>Bình luận</Button>
                         </div>
