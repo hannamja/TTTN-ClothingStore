@@ -51,14 +51,14 @@ const UserBox = () => {
                                 <div className='bottom'>
                                     <div className="item">
                                         <ExitToAppOutlinedIcon />
-                                        <Link className='link' to='/signin' onClick={handleClose}>Login</Link>
+                                        <Link className='link' to='/signin'>Login</Link>
                                     </div>
                                 </div>
                             </>
                         ) : (
                             <>
                                 {
-                                    user.info.role[user.info.role.length-1] !== 'QU004' ? (
+                                    user.info.role[user.info.role.length-1] !== 3 ? (
                                         <div className='top'>
                                             <AdminPanelSettingsOutlinedIcon />
                                             <Link className='link' to='/admin'>Quản lí</Link>
@@ -68,7 +68,7 @@ const UserBox = () => {
                                 <div className='bottom'>
 
                                     {
-                                        user.info.role[user.info.role.length-1] === 'QU004' ? <>
+                                        user.info.role[user.info.role.length-1] === 3 ? <>
                                             <div className="item">
                                                 <ReceiptLongOutlinedIcon />
                                                 <Link className='link' to='/user/purchase'>Quản lí đơn hàng</Link>

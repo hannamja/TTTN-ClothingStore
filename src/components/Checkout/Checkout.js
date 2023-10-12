@@ -17,7 +17,6 @@ import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, resetCart } from "../../redux/cartReducer";
-import { Alert, Snackbar } from '@mui/material';
 
 function Copyright() {
   return (
@@ -39,7 +38,7 @@ function getStepContent(step, setIsPaid) {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm setIsPaid={setIsPaid} />;
+      return <PaymentForm setIsPaid = {setIsPaid}/>;
     case 2:
       return <Review />;
     default:
@@ -54,7 +53,7 @@ export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
-    if (activeStep !== steps.length - 1) setActiveStep(activeStep + 1);
+    setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleCheckout()
     }
@@ -89,7 +88,7 @@ export default function Checkout() {
       "cmnd": null,
       "trangthai": null
     }
-    
+
     const defaultTT = {
       "hoadonDTO": {
         "khachhang": null,
@@ -107,7 +106,7 @@ export default function Checkout() {
 
     const productsList = []
     products.forEach(element => {
-      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.price }
+      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.quantity*element.price }
       productsList.push(ele)
     });
     const cart = {
@@ -127,24 +126,12 @@ export default function Checkout() {
       },
       body: JSON.stringify(cart)
     }).then(res => res.json()).then(data => {
-      if(data.mahd !== null) {
-        dispatch(resetCart())
-        setActiveStep(activeStep+1)
-      }
-      else setOpen404(true)
+      dispatch(resetCart())
     }
     )
   }
 
-  const [open404, setOpen404] = React.useState(false);
-
-  const handleClose404 = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen404(false);
-  };
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -209,11 +196,6 @@ export default function Checkout() {
         </Paper>
         <Copyright />
       </Container>
-      <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
-        <Alert onClose={handleClose404} severity="error" sx={{ width: '100%' }}>
-          Số lượng tồn không đủ!
-        </Alert>
-      </Snackbar>
     </ThemeProvider>
   );
 }
