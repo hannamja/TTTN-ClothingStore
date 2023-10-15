@@ -10,7 +10,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {
-  Autocomplete,
   Button,
   FormControl,
   FormHelperText,
@@ -53,6 +52,8 @@ const Clothes = ({ type }) => {
   const clData = useFetchAdmin(`/chatlieu`);
   const brandData = useFetchAdmin(`/nhanhieu`);
   const typeData = useFetchAdmin(`/loaimh`);
+  const colorData = useFetchAdmin(`/color`);
+  const sizeData = useFetchAdmin(`/size`);
 
   const [errors, setErrors] = useState(initialErrors);
 
@@ -63,31 +64,35 @@ const Clothes = ({ type }) => {
   const [tt, setTT] = useState(ttOpt[0]);
 
   const [sizeValue, setSizeValue] = React.useState(null);
-  const [colorValue, setColorValue] = React.useState("");
+  const [colorValue, setColorValue] = React.useState(null);
 
   const [manh, setMamh] = useState();
   const [cl, setCl] = useState("none");
   const [brand, setBrand] = useState("none");
   const [loai, setLoai] = useState("none");
   const [pl, setPl] = useState(null);
-
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(null);
   const [sl, setSl] = useState(0);
-
-  const [color, setColor] = React.useState("");
-
+  const [color, setColor] = React.useState(null);
   const [url, setUrl] = useState("");
-
+  const [message, setMessage] = useState("");
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = (event, reason) => {
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setOpenSuccess(false);
+  };
+
+  const [openErr, setOpenErr] = React.useState(false);
+  const handleCloseErr = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenErr(false);
   };
 
   const validate = () => {
@@ -149,7 +154,13 @@ const Clothes = ({ type }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setOpen(true);
+          if (data.errCode === "SAVE_SUCCESS") {
+            setMessage(data.message);
+            setOpenSuccess(true);
+          } else {
+            setMessage(data.message);
+            setOpenErr(true);
+          }
           setName("");
           setCachlam(null);
           setTT(null);
@@ -203,8 +214,9 @@ const Clothes = ({ type }) => {
       body: JSON.stringify(sp),
     })
       .then((res) => res.json())
-      .then((data) => setOpen(true));
+      .then((data) => {});
   };
+
   useEffect(() => {
     if (data) {
       setMamh(data.mamh);
@@ -233,19 +245,25 @@ const Clothes = ({ type }) => {
 
   const handleDelCtmh = (i) => {
     const filtered = ctmhRows.filter(
-      (item) => item.color !== i.color && item.size !== i.size
+      (item) =>
+        item.colorDTO.macolor !== i.colorDTO.macolor &&
+        item.sizeDTO.masize !== i.sizeDTO.masize
     );
     setCtmhRows(filtered);
   };
+
   const handleAddCtmh = (i) => {
-    // console.log("handleAddCtmh", i);
-    if (!i.color || !i.size || parseInt(i.currentNumbeer) < 0) {
-      console.log("handleAddCtmh", "FAIL");
+    if (
+      !i.colorDTO.macolor ||
+      !i.sizeDTO.masize ||
+      parseInt(i.currentNumbeer) < 0
+    ) {
       return;
     }
-    console.log("handleAddCtmh", "OK");
     let filtered = ctmhRows.filter(
-      (item) => item.color === i.color && item.size === i.size
+      (item) =>
+        item.colorDTO.macolor === i.colorDTO.macolor &&
+        item.sizeDTO.masize === i.sizeDTO.masize
     );
 
     if (filtered.length > 0) {
@@ -253,7 +271,9 @@ const Clothes = ({ type }) => {
         parseInt(filtered[0].currentNumbeer) + parseInt(i.currentNumbeer);
       setCtmhRows([
         ...ctmhRows.filter(
-          (item) => item.color !== i.color && item.size !== i.size
+          (item) =>
+            item.colorDTO.macolor !== i.colorDTO.macolor &&
+            item.sizeDTO.masize !== i.sizeDTO.masize
         ),
         filtered[0],
       ]);
@@ -261,6 +281,7 @@ const Clothes = ({ type }) => {
       setCtmhRows([...ctmhRows, i]);
     }
   };
+
   return clData.loading || brandData.loading || typeData.loading ? (
     "loading..."
   ) : (
@@ -483,8 +504,8 @@ const Clothes = ({ type }) => {
                     key={row.name}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{row.color}</TableCell>
-                    <TableCell>{row.size}</TableCell>
+                    <TableCell>{row.colorDTO.tencolor}</TableCell>
+                    <TableCell>{row.sizeDTO.tensize}</TableCell>
                     <TableCell>{row.currentNumbeer}</TableCell>
                     <TableCell>
                       <ClearOutlined
@@ -499,42 +520,50 @@ const Clothes = ({ type }) => {
           </TableContainer>
 
           <Grid item xs={12} sm={4}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              value={color}
-              onChange={(event, newValue) => {
-                setColor(newValue);
-              }}
-              inputValue={colorValue}
-              onInputChange={(event, newInputValue) => {
-                setColorValue(newInputValue);
-              }}
-              options={["BLUE", "YELLOW", "WHITE", "RED", "BLACK", "GRAY"]}
-              sx={{ marginTop: 1 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Màu sắc" />
-              )}
-            />
+            <FormControl fullWidth sx={{ marginTop: 1 }}>
+              <InputLabel id="add-clothes-brand-select-label">
+                Chọn màu
+              </InputLabel>
+              <Select
+                labelId="add-clothes-brand-select-label"
+                id="add-clothes-brand-select"
+                value={color}
+                label="Màu sắc"
+                onChange={(event) => {
+                  setColor(event.target.value);
+                }}
+              >
+                {colorData.data.map((e, i) => {
+                  return (
+                    <MenuItem key={i} value={e}>
+                      {e.tencolor}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              value={size}
-              onChange={(event, newValue) => {
-                setSize(newValue);
-              }}
-              inputValue={sizeValue}
-              onInputChange={(event, newInputValue) => {
-                setSizeValue(newInputValue);
-              }}
-              options={["L", "S", "M", "XL", "XL", "XXL"]}
-              sx={{ marginTop: 1 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Kích cỡ" />
-              )}
-            />
+            <FormControl fullWidth sx={{ marginTop: 1 }}>
+              <InputLabel id="add-clothes-brand-select-label">Size</InputLabel>
+              <Select
+                labelId="add-clothes-brand-select-label"
+                id="add-clothes-brand-select"
+                value={size}
+                label="Chọn size"
+                onChange={(event) => {
+                  setSize(event.target.value);
+                }}
+              >
+                {sizeData.data.map((e, i) => {
+                  return (
+                    <MenuItem key={i} value={e}>
+                      {e.tensize}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
@@ -552,7 +581,11 @@ const Clothes = ({ type }) => {
               sx={{ marginTop: 1 }}
               variant="outlined"
               onClick={() => {
-                handleAddCtmh({ color: color, size: size, currentNumbeer: sl });
+                handleAddCtmh({
+                  colorDTO: color,
+                  sizeDTO: size,
+                  currentNumbeer: sl,
+                });
                 setColor(null);
                 setSize(null);
                 setSl(0);
@@ -649,11 +682,37 @@ const Clothes = ({ type }) => {
           </Grid>
         )}
       </Grid>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          {type === "add"
-            ? "Thêm quần áo thành công!"
-            : "Sửa quần áo thành công!"}
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={6000}
+        onClose={handleCloseSuccess}
+      >
+        {type === "add" ? (
+          <Alert
+            onClose={handleCloseSuccess}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        ) : (
+          <Alert
+            onClose={handleCloseSuccess}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Sửa quần áo thành công!
+          </Alert>
+        )}
+      </Snackbar>
+
+      <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
+        <Alert
+          onClose={handleCloseErr}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {message}
         </Alert>
       </Snackbar>
     </React.Fragment>

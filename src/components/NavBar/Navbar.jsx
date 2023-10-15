@@ -79,7 +79,7 @@ const NavBar = () => {
             </div>
           </div>
         </div>
-        {open && <Cart open={setOpen} />}
+        {open && <Cart />}
       </div>
       {openSearch &&
         <div className="search">

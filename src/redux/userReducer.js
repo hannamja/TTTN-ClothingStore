@@ -13,13 +13,9 @@ export const login = createAsyncThunk('user/login', async (data, { rejectWithVal
         body: JSON.stringify(data)
     })
     const user = await res.json()
-    console.log(user)
     const listRole = user.ctQuyens.reduce((arr, cur) => { arr.push(cur.quyen.maquyen); return arr }, [])
 
-    listRole.sort()
-
     const newState = { matk: user.matk, info: { khachhang: user.khachhang, nhanvien: user.nhanvien, role: listRole }, token: user.accessToken }
-    console.log(newState)
     return newState
 })
 

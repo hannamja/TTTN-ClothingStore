@@ -17,7 +17,6 @@ import PaymentForm from './PaymentForm';
 import Review from './Review';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, resetCart } from "../../redux/cartReducer";
-import { Alert, Snackbar } from '@mui/material';
 
 function Copyright() {
   return (
@@ -52,9 +51,13 @@ const defaultTheme = createTheme();
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [isPaid, setIsPaid] = React.useState(false)
+  const products = useSelector((state) => state.cart.products);
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
 
   const handleNext = () => {
-    if (activeStep !== steps.length - 1) setActiveStep(activeStep + 1);
+    setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleCheckout()
     }
@@ -63,10 +66,7 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  const [isPaid, setIsPaid] = React.useState(false)
-  const products = useSelector((state) => state.cart.products);
-  const user = useSelector(state => state.user)
-  const dispatch = useDispatch()
+
   const handleCheckout = async () => {
     const khachhang = {
       "makh": user.info.khachhang.makh,
@@ -78,18 +78,7 @@ export default function Checkout() {
       "diachi": null,
       "cmnd": null
     }
-    const defaultNV = {
-      "manv": 1,
-      "tennv": null,
-      "gioitinh": null,
-      "ngaysinh": null,
-      "sdt": null,
-      "diachi": null,
-      "email": null,
-      "cmnd": null,
-      "trangthai": null
-    }
-    
+
     const defaultTT = {
       "hoadonDTO": {
         "khachhang": null,
@@ -107,14 +96,15 @@ export default function Checkout() {
 
     const productsList = []
     products.forEach(element => {
-      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.price }
+      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.quantity * element.price }
       productsList.push(ele)
     });
     const cart = {
       "khachhang": khachhang,
-      "nhanvien": defaultNV,
+      "nhanvien": null,
+      "shipper": null,
       "ngaytao": new Date().toISOString().slice(0, 10),
-      "tongtien": products.reduce((total, cur) => total + cur.price*cur.quantity, 0),
+      "tongtien": products.reduce((total, cur) => total + cur.price * cur.quantity, 0),
       "chitietTrangThaiDTO": defaultTT,
       "chitietHoadonDTO": productsList
     }
@@ -126,25 +116,14 @@ export default function Checkout() {
         'Authorization': 'Bearer ' + user.token
       },
       body: JSON.stringify(cart)
-    }).then(res => res.json()).then(data => {
-      if(data.mahd !== null) {
+    })
+      .then(res => res.json())
+      .then(data => {
         dispatch(resetCart())
-        setActiveStep(activeStep+1)
-      }
-      else setOpen404(true)
-    }
-    )
+      })
   }
 
-  const [open404, setOpen404] = React.useState(false);
 
-  const handleClose404 = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen404(false);
-  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -209,11 +188,6 @@ export default function Checkout() {
         </Paper>
         <Copyright />
       </Container>
-      <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
-        <Alert onClose={handleClose404} severity="error" sx={{ width: '100%' }}>
-          Số lượng tồn không đủ!
-        </Alert>
-      </Snackbar>
     </ThemeProvider>
   );
 }

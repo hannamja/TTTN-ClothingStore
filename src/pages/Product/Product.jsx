@@ -29,7 +29,7 @@ const Product = () => {
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
   const [hds, setHds] = useState(null)
-
+  
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -43,27 +43,11 @@ const Product = () => {
       }
     }
   }, [])
-  const [km, setKm] = useState(0)
-  useEffect(() => {
-    if (data) {
-      if (data.chitietKhuyenmaiDTO) {
-        if (data.chitietKhuyenmaiDTO.mucgiam == '10%') setKm(0.1)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '20%') setKm(0.2)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '30%') setKm(0.3)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '40%') setKm(0.4)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '50%') setKm(0.5)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '60%') setKm(0.6)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '70%') setKm(0.7)
-        if (data.chitietKhuyenmaiDTO.mucgiam == '80%') setKm(0.8)
-      }
-
-    }
-  }, [loading])
-
+  
   const checkBuy = (item) => {
     const filtered = hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === parseInt(item)).length !== 0)
-    if (filtered.length > 0) {
-      if (filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
+    if(filtered.length>0) {
+      if(filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
     }
     return false
   }
@@ -109,8 +93,8 @@ const Product = () => {
           </div>
           <div className="right">
             <h1>{data?.tenmh}</h1>
-            <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia}`}</span>
-            <span className="price">${data?.gia - data.gia * km}</span>
+            <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia - data.gia * 0.1}`}</span>
+            <span className="price">${data?.gia}</span>
             <p>{data?.mota}</p>
             <Box sx={{ width: 150 }}>
               <FormControl fullWidth>
@@ -124,7 +108,7 @@ const Product = () => {
                 >
                   {
                     data.ctMathangs.map((ct, index) => (
-                      <MenuItem value={index}>{ct.color} - {ct.size}</MenuItem>
+                      <MenuItem value={index}>{ct.colorDTO.tenmau} - {ct.sizeDTO.tensize}</MenuItem>
                     ))
                   }
                 </Select>
@@ -181,7 +165,7 @@ const Product = () => {
                             }
                           },
                           quantity,
-                          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
+                          price: data.gia * quantity,
                         })
                       )
                     }
@@ -224,7 +208,7 @@ const Product = () => {
                             }
                           },
                           quantity,
-                          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
+                          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
                         })
                       )
                     }
@@ -293,7 +277,7 @@ const Product = () => {
                                 }
                               },
                               quantity,
-                              price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
+                              price: data.gia * quantity,
                             })
                           )
                         }
@@ -336,7 +320,7 @@ const Product = () => {
                                 }
                               },
                               quantity,
-                              price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * km) * quantity,
+                              price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
                             })
                           )
                         }
