@@ -38,7 +38,7 @@ function getStepContent(step, setIsPaid) {
     case 0:
       return <AddressForm />;
     case 1:
-      return <PaymentForm setIsPaid = {setIsPaid}/>;
+      return <PaymentForm setIsPaid={setIsPaid} />;
     case 2:
       return <Review />;
     default:
@@ -51,6 +51,10 @@ const defaultTheme = createTheme();
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [isPaid, setIsPaid] = React.useState(false)
+  const products = useSelector((state) => state.cart.products);
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -62,10 +66,7 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  const [isPaid, setIsPaid] = React.useState(false)
-  const products = useSelector((state) => state.cart.products);
-  const user = useSelector(state => state.user)
-  const dispatch = useDispatch()
+
   const handleCheckout = async () => {
     const khachhang = {
       "makh": user.info.khachhang.makh,
@@ -76,17 +77,6 @@ export default function Checkout() {
       "email": user.info.khachhang.email,
       "diachi": null,
       "cmnd": null
-    }
-    const defaultNV = {
-      "manv": 1,
-      "tennv": null,
-      "gioitinh": null,
-      "ngaysinh": null,
-      "sdt": null,
-      "diachi": null,
-      "email": null,
-      "cmnd": null,
-      "trangthai": null
     }
 
     const defaultTT = {
@@ -106,14 +96,15 @@ export default function Checkout() {
 
     const productsList = []
     products.forEach(element => {
-      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.quantity*element.price }
+      let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.quantity * element.price }
       productsList.push(ele)
     });
     const cart = {
       "khachhang": khachhang,
-      "nhanvien": defaultNV,
+      "nhanvien": null,
+      "shipper": null,
       "ngaytao": new Date().toISOString().slice(0, 10),
-      "tongtien": products.reduce((total, cur) => total + cur.price*cur.quantity, 0),
+      "tongtien": products.reduce((total, cur) => total + cur.price * cur.quantity, 0),
       "chitietTrangThaiDTO": defaultTT,
       "chitietHoadonDTO": productsList
     }
@@ -125,13 +116,14 @@ export default function Checkout() {
         'Authorization': 'Bearer ' + user.token
       },
       body: JSON.stringify(cart)
-    }).then(res => res.json()).then(data => {
-      dispatch(resetCart())
-    }
-    )
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch(resetCart())
+      })
   }
 
-  
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />

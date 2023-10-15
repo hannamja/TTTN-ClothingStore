@@ -121,57 +121,35 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 const OrderBillList = () => {
     const [open, setOpen] = React.useState('');
-    const handleOpen = (e) => setOpen(e);
-    const handleClose = (e) => setOpen(e);
-
     const [input, setInput] = useState('')
-    const handldeChange = (e) => {
-        setInput(e)
-    }
     const { data, loading, error } = useFetchAdmin(`/hoadon`);
     const user = useSelector(state => state.user)
 
-    const [open1, setOpen1] = React.useState(false);
+    const [message, setMessage] = useState('')
+    const handleOpen = (e) => setOpen(e);
+    const handleClose = (e) => setOpen(e);
+    const handldeChange = (e) => {
+        setInput(e)
+    }
 
-    const handleClose1 = (event, reason) => {
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const handleCloseSuccess = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
-        setOpen1(false);
+        setOpenSuccess(false);
     };
 
-    const [open10, setOpen10] = React.useState(false);
-
-    const handleClose10 = (event, reason) => {
+    const [openErr, setOpenErr] = React.useState(false);
+    const handleCloseErr = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
-        setOpen10(false);
+        setOpenErr(false);
     };
 
-    const [open01, setOpen01] = React.useState(false);
-
-    const handleClose01 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen01(false);
-    };
-
-    const [open100, setOpen100] = React.useState(false);
-
-    const handleClose100 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen100(false);
-    };
     const handleConfirm = (hd) => {
         hd.nhanvien.manv = user.info.nhanvien.manv
-        console.log(hd)
         fetch('http://localhost:8081/api/hoadon/confirm', {
             method: 'POST',
             headers: {
@@ -181,7 +159,14 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
-            setOpen1(true)
+            if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
+                setMessage(data.message)
+                setOpenSuccess(true)
+            }
+            else {
+                setMessage(data.message)
+                setOpenErr(true)
+            }
             handleClose('')
             window.location.reload()
         })
@@ -196,7 +181,14 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
-            setOpen01(true)
+            if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
+                setMessage(data.message)
+                setOpenSuccess(true)
+            }
+            else {
+                setMessage(data.message)
+                setOpenErr(true)
+            }
             handleClose('')
             window.location.reload()
         })
@@ -212,9 +204,16 @@ const OrderBillList = () => {
                 },
                 body: JSON.stringify(hd)
             }).then(res => res.json()).then(data => {
-                setOpen10(true)
+                if (data.errCode == 'BILL_CANCELED_SUCCESS') {
+                    setMessage(data.message)
+                    setOpenSuccess(true)
+                    window.location.reload()
+                }
+                else {
+                    setMessage(data.message)
+                    setOpenErr(true)
+                }
                 handleClose('')
-                window.location.reload()
             })
         else return
     }
@@ -229,7 +228,7 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
-            setOpen100(true)
+            setOpenSuccess(true)
             handleClose('')
             window.location.reload()
         })
@@ -301,7 +300,6 @@ const OrderBillList = () => {
                                                                         <DeliveryDiningOutlined color='success' onClick={() => handleProcessing(row)} /> Xác nhận đang giao
                                                                     </div> : <></>
                                                     }
-
                                                 </Box>
                                             </Modal>
                                         </div>
@@ -311,33 +309,21 @@ const OrderBillList = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
 
-                    <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                        Đã xác nhận đơn!
+                <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+                    <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
+                        {
+                            message
+                        }
                     </Alert>
-
                 </Snackbar>
-                <Snackbar open={open100} autoHideDuration={6000} onClose={handleClose100}>
 
-                    <Alert onClose={handleClose100} severity="success" sx={{ width: '100%' }}>
-                        Đã xác nhận đơn đang được giao!
+                <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
+                    <Alert onClose={handleCloseErr} severity="error" sx={{ width: '100%' }}>
+                        {
+                            message
+                        }
                     </Alert>
-
-                </Snackbar>
-                <Snackbar open={open01} autoHideDuration={6000} onClose={handleClose01}>
-
-                    <Alert onClose={handleClose01} severity="info" sx={{ width: '100%' }}>
-                        Đã xác nhận hoàn thành đơn đơn!
-                    </Alert>
-
-                </Snackbar>
-                <Snackbar open={open10} autoHideDuration={6000} onClose={handleClose10}>
-
-                    <Alert onClose={handleClose10} severity="error" sx={{ width: '100%' }}>
-                        Đã hủy đơn!
-                    </Alert>
-
                 </Snackbar>
             </div>
     )
