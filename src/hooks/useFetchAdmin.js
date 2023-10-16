@@ -21,7 +21,6 @@ const useFetchAdmin = (url) => {
                 setError(false)
                 setLoading(false);
                 setData(result);
-                console.log(data)
             } catch (err) {
                 setError(true);
                 setLoading(true);
