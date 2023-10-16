@@ -108,7 +108,7 @@ const Product = () => {
                 >
                   {
                     data.ctMathangs.map((ct, index) => (
-                      <MenuItem value={index}>{ct.colorDTO.tenmau} - {ct.sizeDTO.tensize}</MenuItem>
+                      <MenuItem value={index}>{ct.colorDTO.tencolor} - {ct.sizeDTO.tensize}</MenuItem>
                     ))
                   }
                 </Select>

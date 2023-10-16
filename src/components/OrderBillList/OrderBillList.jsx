@@ -7,9 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase'
@@ -18,7 +16,7 @@ import HistoryList from '../HistoryList/HistoryList';
 import Modal from '@mui/material/Modal';
 import { Link } from 'react-router-dom';
 import './OrderBillList.scss'
-import { Alert, Box, Snackbar, Typography } from '@mui/material';
+import { Alert, Box, FormControl, InputLabel, MenuItem, Select, Snackbar, Typography } from '@mui/material';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
 import { CheckOutlined, DeliveryDiningOutlined } from '@mui/icons-material';
@@ -125,6 +123,9 @@ const OrderBillList = () => {
     const { data, loading, error } = useFetchAdmin(`/hoadon`);
     const user = useSelector(state => state.user)
 
+    const [shipper, setShipper] = useState(null);
+    const shipperData = useFetchAdmin(`/shipper`);
+
     const [message, setMessage] = useState('')
     const handleOpen = (e) => setOpen(e);
     const handleClose = (e) => setOpen(e);
@@ -149,7 +150,20 @@ const OrderBillList = () => {
     };
 
     const handleConfirm = (hd) => {
-        hd.nhanvien.manv = user.info.nhanvien.manv
+        hd.nhanvien = {
+            "cmnd": null,
+            "ngaysinh": null,
+            "sdt": null,
+            "tennv": null,
+            "diachi": null,
+            "gioitinh": null,
+            "manv": user.info.nhanvien.manv,
+            "trangthai": null,
+            "email": null
+        }
+        hd.shipper = {
+            "mashipper": shipper.mashipper
+        }
         fetch('http://localhost:8081/api/hoadon/confirm', {
             method: 'POST',
             headers: {
@@ -288,6 +302,30 @@ const OrderBillList = () => {
                                                     </Typography>
                                                     {
                                                         row.chitietTrangThaiDTO.trangthai.matthd < 3 && row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? <div style={{ display: 'flex', gap: 5, justifyContent: 'end' }}>
+                                                            <div className='shipper'>
+                                                                <FormControl fullWidth>
+                                                                    <InputLabel id="add-clothes-brand-select-label">
+                                                                        Chọn shipper
+                                                                    </InputLabel>
+                                                                    <Select
+                                                                        labelId="add-clothes-brand-select-label"
+                                                                        id="add-clothes-brand-select"
+                                                                        value={shipper}
+                                                                        label="Chọn thương hiệu"
+                                                                        onChange={(event) => {
+                                                                            setShipper(event.target.value);
+                                                                        }}
+                                                                    >
+                                                                        {shipperData.data.map((e, i) => {
+                                                                            return (
+                                                                                <MenuItem key={i} value={e}>
+                                                                                    {e.tenshipper}
+                                                                                </MenuItem>
+                                                                            );
+                                                                        })}
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
                                                             <CheckOutlined style={{ color: 'lime' }} onClick={() => handleConfirm(row)} />
                                                             <ClearOutlinedIcon style={{ color: 'red' }} onClick={() => handleCancle(row)} />
                                                         </div>
