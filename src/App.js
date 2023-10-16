@@ -102,11 +102,11 @@ function App() {
         },
         {
           path: "/signin",
-          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+          element: <SignInSide />,
         },
         {
           path: "/signup",
-          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
+          element: <SignUp />,
         },
         {
           path: "/forgot",
@@ -143,11 +143,11 @@ function App() {
         },
         {
           path: "/signin",
-          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+          element: <SignInSide />,
         },
         {
           path: "/signup",
-          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
+          element: <SignUp />,
         },
         {
           path: "/forgot",
@@ -214,11 +214,11 @@ function App() {
         },
         {
           path: "/signin",
-          element: Object.keys(user).length === 0 ? <SignInSide /> : <Navigate to='/' />,
+          element: <SignInSide />,
         },
         {
           path: "/signup",
-          element: Object.keys(user).length === 0 ? <SignUp /> : <Navigate to='/' />,
+          element: <SignUp />,
         },
         {
           path: "/forgot",

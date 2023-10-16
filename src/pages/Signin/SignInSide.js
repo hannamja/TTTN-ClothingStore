@@ -34,6 +34,7 @@ const defaultTheme = createTheme();
 
 
 export default function SignInSide() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,7 +43,10 @@ export default function SignInSide() {
     dispatch(login({
       email: data.get('email'),
       password: data.get('password'),
-    })).unwrap(data => data.json()).then(data => console.log(data)).catch(()=>setOpen1(true))
+    })).unwrap(data => data.json())
+      .then(data =>
+        navigate(-1))
+      .catch(() => setOpen1(true))
   };
 
   const [open1, setOpen1] = React.useState(false);

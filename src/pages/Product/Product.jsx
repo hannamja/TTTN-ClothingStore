@@ -14,22 +14,24 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
+import { Alert, Snackbar } from "@mui/material";
 
 const Product = () => {
   const id = useParams().id;
   const [selectedImg, setSelectedImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [idCtmh, setIdCtmh] = React.useState(null);
-
-  const handleChange = (event) => {
-    setIdCtmh(event.target.value);
-    setQuantity(1);
-  };
   const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
   const [hds, setHds] = useState(null)
-  
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -43,14 +45,61 @@ const Product = () => {
       }
     }
   }, [])
-  
+
   const checkBuy = (item) => {
     const filtered = hds.filter(i => i.chitietHoadonDTO.filter(ii => ii.chitietMathangDTO.mathangDTO.mamh === parseInt(item)).length !== 0)
-    if(filtered.length>0) {
-      if(filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
+    if (filtered.length > 0) {
+      if (filtered[0].chitietTrangThaiDTO.trangthai.matthd === 5) return true
     }
     return false
   }
+
+  const handleAddToCart = () => {
+    if (idCtmh == null) {
+      alert('Vui lòng chọn phân loại mặt hàng')
+      return
+    }
+    dispatch(
+      addToCart({
+        id: data.mamh,
+        title: data.tenmh,
+        desc: data.mota,
+        img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
+        "hoadonDTO": {
+          "khachhang": null,
+          "nhanvien": null,
+          "ngaytao": null,
+          "tongtien": null,
+          "chitietTrangThaiDTO": null,
+          "chitietHoadonDTO": null
+        },
+        "chitietMathangDTO": {
+          ...data.ctMathangs[idCtmh],
+          "mathangDTO": {
+            "mamh": data.mamh,
+            "chatlieuDTO": null,
+            "loaimhDTO": null,
+            "nhanhieuDTO": null,
+            "tenmh": data.tenmh,
+            "mota": null,
+            "trangthai": null,
+            "cachlam": null,
+            "phanloai": null,
+            "gia": null,
+            "hinhanhDTOs": null,
+            "ctMathangs": null
+          }
+        },
+        quantity,
+        price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
+      })
+    )
+    setOpenSuccess(true)
+  }
+  const handleChange = (event) => {
+    setIdCtmh(event.target.value);
+    setQuantity(1);
+  };
   return (
     <div className="product">
       {loading ? (
@@ -96,8 +145,8 @@ const Product = () => {
             <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia - data.gia * 0.1}`}</span>
             <span className="price">${data?.gia}</span>
             <p>{data?.mota}</p>
-            <Box sx={{ width: 150 }}>
-              <FormControl fullWidth>
+            <Box sx={{ width: 500, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <FormControl sx={{ width: 150 }}>
                 <InputLabel id="demo-simple-select-label">Phân loại đồ</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -113,6 +162,11 @@ const Product = () => {
                   }
                 </Select>
               </FormControl>
+              {
+                idCtmh == null ? <></> : <div>
+                  Còn sẵn: {data.ctMathangs[idCtmh].currentNumbeer}
+                </div>
+              }
             </Box>
             {Object.keys(user).length === 0 ? <>
               <div className="quantity">
@@ -132,86 +186,12 @@ const Product = () => {
                   <button
                     disabled={data.ctMathangs.length === 0}
                     className="add"
-                    onClick={() =>
-                      dispatch(
-                        addToCart({
-                          id: data.mamh,
-                          title: data.tenmh,
-                          desc: data.mota,
-                          img: data.hinhanhDTOs[0].duongdan,
-                          "hoadonDTO": {
-                            "khachhang": null,
-                            "nhanvien": null,
-                            "ngaytao": null,
-                            "tongtien": null,
-                            "chitietTrangThaiDTO": null,
-                            "chitietHoadonDTO": null
-                          },
-                          "chitietMathangDTO": {
-                            ...data.ctMathangs[idCtmh],
-                            "mathangDTO": {
-                              "mamh": data.mamh,
-                              "chatlieuDTO": null,
-                              "loaimhDTO": null,
-                              "nhanhieuDTO": null,
-                              "tenmh": data.tenmh,
-                              "mota": null,
-                              "trangthai": null,
-                              "cachlam": null,
-                              "phanloai": null,
-                              "gia": null,
-                              "hinhanhDTOs": null,
-                              "ctMathangs": null
-                            }
-                          },
-                          quantity,
-                          price: data.gia * quantity,
-                        })
-                      )
-                    }
                   >
                     <AddShoppingCartIcon /> OUT OF STOCK
                   </button>
                   : <button
                     className="add"
-                    disabled={idCtmh === null}
-                    onClick={() =>
-                      dispatch(
-                        addToCart({
-                          id: data.mamh,
-                          title: data.tenmh,
-                          desc: data.mota,
-                          img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
-                          "hoadonDTO": {
-                            "khachhang": null,
-                            "nhanvien": null,
-                            "ngaytao": null,
-                            "tongtien": null,
-                            "chitietTrangThaiDTO": null,
-                            "chitietHoadonDTO": null
-                          },
-                          "chitietMathangDTO": {
-                            ...data.ctMathangs[idCtmh],
-                            "mathangDTO": {
-                              "mamh": data.mamh,
-                              "chatlieuDTO": null,
-                              "loaimhDTO": null,
-                              "nhanhieuDTO": null,
-                              "tenmh": data.tenmh,
-                              "mota": null,
-                              "trangthai": null,
-                              "cachlam": null,
-                              "phanloai": null,
-                              "gia": null,
-                              "hinhanhDTOs": null,
-                              "ctMathangs": null
-                            }
-                          },
-                          quantity,
-                          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
-                        })
-                      )
-                    }
+                    onClick={handleAddToCart}
                   >
                     <AddShoppingCartIcon /> ADD TO CART
                   </button>
@@ -244,86 +224,12 @@ const Product = () => {
                       <button
                         disabled={data.ctMathangs.length === 0}
                         className="add"
-                        onClick={() =>
-                          dispatch(
-                            addToCart({
-                              id: data.mamh,
-                              title: data.tenmh,
-                              desc: data.mota,
-                              img: data.hinhanhDTOs[0].duongdan,
-                              "hoadonDTO": {
-                                "khachhang": null,
-                                "nhanvien": null,
-                                "ngaytao": null,
-                                "tongtien": null,
-                                "chitietTrangThaiDTO": null,
-                                "chitietHoadonDTO": null
-                              },
-                              "chitietMathangDTO": {
-                                ...data.ctMathangs[idCtmh],
-                                "mathangDTO": {
-                                  "mamh": data.mamh,
-                                  "chatlieuDTO": null,
-                                  "loaimhDTO": null,
-                                  "nhanhieuDTO": null,
-                                  "tenmh": data.tenmh,
-                                  "mota": null,
-                                  "trangthai": null,
-                                  "cachlam": null,
-                                  "phanloai": null,
-                                  "gia": null,
-                                  "hinhanhDTOs": null,
-                                  "ctMathangs": null
-                                }
-                              },
-                              quantity,
-                              price: data.gia * quantity,
-                            })
-                          )
-                        }
                       >
                         <AddShoppingCartIcon /> OUT OF STOCK
                       </button>
                       : <button
-                        disabled={idCtmh === null}
                         className="add"
-                        onClick={() =>
-                          dispatch(
-                            addToCart({
-                              id: data.mamh,
-                              title: data.tenmh,
-                              desc: data.mota,
-                              img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
-                              "hoadonDTO": {
-                                "khachhang": null,
-                                "nhanvien": null,
-                                "ngaytao": null,
-                                "tongtien": null,
-                                "chitietTrangThaiDTO": null,
-                                "chitietHoadonDTO": null
-                              },
-                              "chitietMathangDTO": {
-                                ...data.ctMathangs[idCtmh],
-                                "mathangDTO": {
-                                  "mamh": data.mamh,
-                                  "chatlieuDTO": null,
-                                  "loaimhDTO": null,
-                                  "nhanhieuDTO": null,
-                                  "tenmh": data.tenmh,
-                                  "mota": null,
-                                  "trangthai": null,
-                                  "cachlam": null,
-                                  "phanloai": null,
-                                  "gia": null,
-                                  "hinhanhDTOs": null,
-                                  "ctMathangs": null
-                                }
-                              },
-                              quantity,
-                              price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
-                            })
-                          )
-                        }
+                        onClick={handleAddToCart}
                       >
                         <AddShoppingCartIcon /> ADD TO CART
                       </button>
@@ -355,6 +261,15 @@ const Product = () => {
           </div>
         </>
       )}
+      <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Đã thêm vào giỏ
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
