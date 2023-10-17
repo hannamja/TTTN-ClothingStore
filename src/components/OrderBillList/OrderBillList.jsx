@@ -116,34 +116,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const initialMessages = {
-  isOpen: false,
-};
 
-const reducers = (prevState, action) => {
-  switch (action.type) {
-    case "CLOSE":
-      return { ...prevState, isOpen: false };
-    case "OPEN":
-      return { ...prevState, isOpen: true };
-    case "SET_SUCCESSFUL_MESSAGE":
-      return {
-        isOpen: true,
-        isSuccessful: true,
-        code: action.code,
-        message: action.message,
-      };
-    case "SET_ERROR_MESSAGE":
-      return {
-        isOpen: true,
-        isSuccessful: false,
-        code: action.code,
-        message: action.message,
-      };
-    default:
-      return prevState;
-  }
-};
 const OrderBillList = () => {
     const [open, setOpen] = React.useState('');
     const [input, setInput] = useState('')
@@ -152,6 +125,7 @@ const OrderBillList = () => {
 
     const [shipper, setShipper] = useState(null);
     const shipperData = useFetchAdmin(`/shipper`);
+    console.log('shipperData: ', shipperData);
 
     const [message, setMessage] = useState('')
     const handleOpen = (e) => setOpen(e);
@@ -200,6 +174,7 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
+          // FIXME: Sửa lại mã code
             if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
                 setMessage(data.message)
                 setOpenSuccess(true)
@@ -269,6 +244,7 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
+            // FIXME: Sửa lại khúc này
             setOpenSuccess(true)
             handleClose('')
             window.location.reload()
