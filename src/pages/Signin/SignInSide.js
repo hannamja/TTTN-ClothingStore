@@ -1,30 +1,36 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { login } from '../../redux/userReducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Alert, Snackbar } from '@mui/material';
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { login } from "../../redux/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Alert, Snackbar } from "@mui/material";
+import { useFormik } from "formik";
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="http://localhost:3000">
         Hukistore
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -32,27 +38,50 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-
 export default function SignInSide() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    dispatch(login({
-      email: data.get('email'),
-      password: data.get('password'),
-    })).unwrap(data => data.json())
-      .then(data =>
-        navigate(-1))
-      .catch(() => setOpen1(true))
+  const validate = (values) => {
+    const returnErrors = {};
+    if (!values.email) {
+      returnErrors.email = "Vui lòng nhập tên tài khoản!";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      returnErrors.email = "Email không đúng định dạng!";
+    }
+    if (!values.password) {
+      returnErrors.password = "Vui lòng nhập mật khẩu!";
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{4,45}$/.test(values.password)) {
+      returnErrors.password = "Mật khẩu từ 3-45 ký tự! gồm 0-9A-Za-z";
+    }
+    return returnErrors;
   };
+
+  const loginFormik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      dispatch(
+        login({
+          email: values.email,
+          password: values.password,
+        })
+      )
+        .unwrap((data) => data.json())
+        .then((data) => navigate(-1))
+        .catch(() => setOpen1(true));
+    },
+  });
 
   const [open1, setOpen1] = React.useState(false);
 
   const handleClose1 = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -60,7 +89,7 @@ export default function SignInSide() {
   };
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -68,12 +97,15 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
-            backgroundRepeat: 'no-repeat',
+            backgroundImage:
+              "url(https://source.unsplash.com/random?wallpapers)",
+            backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -81,37 +113,50 @@ export default function SignInSide() {
             sx={{
               my: 8,
               mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <form
+              onSubmit={loginFormik.handleSubmit}
+              style={{ marginTop: "8px" }}
+            >
               <TextField
                 margin="normal"
-                required
                 fullWidth
                 id="email"
-                label="Email Address"
                 name="email"
-                autoComplete="email"
-                autoFocus
+                label="Email Address"
+                {...loginFormik.getFieldProps("email")}
+                error={
+                  loginFormik.touched.email && Boolean(loginFormik.errors.email)
+                }
+                helperText={
+                  loginFormik.touched.email && loginFormik.errors.email
+                }
               />
               <TextField
                 margin="normal"
-                required
                 fullWidth
+                id="password"
                 name="password"
                 label="Password"
+                {...loginFormik.getFieldProps("password")}
+                error={
+                  loginFormik.touched.password &&
+                  Boolean(loginFormik.errors.password)
+                }
+                helperText={
+                  loginFormik.touched.password && loginFormik.errors.password
+                }
                 type="password"
-                id="password"
-                autoComplete="current-password"
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -138,13 +183,13 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
-            </Box>
+            </form>
           </Box>
         </Grid>
       </Grid>
 
       <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-        <Alert onClose={handleClose1} severity="warning" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose1} severity="warning" sx={{ width: "100%" }}>
           Sai thông tin!
         </Alert>
       </Snackbar>
