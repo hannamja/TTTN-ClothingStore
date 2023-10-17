@@ -10,9 +10,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {
-  Autocomplete,
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -32,6 +32,17 @@ const ttOpt = [
   { tt: "0", ttName: "Có sẵn" },
   { tt: "1", ttName: "Không có sẵn" },
 ];
+
+const initialErrors = {
+  brand: "",
+  cl: "",
+  loai: "",
+  name: "",
+  price: "",
+  tt: "",
+  cachlam: "",
+};
+
 const Clothes = ({ type }) => {
   const { id } = useParams();
   const { data, loading } = useFetch(
@@ -41,107 +52,130 @@ const Clothes = ({ type }) => {
   const clData = useFetchAdmin(`/chatlieu`);
   const brandData = useFetchAdmin(`/nhanhieu`);
   const typeData = useFetchAdmin(`/loaimh`);
+  const colorData = useFetchAdmin(`/color`);
+  const sizeData = useFetchAdmin(`/size`);
+
+  const [errors, setErrors] = useState(initialErrors);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState();
   const [cachlam, setCachlam] = useState("");
-  const [cachlamInput, setCachlamInput] = useState("");
 
   const [tt, setTT] = useState(ttOpt[0]);
-  const [ttInput, setTTInput] = useState();
 
   const [sizeValue, setSizeValue] = React.useState(null);
-  const [colorValue, setColorValue] = React.useState("");
+  const [colorValue, setColorValue] = React.useState(null);
 
   const [manh, setMamh] = useState();
   const [cl, setCl] = useState("none");
   const [brand, setBrand] = useState("none");
   const [loai, setLoai] = useState("none");
   const [pl, setPl] = useState(null);
-  const [clInput, setClInput] = useState();
-  const [brandInput, setBrandInput] = useState();
-  const [loaiInput, setLoaiInput] = useState();
-
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(null);
   const [sl, setSl] = useState(0);
-
-  const [color, setColor] = React.useState("");
-
+  const [color, setColor] = React.useState(null);
   const [url, setUrl] = useState("");
-
+  const [message, setMessage] = useState("");
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = (event, reason) => {
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
+    setOpenSuccess(false);
+  };
 
-    setOpen(false);
+  const [openErr, setOpenErr] = React.useState(false);
+  const handleCloseErr = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenErr(false);
+  };
+
+  const validate = () => {
+    const errors = {};
+    if (cl === undefined) {
+      errors.cl = "Chưa chọn chất liệu!";
+    }
+    if (loai === undefined) {
+      errors.loai = "Chưa chọn loại!";
+    }
+    if (brand === undefined) {
+      errors.brand = "Chưa chọn thương hiệu!";
+    }
+    if (!name) {
+      errors.name = "Tên không được để trống!";
+    }
+    if (tt == null) {
+      errors.tt = "Chưa chọn trạng thái!";
+    }
+    if (!cachlam) {
+      errors.cachlam = "Chưa chọn cách làm!";
+    }
+    if (!price) {
+      errors.price = "Giá không được để trống!";
+    } else if (parseFloat(price) < 0) {
+      errors.price = "Giá không được nhỏ hơn 0";
+    }
+    return errors;
   };
 
   const handleAdd = () => {
-    console.log("brand", brand);
-    console.log("loai", loai);
-    console.log("cl", cl);
-    if (
-      cl === undefined ||
-      loai === undefined ||
-      brand === undefined ||
-      name === "" ||
-      tt == null ||
-      !price
-    ) {
-      alert("Vui lòng nhập đầy đủ thông tin");
-      return;
+    const returnErrors = validate();
+    if (Object.keys(returnErrors).length > 0) {
+      setErrors(returnErrors);
+      alert("Vui lòng nhập đầy đủ thông tin!");
+    } else {
+      setErrors(initialErrors);
+      const sp = {
+        chatlieuDTO: cl,
+        loaimhDTO: loai,
+        nhanhieuDTO: brand,
+        tenmh: name,
+        mota: "KO",
+        trangthai: tt.tt,
+        cachlam: cachlam,
+        phanloai: pl,
+        gia: price,
+        hinhanhDTOs: haRows,
+        ctMathangs: ctmhRows,
+      };
+      console.log(sp);
+      fetch("http://localhost:8081/api/mathang", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sp),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.errCode === "SAVE_SUCCESS") {
+            setMessage(data.message);
+            setOpenSuccess(true);
+          } else {
+            setMessage(data.message);
+            setOpenErr(true);
+          }
+          setName("");
+          setCachlam(null);
+          setTT(null);
+
+          setPrice("");
+
+          setCl(undefined);
+          setBrand(undefined);
+          setLoai(undefined);
+          // ctmh
+          setColor(null);
+          setSize(null);
+          setSl(0);
+        });
     }
-    if (parseFloat(price) < 0) {
-      alert("Giá không được nhỏ hơn 0");
-      return;
-    }
-    const sp = {
-      chatlieuDTO: cl,
-      loaimhDTO: loai,
-      nhanhieuDTO: brand,
-      tenmh: name,
-      mota: "KO",
-      trangthai: tt.tt,
-      cachlam: cachlam,
-      phanloai: pl,
-      gia: price,
-      hinhanhDTOs: haRows,
-      ctMathangs: ctmhRows,
-    };
-
-    fetch("http://localhost:8081/api/mathang", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(sp),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setOpen(true);
-        // console.log(data);
-        setName("");
-        setCachlam(null);
-        setTT(null);
-
-        setPrice("");
-
-        // setTT(ttOpt[0]);
-        setCl(undefined);
-        setBrand(undefined);
-        setLoai(undefined);
-        // ctmh
-        setColor(null);
-        setSize(null);
-        setSl(0);
-      });
   };
 
   const handleMod = () => {
@@ -180,8 +214,9 @@ const Clothes = ({ type }) => {
       body: JSON.stringify(sp),
     })
       .then((res) => res.json())
-      .then((data) => setOpen(true));
+      .then((data) => {});
   };
+
   useEffect(() => {
     if (data) {
       setMamh(data.mamh);
@@ -201,21 +236,34 @@ const Clothes = ({ type }) => {
     }
   }, [loading]);
 
+  const removeError = (fieldName) => {
+    setErrors((e) => ({
+      ...e,
+      [fieldName]: "",
+    }));
+  };
+
   const handleDelCtmh = (i) => {
     const filtered = ctmhRows.filter(
-      (item) => item.color !== i.color && item.size !== i.size
+      (item) =>
+        item.colorDTO.macolor !== i.colorDTO.macolor &&
+        item.sizeDTO.masize !== i.sizeDTO.masize
     );
     setCtmhRows(filtered);
   };
+
   const handleAddCtmh = (i) => {
-    console.log("handleAddCtmh", i);
-    if (!i.color || !i.size || parseInt(i.currentNumbeer) < 0) {
-      console.log("handleAddCtmh", "FAIL");
+    if (
+      !i.colorDTO.macolor ||
+      !i.sizeDTO.masize ||
+      parseInt(i.currentNumbeer) < 0
+    ) {
       return;
     }
-    console.log("handleAddCtmh", "OK");
     let filtered = ctmhRows.filter(
-      (item) => item.color === i.color && item.size === i.size
+      (item) =>
+        item.colorDTO.macolor === i.colorDTO.macolor &&
+        item.sizeDTO.masize === i.sizeDTO.masize
     );
 
     if (filtered.length > 0) {
@@ -223,7 +271,9 @@ const Clothes = ({ type }) => {
         parseInt(filtered[0].currentNumbeer) + parseInt(i.currentNumbeer);
       setCtmhRows([
         ...ctmhRows.filter(
-          (item) => item.color !== i.color && item.size !== i.size
+          (item) =>
+            item.colorDTO.macolor !== i.colorDTO.macolor &&
+            item.sizeDTO.masize !== i.sizeDTO.masize
         ),
         filtered[0],
       ]);
@@ -231,6 +281,7 @@ const Clothes = ({ type }) => {
       setCtmhRows([...ctmhRows, i]);
     }
   };
+
   return clData.loading || brandData.loading || typeData.loading ? (
     "loading..."
   ) : (
@@ -253,35 +304,24 @@ const Clothes = ({ type }) => {
 
         <Grid item xs={12} sm={6}>
           <TextField
+            error={!!errors.name}
+            helperText={errors.name}
             required
+            inputProps={{ maxLength: 100 }}
             id="firstName"
-            name="firstName"
+            name="name"
             label="Tên quần áo"
             fullWidth
-            autoComplete="given-name"
+            autoComplete="off"
             variant="standard"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              removeError(e.target.name);
+              setName(e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          {/* <Autocomplete
-            value={tt}
-            onChange={(event, newValue) => {
-              setTT(newValue);
-            }}
-            inputValue={ttInput}
-            onInputChange={(event, newInputValue) => {
-              setTTInput(newInputValue);
-            }}
-            id="controllable-states-demo"
-            options={ttOpt}
-            getOptionLabel={(option) => option.ttName}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Trạng thái" />
-            )}
-          /> */}
           <FormControl sx={{ width: 300 }}>
             <InputLabel id="add-clothes-status-select-label">
               Trạng thái
@@ -290,9 +330,11 @@ const Clothes = ({ type }) => {
               labelId="add-clothes-status-select-label"
               id="add-clothes-status-select"
               value={tt}
+              name="tt"
               label="Trạng thái"
               onChange={(event) => {
                 setTT(event.target.value);
+                removeError(event.target.name);
               }}
             >
               {ttOpt.map((e, i) => {
@@ -303,39 +345,29 @@ const Clothes = ({ type }) => {
                 );
               })}
             </Select>
+            <FormHelperText sx={{ color: "red" }}>{errors.tt}</FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            error={!!errors.price}
+            helperText={errors.price}
             required
             id="address1"
-            name="address1"
+            name="price"
             label="Giá"
             fullWidth
-            autoComplete="shipping address-line1"
+            autoComplete="off"
             variant="standard"
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              removeError(e.target.name);
+              setPrice(e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          {/* <Autocomplete
-            value={cachlam}
-            onChange={(event, newValue) => {
-              setCachlam(newValue);
-            }}
-            inputValue={cachlamInput}
-            onInputChange={(event, newInputValue) => {
-              setCachlamInput(newInputValue);
-            }}
-            id="controllable-states-demo"
-            options={["HAND", "MACHINE"]}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Chọn cách làm" />
-            )}
-          /> */}
           <FormControl fullWidth sx={{ width: 300 }}>
             <InputLabel id="add-clothes-cach-lam-select-label">
               Chọn cách làm
@@ -343,9 +375,11 @@ const Clothes = ({ type }) => {
             <Select
               labelId="add-clothes-cach-lam-select-label"
               id="add-clothes-cach-lam-select"
+              name="cachlam"
               value={cachlam}
               label="Chọn cách làm"
               onChange={(event) => {
+                removeError(event.target.name);
                 setCachlam(event.target.value);
               }}
             >
@@ -357,26 +391,12 @@ const Clothes = ({ type }) => {
                 );
               })}
             </Select>
+            <FormHelperText sx={{ color: "red" }}>
+              {errors.cachlam}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
-          {/* <Autocomplete
-            value={brand}
-            onChange={(event, newValue) => {
-              setBrand(newValue);
-            }}
-            inputValue={brandInput}
-            onInputChange={(event, newInputValue) => {
-              setBrandInput(newInputValue);
-            }}
-            id="controllable-states-demo"
-            options={brandData.data}
-            getOptionLabel={(option) => option.tennh}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Chọn thương hiệu" />
-            )}
-          /> */}
           <FormControl fullWidth>
             <InputLabel id="add-clothes-brand-select-label">
               Chọn thương hiệu
@@ -384,9 +404,11 @@ const Clothes = ({ type }) => {
             <Select
               labelId="add-clothes-brand-select-label"
               id="add-clothes-brand-select"
+              name="brand"
               value={brand}
               label="Chọn thương hiệu"
               onChange={(event) => {
+                removeError(event.target.name);
                 setBrand(event.target.value);
               }}
             >
@@ -398,27 +420,12 @@ const Clothes = ({ type }) => {
                 );
               })}
             </Select>
+            <FormHelperText sx={{ color: "red" }}>
+              {errors.brand}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={4}>
-          {/* <Autocomplete
-            value={loai}
-            onChange={(event, newValue) => {
-              // object newValue
-              setLoai(newValue);
-            }}
-            inputValue={loaiInput}
-            onInputChange={(event, newInputValue) => {
-              setLoaiInput(newInputValue);
-            }}
-            id="controllable-states-demo"
-            options={typeData.data}
-            getOptionLabel={(option) => option.tenloadimh}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Chọn loại" />
-            )}
-          /> */}
           <FormControl fullWidth>
             <InputLabel id="add-clothes-type-select-label">
               Chọn loại
@@ -426,10 +433,12 @@ const Clothes = ({ type }) => {
             <Select
               labelId="add-clothes-type-select-label"
               id="add-clothes-type-select"
+              name="loai"
               value={loai}
               label="Chọn loại"
               onChange={(event) => {
                 setLoai(event.target.value);
+                removeError(event.target.name);
               }}
             >
               {typeData.data.map((e, i) => {
@@ -440,26 +449,10 @@ const Clothes = ({ type }) => {
                 );
               })}
             </Select>
+            <FormHelperText sx={{ color: "red" }}>{errors.loai}</FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={2}>
-          {/* <Autocomplete
-            value={cl}
-            onChange={(event, newValue) => {
-              setCl(newValue);
-            }}
-            inputValue={clInput}
-            onInputChange={(event, newInputValue) => {
-              setClInput(newInputValue);
-            }}
-            id="controllable-states-demo"
-            options={clData.data}
-            getOptionLabel={(option) => option.tenvai}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Chọn chất liệu" />
-            )}
-          /> */}
           <FormControl fullWidth>
             <InputLabel id="add-clothes-chat-lieu-select-label">
               Chọn chất liệu
@@ -468,10 +461,12 @@ const Clothes = ({ type }) => {
               sx={{ width: 300 }}
               labelId="add-clothes-chat-lieu-select-label"
               id="add-clothes-chat-lieu-select"
+              name="cl"
               value={cl}
               label="Chọn chất liệu"
               onChange={(event) => {
                 setCl(event.target.value);
+                removeError(event.target.name);
               }}
             >
               {clData.data.map((e, i) => {
@@ -482,6 +477,9 @@ const Clothes = ({ type }) => {
                 );
               })}
             </Select>
+            <FormHelperText sx={{ color: "red", width: "100%" }}>
+              {errors.cl}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid container item xs={12} sm={6}>
@@ -506,8 +504,8 @@ const Clothes = ({ type }) => {
                     key={row.name}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{row.color}</TableCell>
-                    <TableCell>{row.size}</TableCell>
+                    <TableCell>{row.colorDTO.tencolor}</TableCell>
+                    <TableCell>{row.sizeDTO.tensize}</TableCell>
                     <TableCell>{row.currentNumbeer}</TableCell>
                     <TableCell>
                       <ClearOutlined
@@ -522,42 +520,50 @@ const Clothes = ({ type }) => {
           </TableContainer>
 
           <Grid item xs={12} sm={4}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              value={color}
-              onChange={(event, newValue) => {
-                setColor(newValue);
-              }}
-              inputValue={colorValue}
-              onInputChange={(event, newInputValue) => {
-                setColorValue(newInputValue);
-              }}
-              options={["BLUE", "YELLOW", "WHITE", "RED", "BLACK", "GRAY"]}
-              sx={{ marginTop: 1 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Màu sắc" />
-              )}
-            />
+            <FormControl fullWidth sx={{ marginTop: 1 }}>
+              <InputLabel id="add-clothes-brand-select-label">
+                Chọn màu
+              </InputLabel>
+              <Select
+                labelId="add-clothes-brand-select-label"
+                id="add-clothes-brand-select"
+                value={color}
+                label="Màu sắc"
+                onChange={(event) => {
+                  setColor(event.target.value);
+                }}
+              >
+                {colorData.data.map((e, i) => {
+                  return (
+                    <MenuItem key={i} value={e}>
+                      {e.tencolor}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              value={size}
-              onChange={(event, newValue) => {
-                setSize(newValue);
-              }}
-              inputValue={sizeValue}
-              onInputChange={(event, newInputValue) => {
-                setSizeValue(newInputValue);
-              }}
-              options={["L", "S", "M", "XL", "XL", "XXL"]}
-              sx={{ marginTop: 1 }}
-              renderInput={(params) => (
-                <TextField {...params} label="Kích cỡ" />
-              )}
-            />
+            <FormControl fullWidth sx={{ marginTop: 1 }}>
+              <InputLabel id="add-clothes-brand-select-label">Size</InputLabel>
+              <Select
+                labelId="add-clothes-brand-select-label"
+                id="add-clothes-brand-select"
+                value={size}
+                label="Chọn size"
+                onChange={(event) => {
+                  setSize(event.target.value);
+                }}
+              >
+                {sizeData.data.map((e, i) => {
+                  return (
+                    <MenuItem key={i} value={e}>
+                      {e.tensize}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={4}>
             <TextField
@@ -575,7 +581,11 @@ const Clothes = ({ type }) => {
               sx={{ marginTop: 1 }}
               variant="outlined"
               onClick={() => {
-                handleAddCtmh({ color: color, size: size, currentNumbeer: sl });
+                handleAddCtmh({
+                  colorDTO: color,
+                  sizeDTO: size,
+                  currentNumbeer: sl,
+                });
                 setColor(null);
                 setSize(null);
                 setSl(0);
@@ -629,7 +639,7 @@ const Clothes = ({ type }) => {
                   name="firstName"
                   label="URL"
                   fullWidth
-                  autoComplete="given-name"
+                  autoComplete="off"
                   variant="outlined"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
@@ -672,24 +682,38 @@ const Clothes = ({ type }) => {
           </Grid>
         )}
       </Grid>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={6000}
+        onClose={handleCloseSuccess}
+      >
         {type === "add" ? (
           <Alert
-            onClose={handleClose}
+            onClose={handleCloseSuccess}
             severity="success"
             sx={{ width: "100%" }}
           >
-            Thêm quần áo thành công!
+            {message}
           </Alert>
         ) : (
           <Alert
-            onClose={handleClose}
+            onClose={handleCloseSuccess}
             severity="success"
             sx={{ width: "100%" }}
           >
             Sửa quần áo thành công!
           </Alert>
         )}
+      </Snackbar>
+
+      <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
+        <Alert
+          onClose={handleCloseErr}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
       </Snackbar>
     </React.Fragment>
   );

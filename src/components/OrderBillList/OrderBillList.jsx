@@ -1,27 +1,25 @@
-import React, { useReducer, useState } from "react";
-import { styled, alpha } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
-import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import SearchIcon from "@mui/icons-material/Search";
-import InputBase from "@mui/material/InputBase";
-import BackspaceOutlinedIcon from "@mui/icons-material/BackspaceOutlined";
-import HistoryList from "../HistoryList/HistoryList";
-import Modal from "@mui/material/Modal";
-import { Link } from "react-router-dom";
-import "./OrderBillList.scss";
-import { Alert, Box, Snackbar, Typography } from "@mui/material";
-import useFetchAdmin from "../../hooks/useFetchAdmin";
-import { useSelector } from "react-redux";
-import { CheckOutlined, DeliveryDiningOutlined } from "@mui/icons-material";
+import React, { useState } from 'react'
+import { styled, alpha } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase'
+import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
+import HistoryList from '../HistoryList/HistoryList';
+import Modal from '@mui/material/Modal';
+import { Link } from 'react-router-dom';
+import './OrderBillList.scss'
+import { Alert, Box, FormControl, InputLabel, MenuItem, Select, Snackbar, Typography } from '@mui/material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
+import { useSelector } from 'react-redux';
+import { CheckOutlined, DeliveryDiningOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -147,319 +145,253 @@ const reducers = (prevState, action) => {
   }
 };
 const OrderBillList = () => {
-  // my implementation
-  const [messageObj, dispatchMessage] = useReducer(initialMessages, reducers);
+    const [open, setOpen] = React.useState('');
+    const [input, setInput] = useState('')
+    const { data, loading, error } = useFetchAdmin(`/hoadon`);
+    const user = useSelector(state => state.user)
 
-  const handleCloseReducer = (event, reason) => {
-    if (reason === "clickaway") return;
-    dispatchMessage({ type: "CLOSE" });
-  };
+    const [shipper, setShipper] = useState(null);
+    const shipperData = useFetchAdmin(`/shipper`);
 
-  const setMessage = (messageCode, message, isSuccessful) => {
-    if (isSuccessful)
-      dispatchMessage({
-        type: "SET_SUCCESSFUL_MESSAGE",
-        code: messageCode,
-        message: message,
-      });
-    else
-      dispatchMessage({
-        type: "SET_ERROR_MESSAGE",
-        code: messageCode,
-        message: message,
-      });
-  };
-  // end my implementation
-
-  const [open, setOpen] = React.useState("");
-  const handleOpen = (e) => setOpen(e);
-  const handleClose = (e) => setOpen(e);
-
-  const [input, setInput] = useState("");
-  const handldeChange = (e) => {
-    setInput(e);
-  };
-  const { data, loading, error } = useFetchAdmin(`/hoadon`);
-  const user = useSelector((state) => state.user);
-
-  const [open1, setOpen1] = React.useState(false);
-
-  const handleClose1 = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
+    const [message, setMessage] = useState('')
+    const handleOpen = (e) => setOpen(e);
+    const handleClose = (e) => setOpen(e);
+    const handldeChange = (e) => {
+        setInput(e)
     }
 
-    setOpen1(false);
-  };
-
-  const [open10, setOpen10] = React.useState(false);
-
-  const handleClose10 = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen10(false);
-  };
-
-  const [open01, setOpen01] = React.useState(false);
-
-  const handleClose01 = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen01(false);
-  };
-
-  const [open100, setOpen100] = React.useState(false);
-
-  const handleClose100 = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpen100(false);
-  };
-  const handleConfirm = (hd) => {
-    hd.nhanvien.manv = user.info.nhanvien.manv;
-    console.log(hd);
-    fetch("http://localhost:8081/api/hoadon/confirm", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + user.token,
-      },
-      body: JSON.stringify(hd),
-    })
-      .then((res) => res.json())
-      .then((dataObj) => {
-        // data có dạng {isSuccessful: boolean , data: (data của phía backend), messageObj: (messageCode: String, messageDetail: string ))}
-        const { isSuccessful, _data, messageObj } = dataObj;
-        if (isSuccessful) {
-          setMessage(messageObj.messageCode, messageObj.messageDetail, true);
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        } else {
-          setMessage(messageObj.messageCode, messageObj.messageDetail, false);
-          setTimeout(() => {
-            handleCloseReducer();
-          }, 2000);
+    const [openSuccess, setOpenSuccess] = React.useState(false);
+    const handleCloseSuccess = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
         }
-        //// setOpen ở đây là open snackbar
-        // setOpen1(true);
-        // handleClose("");
-      });
-  };
-  const handleComplete = (hd) => {
-    fetch("http://localhost:8081/api/hoadon/complete", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + user.token,
-      },
-      body: JSON.stringify(hd),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setOpen01(true);
-        handleClose("");
-        window.location.reload();
-      });
-  };
-  const handleCancle = (hd) => {
-    if (window.confirm("Bạn có muốn hủy hóa đơn có id: " + hd.mahd + "?"))
-      fetch("http://localhost:8081/api/hoadon/cancel", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + user.token,
-        },
-        body: JSON.stringify(hd),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setOpen10(true);
-          handleClose("");
-          window.location.reload();
-        });
-    else return;
-  };
+        setOpenSuccess(false);
+    };
 
-  const handleProcessing = (hd) => {
-    fetch("http://localhost:8081/api/hoadon/processing", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + user.token,
-      },
-      body: JSON.stringify(hd),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setOpen100(true);
-        handleClose("");
-        window.location.reload();
-      });
-  };
+    const [openErr, setOpenErr] = React.useState(false);
+    const handleCloseErr = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenErr(false);
+    };
 
-  return loading ? (
-    "loading..."
-  ) : (
-    <div className="orderBillList">
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon onClick={() => setInput("search")} />
-        </SearchIconWrapper>
+    const handleConfirm = (hd) => {
+        hd.nhanvien = {
+            "cmnd": null,
+            "ngaysinh": null,
+            "sdt": null,
+            "tennv": null,
+            "diachi": null,
+            "gioitinh": null,
+            "manv": user.info.nhanvien.manv,
+            "trangthai": null,
+            "email": null
+        }
+        hd.shipper = {
+            "mashipper": shipper.mashipper
+        }
+        fetch('http://localhost:8081/api/hoadon/confirm', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
+                setMessage(data.message)
+                setOpenSuccess(true)
+            }
+            else {
+                setMessage(data.message)
+                setOpenErr(true)
+            }
+            handleClose('')
+            window.location.reload()
+        })
+    }
+    const handleComplete = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/complete', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
+                setMessage(data.message)
+                setOpenSuccess(true)
+            }
+            else {
+                setMessage(data.message)
+                setOpenErr(true)
+            }
+            handleClose('')
+            window.location.reload()
+        })
+    }
+    const handleCancle = (hd) => {
+        if (window.confirm('Bạn có muốn hủy hóa đơn có id: ' + hd.mahd + '?'))
+            fetch('http://localhost:8081/api/hoadon/cancel', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+                body: JSON.stringify(hd)
+            }).then(res => res.json()).then(data => {
+                if (data.errCode == 'BILL_CANCELED_SUCCESS') {
+                    setMessage(data.message)
+                    setOpenSuccess(true)
+                    window.location.reload()
+                }
+                else {
+                    setMessage(data.message)
+                    setOpenErr(true)
+                }
+                handleClose('')
+            })
+        else return
+    }
 
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ "aria-label": "search" }}
-          onChange={(e) => {
-            handldeChange(e.value);
-          }}
-          value={input}
-        />
-        <BackspaceIconWrapper
-          onClick={() => {
-            setInput("");
-          }}
-        >
-          <BackspaceOutlinedIcon />
-        </BackspaceIconWrapper>
-      </Search>
+    const handleProcessing = (hd) => {
+        fetch('http://localhost:8081/api/hoadon/processing', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            },
+            body: JSON.stringify(hd)
+        }).then(res => res.json()).then(data => {
+            setOpenSuccess(true)
+            handleClose('')
+            window.location.reload()
+        })
+    }
 
-      <TableContainer component={Paper}>
-        <Table aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Mã số khách hàng</StyledTableCell>
-              <StyledTableCell align="center">Mã đơn</StyledTableCell>
-              <StyledTableCell align="right">Ngày đặt</StyledTableCell>
-              <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <StyledTableRow key={row.mahd}>
-                <StyledTableCell align="center">
-                  {row.khachhang.makh}
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  <Link className="link" to="/">
-                    {row.mahd}
-                  </Link>
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.ngaytao}</StyledTableCell>
-                <StyledTableCell align="right">
-                  <div className="btns">
-                    <div className="info" onClick={() => handleOpen(row.mahd)}>
-                      <InfoOutlinedIcon />
-                    </div>
-                    <Modal
-                      open={open == row.mahd}
-                      onClose={() => handleClose("")}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <Typography
-                          id="modal-modal-title"
-                          variant="h6"
-                          component="div"
-                        >
-                          <HistoryList data={row} type="admin" />
-                        </Typography>
-                        {row.chitietTrangThaiDTO.trangthai.matthd < 3 &&
-                        row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: 5,
-                              justifyContent: "end",
-                            }}
-                          >
-                            <CheckOutlined
-                              style={{ color: "lime" }}
-                              onClick={() => handleConfirm(row)}
-                            />
-                            <ClearOutlinedIcon
-                              style={{ color: "red" }}
-                              onClick={() => handleCancle(row)}
-                            />
-                          </div>
-                        ) : row.chitietTrangThaiDTO.trangthai.matthd === 4 ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: 5,
-                              justifyContent: "end",
-                              alignItems: "center",
-                            }}
-                          >
-                            <CheckOutlined
-                              color="success"
-                              onClick={() => handleComplete(row)}
-                            />{" "}
-                            Xác nhận hoàn thành
-                          </div>
-                        ) : row.chitietTrangThaiDTO.trangthai.matthd === 3 ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: 5,
-                              justifyContent: "end",
-                              alignItems: "center",
-                            }}
-                          >
-                            <DeliveryDiningOutlined
-                              color="success"
-                              onClick={() => handleProcessing(row)}
-                            />{" "}
-                            Xác nhận đang giao
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </Box>
-                    </Modal>
-                  </div>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-        <Alert onClose={handleClose1} severity="success" sx={{ width: "100%" }}>
-          Đã xác nhận đơn!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={open100} autoHideDuration={6000} onClose={handleClose100}>
-        <Alert
-          onClose={handleClose100}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Đã xác nhận đơn đang được giao!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={open01} autoHideDuration={6000} onClose={handleClose01}>
-        <Alert onClose={handleClose01} severity="info" sx={{ width: "100%" }}>
-          Đã xác nhận hoàn thành đơn đơn!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={open10} autoHideDuration={6000} onClose={handleClose10}>
-        <Alert onClose={handleClose10} severity="error" sx={{ width: "100%" }}>
-          Đã hủy đơn!
-        </Alert>
-      </Snackbar>
-    </div>
-  );
-};
+    return (
+        loading ? 'loading...' :
+            <div className='orderBillList'>
+                <Search>
+                    <SearchIconWrapper>
+                        <SearchIcon onClick={() => setInput('search')} />
+                    </SearchIconWrapper>
 
-export default OrderBillList;
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                        onChange={(e) => { handldeChange(e.value) }}
+                        value={input}
+                    />
+                    <BackspaceIconWrapper onClick={() => { setInput('') }}>
+                        <BackspaceOutlinedIcon />
+                    </BackspaceIconWrapper>
+                </Search>
+
+                <TableContainer component={Paper}>
+                    <Table aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell>Mã số khách hàng</StyledTableCell>
+                                <StyledTableCell align='center'>Mã đơn</StyledTableCell>
+                                <StyledTableCell align="right">Ngày đặt</StyledTableCell>
+                                <StyledTableCell align="center">Trạng thái duyệt</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((row) => (
+                                <StyledTableRow key={row.mahd}>
+                                    <StyledTableCell align="center">{row.khachhang.makh}</StyledTableCell>
+                                    <StyledTableCell component="th" scope="row">
+                                        <Link className='link' to='/'>{row.mahd}</Link>
+                                    </StyledTableCell>
+                                    <StyledTableCell align="right">{row.ngaytao}</StyledTableCell>
+                                    <StyledTableCell align="right">
+                                        <div className='btns'>
+                                            <div className='info' onClick={() => handleOpen(row.mahd)}>
+                                                <InfoOutlinedIcon />
+                                            </div>
+                                            <Modal
+                                                open={open == row.mahd}
+                                                onClose={() => handleClose('')}
+                                                aria-labelledby="modal-modal-title"
+                                                aria-describedby="modal-modal-description"
+                                            >
+                                                <Box sx={style}>
+                                                    <Typography id="modal-modal-title" variant="h6" component="div">
+                                                        <HistoryList data={row} type='admin' />
+                                                    </Typography>
+                                                    {
+                                                        row.chitietTrangThaiDTO.trangthai.matthd < 3 && row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? <div style={{ display: 'flex', gap: 5, justifyContent: 'end' }}>
+                                                            <div className='shipper'>
+                                                                <FormControl fullWidth>
+                                                                    <InputLabel id="add-clothes-brand-select-label">
+                                                                        Chọn shipper
+                                                                    </InputLabel>
+                                                                    <Select
+                                                                        labelId="add-clothes-brand-select-label"
+                                                                        id="add-clothes-brand-select"
+                                                                        value={shipper}
+                                                                        label="Chọn thương hiệu"
+                                                                        onChange={(event) => {
+                                                                            setShipper(event.target.value);
+                                                                        }}
+                                                                    >
+                                                                        {shipperData.data.map((e, i) => {
+                                                                            return (
+                                                                                <MenuItem key={i} value={e}>
+                                                                                    {e.tenshipper}
+                                                                                </MenuItem>
+                                                                            );
+                                                                        })}
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </div>
+                                                            <CheckOutlined style={{ color: 'lime' }} onClick={() => handleConfirm(row)} />
+                                                            <ClearOutlinedIcon style={{ color: 'red' }} onClick={() => handleCancle(row)} />
+                                                        </div>
+                                                            : row.chitietTrangThaiDTO.trangthai.matthd === 4 ?
+                                                                <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems: 'center' }}>
+                                                                    <CheckOutlined color='success' onClick={() => handleComplete(row)} /> Xác nhận hoàn thành
+                                                                </div>
+                                                                : row.chitietTrangThaiDTO.trangthai.matthd === 3 ?
+                                                                    <div style={{ display: 'flex', gap: 5, justifyContent: 'end', alignItems: 'center' }}>
+                                                                        <DeliveryDiningOutlined color='success' onClick={() => handleProcessing(row)} /> Xác nhận đang giao
+                                                                    </div> : <></>
+                                                    }
+                                                </Box>
+                                            </Modal>
+                                        </div>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+                    <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
+                        {
+                            message
+                        }
+                    </Alert>
+                </Snackbar>
+
+                <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
+                    <Alert onClose={handleCloseErr} severity="error" sx={{ width: '100%' }}>
+                        {
+                            message
+                        }
+                    </Alert>
+                </Snackbar>
+            </div>
+    )
+}
+
+export default OrderBillList
