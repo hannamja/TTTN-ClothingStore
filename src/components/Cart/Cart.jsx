@@ -2,17 +2,15 @@ import React from "react";
 import "./Cart.scss";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useSelector } from "react-redux";
-import { removeItem, resetCart } from "../../redux/cartReducer";
+import { removeItem, resetCart, add, minus } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
-import { makeRequest } from "../../makeRequest";
-import { loadStripe } from "@stripe/stripe-js";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Cart = ({ open }) => {
   const products = useSelector((state) => state.cart.products);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user)
-  const navigate = useNavigate()
+
   const totalPrice = () => {
     let total = 0;
     products.forEach((item) => {
@@ -21,23 +19,6 @@ const Cart = ({ open }) => {
     return total.toFixed(2);
   };
 
-  const stripePromise = loadStripe(
-    "pk_test_eOTMlr8usx1ctymXqrik0ls700lQCsX2UB"
-  );
-  const handlePayment = async () => {
-    try {
-      const stripe = await stripePromise;
-      const res = await makeRequest.post("/orders", {
-        products,
-      });
-      await stripe.redirectToCheckout({
-        sessionId: res.data.stripeSession.id,
-      });
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
     <div className="cart">
       <h1>Products in your cart</h1>
@@ -51,10 +32,19 @@ const Cart = ({ open }) => {
               {item.quantity} x ${item.price}
             </div>
           </div>
-          <DeleteOutlinedIcon
-            className="delete"
-            onClick={() => dispatch(removeItem(item.id))}
-          />
+          <div className="quantity">
+            <button className="quantityBtn"
+              onClick={() => dispatch(minus(item))}
+            >
+              -
+            </button>
+            {item.quantity}
+            <button className="quantityBtn" onClick={() => dispatch(add(item))}>+</button>
+            <DeleteOutlinedIcon
+              className="delete"
+              onClick={() => dispatch(removeItem(item.id))}
+            />
+          </div>
         </div>
       ))}
       <div className="total">
@@ -62,7 +52,7 @@ const Cart = ({ open }) => {
         <span>${totalPrice()}</span>
       </div>
       <Link className="link" to={Object.keys(user).length == 0 ? '/signin' : '/checkout'} onClick={() => { open(false) }}>
-        <button>PROCEED TO CHECKOUT</button>
+        <button className="checkoutBtn">PROCEED TO CHECKOUT</button>
       </Link>
       <span className="reset" onClick={() => dispatch(resetCart())}>
         Reset Cart
