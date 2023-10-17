@@ -297,10 +297,10 @@ const OrderVoucher = ({ type }) => {
                             setInputValue(newInputValue);
                         }}
                         options={ctmh === null ? { lable: 'none' } : ctmh}
-                        getOptionLabel={option => ctmh === null ? option.lable : option.mathangDTO.tenmh + ' [-' + option.color + '-] [--' + option.size + '--] ' + `(mamh: ${option.mathangDTO.mamh})`}
+                        getOptionLabel={option => ctmh === null ? option.lable : option.mathangDTO.tenmh + ' [-' + option.colorDTO.tencolor + '-] [--' + option.sizeDTO.tensize + '--] ' + `(mamh: ${option.mathangDTO.mamh})`}
                         sx={{ width: 300 }}
 
-                        renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
+                        renderInput={(params) => <TextField {...params} label="Sản phẩm" key={params.id}/>}
                     />
                 </Grid>
                 <Grid item xs={4}>

@@ -27,9 +27,9 @@ const KM = ({ type }) => {
     const [ctkmRows, setCtkmRows] = useState([])
     const [ld, setLd] = useState('')
     const [bd, setBd] = useState(`${type === 'add' ? new Date().toISOString().slice(0, 10) : ''}`)
-    const [kt, setKt] = useState('')
-    const [mucgiam, setMucgiam] = useState('')
-    const [mucgiamInput, setMucgiamInput] = useState('')
+    const [kt, setKt] = useState(new Date().toISOString().slice(0, 10))
+    const [mucgiam, setMucgiam] = useState(null)
+    const [mucgiamInput, setMucgiamInput] = useState(null)
 
     useEffect(() => {
         if (data) {

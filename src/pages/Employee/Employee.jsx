@@ -26,26 +26,26 @@ const Employee = ({ type }) => {
     const [email, setEmaol] = useState('')
     const [sdt, setSdt] = useState('')
     const [tt, setTT] = useState("0")
-    const [ttInput, setTTInput] = useState(" ")
-    const [ngaysinh, setNgaysinh] = useState('')
-    const [cmnd, setCmnd] = useState("")
+    const [ttInput, setTTInput] = useState('')
+    const [ngaysinh, setNgaysinh] = useState('2000-01-01')
+    const [cmnd, setCmnd] = useState('')
 
     const [gt, setGT] = useState("nam")
-    const [gtInput, setGtInput] = useState("")
+    const [gtInput, setGtInput] = useState('')
 
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
-    const [ngayend, setNgayend] = useState(null)
+    const [ngayend, setNgayend] = useState(new Date().toISOString().slice(0, 10))
     useEffect(() => {
         if (data) {
-            setTen(data.tennv)
-            setDc(data.diachi)
-            setEmaol(data.email)
-            setSdt(data.sdt)
-            setGT(data.gioitinh)
-            setNgaysinh(new Date(data.ngaysinh))
-            setCmnd(data.cmnd)
             if (type !== 'add') {
+                setTen(data.tennv)
+                setDc(data.diachi)
+                setEmaol(data.email)
+                setSdt(data.sdt)
+                setGT(data.gioitinh)
+                setNgaysinh(new Date(data.ngaysinh))
+                setCmnd(data.cmnd)
                 fetch('http://localhost:8081/api/ctquyen/' + data.email, {
                     headers: {
                         'Accept': 'application/json',
@@ -53,7 +53,6 @@ const Employee = ({ type }) => {
                         'Authorization': 'Bearer ' + user.token
                     },
                 }).then(data => data.json()).then(data => {
-                    console.log(data)
                     setCtqRows(data)
                 })
             }
@@ -372,7 +371,7 @@ const Employee = ({ type }) => {
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField value={ngayend} id="outlined-basic" label="Ngày kt" variant="outlined" type='date' onChange={e => setNgayend(e.target.value)} />
+                    <TextField value={ngayend} id="outlined-basic" label="Ngày kết thúc" variant="outlined" type='date' onChange={e => setNgayend(e.target.value)} />
                 </Grid>
 
 
