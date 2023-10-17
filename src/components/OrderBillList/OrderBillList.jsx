@@ -134,7 +134,6 @@ const OrderBillList = () => {
   const [open, setOpen] = React.useState('');
   const [input, setInput] = useState('');
   const { data, loading, error } = useFetchAdmin(`/hoadon`);
-  console.log('hoadon: ', data);
   // rows: Danh sách hóa đơn trong API
 
   const columns = [
@@ -353,28 +352,6 @@ const OrderBillList = () => {
     'loading...'
   ) : (
     <div className='orderBillList'>
-      {/* <Search>
-        <SearchIconWrapper>
-          <SearchIcon onClick={() => setInput('search')} />
-        </SearchIconWrapper>
-
-        <StyledInputBase
-          placeholder='Search…'
-          inputProps={{ 'aria-label': 'search' }}
-          onChange={(e) => {
-            handldeChange(e.value);
-          }}
-          value={input}
-        />
-        <BackspaceIconWrapper
-          onClick={() => {
-            setInput('');
-          }}
-        >
-          <BackspaceOutlinedIcon />
-        </BackspaceIconWrapper>
-      </Search> */}
-
       {/* Sửa lại UI Table */}
 
       <Box sx={{ height: 500, width: '95%', margin: '0 auto' }}>
@@ -482,132 +459,6 @@ const OrderBillList = () => {
         </Modal>
       ))}
       {/* End Sửa lại UI Table */}
-
-      {/* <TableContainer component={Paper}>
-        <Table aria-label='customized table'>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Mã số khách hàng</StyledTableCell>
-              <StyledTableCell align='center'>Mã đơn</StyledTableCell>
-              <StyledTableCell align='right'>Ngày đặt</StyledTableCell>
-              <StyledTableCell align='center'>Trạng thái duyệt</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row) => (
-              <StyledTableRow key={row.mahd}>
-                <StyledTableCell align='center'>
-                  {row.khachhang.makh}
-                </StyledTableCell>
-                <StyledTableCell component='th' scope='row'>
-                  <Link className='link' to='/'>
-                    {row.mahd}
-                  </Link>
-                </StyledTableCell>
-                <StyledTableCell align='right'>{row.ngaytao}</StyledTableCell>
-                <StyledTableCell align='right'>
-                  <div className='btns'>
-                    <div className='info' onClick={() => handleOpen(row.mahd)}>
-                      <InfoOutlinedIcon />
-                    </div>
-                    <Modal
-                      open={open == row.mahd}
-                      onClose={() => handleClose('')}
-                      aria-labelledby='modal-modal-title'
-                      aria-describedby='modal-modal-description'
-                    >
-                      <Box sx={style}>
-                        <Typography
-                          id='modal-modal-title'
-                          variant='h6'
-                          component='div'
-                        >
-                          <HistoryList data={row} type='admin' />
-                        </Typography>
-                        {row.chitietTrangThaiDTO.trangthai.matthd < 3 &&
-                        row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? (
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 5,
-                              justifyContent: 'end',
-                            }}
-                          >
-                            <div className='shipper'>
-                              <FormControl fullWidth>
-                                <InputLabel id='add-clothes-brand-select-label'>
-                                  Chọn shipper
-                                </InputLabel>
-                                <Select
-                                  labelId='add-clothes-brand-select-label'
-                                  id='add-clothes-brand-select'
-                                  value={shipper}
-                                  label='Chọn thương hiệu'
-                                  onChange={(event) => {
-                                    setShipper(event.target.value);
-                                  }}
-                                >
-                                  {shipperData.data.map((e, i) => {
-                                    return (
-                                      <MenuItem key={i} value={e}>
-                                        {e.tenshipper}
-                                      </MenuItem>
-                                    );
-                                  })}
-                                </Select>
-                              </FormControl>
-                            </div>
-                            <CheckOutlined
-                              style={{ color: 'lime' }}
-                              onClick={() => handleConfirm(row)}
-                            />
-                            <ClearOutlinedIcon
-                              style={{ color: 'red' }}
-                              onClick={() => handleCancle(row)}
-                            />
-                          </div>
-                        ) : row.chitietTrangThaiDTO.trangthai.matthd === 4 ? (
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 5,
-                              justifyContent: 'end',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <CheckOutlined
-                              color='success'
-                              onClick={() => handleComplete(row)}
-                            />{' '}
-                            Xác nhận hoàn thành
-                          </div>
-                        ) : row.chitietTrangThaiDTO.trangthai.matthd === 3 ? (
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 5,
-                              justifyContent: 'end',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <DeliveryDiningOutlined
-                              color='success'
-                              onClick={() => handleProcessing(row)}
-                            />{' '}
-                            Xác nhận đang giao
-                          </div>
-                        ) : (
-                          <></>
-                        )}
-                      </Box>
-                    </Modal>
-                  </div>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
 
       <Snackbar
         open={openSuccess}
