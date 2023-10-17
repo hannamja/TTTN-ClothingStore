@@ -22,101 +22,101 @@ import { useSelector } from 'react-redux';
 import { CheckOutlined, DeliveryDiningOutlined } from '@mui/icons-material';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  "&:last-child": {
+    ".btns": {
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      ".info": {
+        display: "flex",
+        alignItems: "center",
+        color: "lime",
+        cursor: "pointer",
+      },
     },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-    },
-    '&:last-child': {
-        '.btns': {
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            '.info': {
-                display: 'flex',
-                alignItems: 'center',
-                color: 'lime',
-                cursor: 'pointer'
-            }
-        }
-    }
-
+  },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type()': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
-    },
+  "&:nth-of-type()": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
 }));
 
 const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
 
-const Search = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-    marginBottom: 10,
+const Search = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+  marginBottom: 10,
 }));
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer'
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
 }));
-const BackspaceIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer'
+const BackspaceIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
 }));
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '80%',
-        [theme.breakpoints.up('sm')]: {
-            width: '30ch',
-            '&:focus': {
-                width: '40ch',
-                borderBottom: '1px solid black'
-            },
-        },
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "80%",
+    [theme.breakpoints.up("sm")]: {
+      width: "30ch",
+      "&:focus": {
+        width: "40ch",
+        borderBottom: "1px solid black",
+      },
     },
+  },
 }));
+
 const OrderBillList = () => {
     const [open, setOpen] = React.useState('');
     const [input, setInput] = useState('')
@@ -125,6 +125,7 @@ const OrderBillList = () => {
 
     const [shipper, setShipper] = useState(null);
     const shipperData = useFetchAdmin(`/shipper`);
+    console.log('shipperData: ', shipperData);
 
     const [message, setMessage] = useState('')
     const handleOpen = (e) => setOpen(e);
@@ -173,6 +174,7 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
+          // FIXME: Sửa lại mã code
             if (data.errCode == 'BILL_COMPLETED_DELIVERING') {
                 setMessage(data.message)
                 setOpenSuccess(true)
@@ -242,6 +244,7 @@ const OrderBillList = () => {
             },
             body: JSON.stringify(hd)
         }).then(res => res.json()).then(data => {
+            // FIXME: Sửa lại khúc này
             setOpenSuccess(true)
             handleClose('')
             window.location.reload()
