@@ -57,9 +57,9 @@ const Clothes = ({ type }) => {
 
   const [errors, setErrors] = useState(initialErrors);
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState();
-  const [cachlam, setCachlam] = useState("");
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [cachlam, setCachlam] = useState('');
 
   const [tt, setTT] = useState(ttOpt[0]);
 
@@ -67,15 +67,15 @@ const Clothes = ({ type }) => {
   const [colorValue, setColorValue] = React.useState(null);
 
   const [manh, setMamh] = useState();
-  const [cl, setCl] = useState("none");
-  const [brand, setBrand] = useState("none");
-  const [loai, setLoai] = useState("none");
-  const [pl, setPl] = useState(null);
-  const [size, setSize] = useState(null);
+  const [cl, setCl] = useState('');
+  const [brand, setBrand] = useState('');
+  const [loai, setLoai] = useState('');
+  const [pl, setPl] = useState('');
+  const [size, setSize] = useState('');
   const [sl, setSl] = useState(0);
-  const [color, setColor] = React.useState(null);
-  const [url, setUrl] = useState("");
-  const [message, setMessage] = useState("");
+  const [color, setColor] = React.useState('');
+  const [url, setUrl] = useState('');
+  const [message, setMessage] = useState('');
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
 
@@ -161,18 +161,18 @@ const Clothes = ({ type }) => {
             setMessage(data.message);
             setOpenErr(true);
           }
-          setName("");
-          setCachlam(null);
-          setTT(null);
+          setName('');
+          setCachlam('');
+          setTT('');
 
-          setPrice("");
+          setPrice('');
 
-          setCl(undefined);
-          setBrand(undefined);
-          setLoai(undefined);
+          setCl('');
+          setBrand('');
+          setLoai('');
           // ctmh
-          setColor(null);
-          setSize(null);
+          setColor('');
+          setSize('');
           setSl(0);
         });
     }
@@ -214,21 +214,21 @@ const Clothes = ({ type }) => {
       body: JSON.stringify(sp),
     })
       .then((res) => res.json())
-      .then((data) => {});
+      .then((data) => { });
   };
 
   useEffect(() => {
     if (data) {
-      setMamh(data.mamh);
-      setLoai(data.loaimhDTO);
-      setName(data.tenmh);
-      setBrand(data.nhanhieuDTO);
-      setCachlam(data.cachlam);
-      setCl(data.chatlieuDTO);
-      setTT(ttOpt[parseInt(data.trangthai)]);
-      setPrice(data.gia);
-      setPl(data.phanloai);
       if (type !== "add") {
+        setMamh(data.mamh);
+        setLoai(data.loaimhDTO);
+        setName(data.tenmh);
+        setBrand(data.nhanhieuDTO);
+        setCachlam(data.cachlam);
+        setCl(data.chatlieuDTO);
+        setTT(ttOpt[parseInt(data.trangthai)]);
+        setPrice(data.gia);
+        setPl(data.phanloai);
         console.log(data.ctMathangs);
         setCtmhRows(data.ctMathangs);
         setHaRows(data.hinhanhDTOs);
@@ -672,8 +672,8 @@ const Clothes = ({ type }) => {
               onClick={
                 type === "add"
                   ? () => {
-                      handleAdd();
-                    }
+                    handleAdd();
+                  }
                   : handleMod
               }
             >
