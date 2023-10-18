@@ -63,9 +63,6 @@ const Clothes = ({ type }) => {
 
   const [tt, setTT] = useState(ttOpt[0]);
 
-  const [sizeValue, setSizeValue] = React.useState(null);
-  const [colorValue, setColorValue] = React.useState(null);
-
   const [manh, setMamh] = useState();
   const [cl, setCl] = useState('');
   const [brand, setBrand] = useState('');

@@ -17,6 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Alert, Snackbar } from "@mui/material";
 import { useFormik } from "formik";
+import {
+  validateEmail,
+  validateNotNull,
+  validatePassword,
+} from "../../utilities/validation";
 function Copyright(props) {
   return (
     <Typography
@@ -44,17 +49,13 @@ export default function SignInSide() {
 
   const validate = (values) => {
     const returnErrors = {};
-    if (!values.email) {
-      returnErrors.email = "Vui lòng nhập tên tài khoản!";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-      returnErrors.email = "Email không đúng định dạng!";
+    validateNotNull(returnErrors, values.email, "email");
+    if (!returnErrors.email) {
+      validateEmail(returnErrors, values.email);
     }
-    if (!values.password) {
-      returnErrors.password = "Vui lòng nhập mật khẩu!";
-    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{4,45}$/.test(values.password)) {
-      returnErrors.password = "Mật khẩu từ 3-45 ký tự! gồm 0-9A-Za-z";
+    validateNotNull(returnErrors, values.password, "password");
+    if (!returnErrors.password) {
+      validatePassword(returnErrors, values.password);
     }
     return returnErrors;
   };
