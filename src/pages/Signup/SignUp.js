@@ -159,6 +159,7 @@ export default function SignUp() {
             return;
           }
           setOpen(true);
+          // success
           dispatch(
             login({
               email: email,
