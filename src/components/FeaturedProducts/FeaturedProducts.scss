@@ -1,6 +1,6 @@
 .featuredProducts {
   margin: 100px 200px;
-  
+
   .top {
     display: flex;
     align-items: center;
@@ -12,15 +12,15 @@
       text-transform: capitalize;
     }
 
-    p{
-      flex:3;
-      color:gray
+    p {
+      flex: 3;
+      color: gray
     }
   }
 
-  .bottom{
+  .bottom {
     display: flex;
-    gap: 50px;
-    overflow: scroll;
+    gap: 20px;
+    flex-wrap: wrap;
   }
 }
