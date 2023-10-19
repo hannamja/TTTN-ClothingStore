@@ -743,21 +743,6 @@ const Clothes = ({ type }) => {
           {message.content}
         </Alert>
       </Snackbar>
-
-      {/* Message */}
-      <Snackbar
-        open={!!message.content}
-        autoHideDuration={3000}
-        onClose={handleCloseMesssage}
-      >
-        <Alert
-          onClose={handleCloseMesssage}
-          severity={message.type}
-          sx={{ width: "100%" }}
-        >
-          {message.content}
-        </Alert>
-      </Snackbar>
     </React.Fragment>
   );
 };
