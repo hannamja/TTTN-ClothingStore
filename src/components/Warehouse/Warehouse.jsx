@@ -186,7 +186,7 @@ const Warehouse = () => {
                                 </TableHead>
                                 <TableBody>
                                     {
-                                        data.map((row) => (
+                                        data?.map((row) => (
                                             <StyledTableRow key={row.mamh}>
                                                 <StyledTableCell align="center"><img src={row.hinhanhDTOs.length === 0 ? '' : row.hinhanhDTOs[0].duongdan} alt='Goods' style={{ width: 60, height: 60 }}></img></StyledTableCell>
                                                 <StyledTableCell component="th" scope="row">
