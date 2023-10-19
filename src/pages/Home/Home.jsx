@@ -5,7 +5,6 @@ import FeaturedProducts from '../../components/FeaturedProducts/FeaturedProducts
 import Slider from '../../components/Slider/Slider'
 import "./Home.scss"
 import clothesServices from '../../services/clothesServices'
-import { Alert, Snackbar } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 const Home = () => {
