@@ -10,6 +10,7 @@ const useFetchAdmin = (url) => {
         const fetchData = async () => {
             if(url === '') return
             try {
+                setLoading(true);
                 const res = await fetch('http://localhost:8081/api' + url, {
                     headers: {
                         'Accept': 'application/json',
@@ -23,7 +24,7 @@ const useFetchAdmin = (url) => {
                 setData(result);
             } catch (err) {
                 setError(true);
-                setLoading(true);
+                setLoading(false);
             }
         };
         fetchData();
