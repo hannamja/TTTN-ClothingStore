@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import { useSelector } from 'react-redux';
 import { Alert, Snackbar } from '@mui/material';
+import useFetchAdmin from '../../hooks/useFetchAdmin';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -121,7 +122,6 @@ const Warehouse = () => {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
     };
 
@@ -151,7 +151,7 @@ const Warehouse = () => {
             )
         else return
     }
-    const { data, loading, error } = useFetch(`/mathang`);
+    const { data, loading, error } = useFetchAdmin(`/mathangAd`);
     return (
         <div className='wareHouse'>
             {
