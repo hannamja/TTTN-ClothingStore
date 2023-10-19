@@ -6,15 +6,16 @@ const useFetch = (url) => {
   const [error, setError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        const res = await fetch('http://localhost:8081/api' + url)
-        const result = await res.json()
-        setError(false)
+        const res = await fetch("http://localhost:8081/api" + url);
+        const result = await res.json();
+        setError(false);
         setLoading(false);
         setData(result);
       } catch (err) {
         setError(true);
-        setLoading(true);
+        setLoading(false);
       }
     };
     fetchData();
