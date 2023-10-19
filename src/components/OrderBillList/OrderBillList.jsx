@@ -171,15 +171,15 @@ const OrderBillList = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        // FIXME: Sửa lại mã code
-        // if (data.errCode == "BILL_COMPLETED_DELIVERING") {
         if (data.errCode == "BILL_CONFIRMED_SUCCESS") {
           setMessage({ content: data.message, type: "success" });
         } else {
           setMessage({ content: data.message, type: "error" });
         }
-        handleClose("");
-        window.location.reload();
+        setTimeout(() => {
+          handleClose("");
+          window.location.reload();
+        }, 2000);
       });
   };
   const handleComplete = (hd) => {
@@ -199,8 +199,10 @@ const OrderBillList = () => {
         } else {
           setMessage({ content: data.message, type: "error" });
         }
-        handleClose("");
-        window.location.reload();
+        setTimeout(() => {
+          handleClose("");
+          window.location.reload();
+        }, 2000);
       });
   };
   const handleCancle = (hd) => {
@@ -222,7 +224,10 @@ const OrderBillList = () => {
           } else {
             setMessage({ content: data.message, type: "error" });
           }
+        setTimeout(() => {
           handleClose("");
+          window.location.reload();
+        }, 2000);
         });
     else return;
   };
@@ -239,10 +244,15 @@ const OrderBillList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // FIXME: Sửa lại khúc này
-        setMessage({ content: "Thành công!", type: "success" });
-        handleClose("");
-        window.location.reload();
+        if (data.errCode == "BILL_PROCESSED_SUCCESS") {
+          setMessage({content: data.message, type: "success"});
+        } else {
+          setMessage({content: data.message, type: 'error'});
+        }
+        setTimeout(() => {
+          handleClose("");
+          window.location.reload();
+        }, 2000);
       });
   };
 

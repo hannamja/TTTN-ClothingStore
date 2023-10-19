@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
 import { Alert, Snackbar } from "@mui/material";
+import { handleMoney } from "../../utilities/handleMoney";
 
 const Product = () => {
   const id = useParams().id;
@@ -26,6 +27,23 @@ const Product = () => {
   const user = useSelector(state => state.user)
   const [hds, setHds] = useState(null)
   const [openSuccess, setOpenSuccess] = React.useState(false);
+  const [isOutOfStock, setIsOutOfStock] = useState(true);
+  // if (data?.ctMathangs[idCtmh]?.currentNumbeer  === 0) {
+  //   setIsOutOfStock(true);
+  // }else  {
+  //   setIsOutOfStock(false);
+  // }
+  useEffect(() => {
+    console.log('stock in effect: ', data?.ctMathangs[idCtmh]?.currentNumbeer)
+    if(data?.ctMathangs[idCtmh]?.currentNumbeer  == 0) {
+      setIsOutOfStock(true);
+    } else 
+      setIsOutOfStock(false);
+  },[idCtmh]);
+
+  console.log('idctmh: ', idCtmh);
+  console.log('outOfStock: ', isOutOfStock);
+  console.log('stock: ' ,data?.ctMathangs[idCtmh]?.currentNumbeer)
   const handleCloseSuccess = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -142,7 +160,7 @@ const Product = () => {
           <div className="right">
             <h1>{data?.tenmh}</h1>
             <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia - data.gia * 0.1}`}</span>
-            <span className="price">${data?.gia}</span>
+            <span className="price">${handleMoney(data?.gia)}</span>
             <p>{data?.mota}</p>
             <Box sx={{ width: 500, display: 'flex', alignItems: 'center', gap: 1 }}>
               <FormControl sx={{ width: 150 }}>
@@ -219,10 +237,11 @@ const Product = () => {
                     <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
                   </div>
                   {
-                    data.ctMathangs.length === 0 ?
+                    isOutOfStock ?
                       <button
-                        disabled={data.ctMathangs.length === 0}
+                        disabled={isOutOfStock}
                         className="add"
+                        style={{background: '#777'}}
                       >
                         <AddShoppingCartIcon /> OUT OF STOCK
                       </button>
