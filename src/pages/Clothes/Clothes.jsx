@@ -269,14 +269,13 @@ const Clothes = ({ type }) => {
   const handleDelCtmh = (i) => {
     const filtered = ctmhRows.filter(
       (item) =>
-        item.colorDTO.macolor !== i.colorDTO.macolor &&
-        item.sizeDTO.masize !== i.sizeDTO.masize
+        item.id !== i.id &&
+        item.id !== i.id
     );
     setCtmhRows(filtered);
   };
 
   const handleAddCtmh = (i) => {
-    console.log(i);
     if (!i.colorDTO || !i.sizeDTO || parseInt(i.currentNumbeer) < 0) {
       setMessage({
         content: "Vui lòng nhập đúng đủ màu, kích thước, số lượng!",
@@ -286,8 +285,8 @@ const Clothes = ({ type }) => {
     }
     let filtered = ctmhRows.filter(
       (item) =>
-        item.colorDTO.macolor === i.colorDTO.macolor &&
-        item.sizeDTO.masize === i.sizeDTO.masize
+        item.id === i.colorDTO.id &&
+        item.id === i.sizeDTO.id
     );
 
     if (filtered.length > 0) {
