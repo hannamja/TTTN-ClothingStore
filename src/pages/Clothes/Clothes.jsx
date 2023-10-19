@@ -253,12 +253,19 @@ const Clothes = ({ type }) => {
         setTT(ttOpt[parseInt(data.trangthai)]);
         setPrice(data.gia);
         setPl(data.phanloai);
-        console.log(data.ctMathangs);
         setCtmhRows(data.ctMathangs);
         setHaRows(data.hinhanhDTOs);
       }
     }
   }, [loading, data]);
+
+  useEffect(() => {
+    if (clData && brandData && typeData) {
+      if (type !== "add") {
+  
+      }
+    }
+  }, [clData.loading, brandData.loading, typeData.loading]);
 
   const removeError = (fieldName) => {
     setErrors((e) => ({
@@ -266,7 +273,6 @@ const Clothes = ({ type }) => {
       [fieldName]: "",
     }));
   };
-
   const handleDelCtmh = (i) => {
     const filtered = ctmhRows.filter(
       (item) =>

@@ -33,10 +33,10 @@ function Copyright() {
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-function getStepContent(step, setIsPaid) {
+function getStepContent(step, setIsPaid, setAddr, addr) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <AddressForm setAddr={setAddr} addr={addr}/>;
     case 1:
       return <PaymentForm setIsPaid={setIsPaid} />;
     case 2:
@@ -54,6 +54,7 @@ export default function Checkout() {
   const [isPaid, setIsPaid] = React.useState(false)
   const products = useSelector((state) => state.cart.products);
   const user = useSelector(state => state.user)
+  const [addr, setAddr] = React.useState(user.info.khachhang.diachi)
   const dispatch = useDispatch()
 
   const handleNext = () => {
@@ -103,6 +104,7 @@ export default function Checkout() {
       "khachhang": khachhang,
       "nhanvien": null,
       "shipper": null,
+      "diachi": addr,
       "ngaytao": new Date().toISOString().slice(0, 10),
       "tongtien": products.reduce((total, cur) => total + cur.price * cur.quantity, 0),
       "chitietTrangThaiDTO": defaultTT,
@@ -167,7 +169,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep, setIsPaid)}
+              {getStepContent(activeStep, setIsPaid, setAddr, addr)}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
