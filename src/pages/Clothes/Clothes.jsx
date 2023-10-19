@@ -140,7 +140,7 @@ const Clothes = ({ type }) => {
         hinhanhDTOs: haRows,
         ctMathangs: ctmhRows,
       };
-      console.log(sp);
+
       fetch("http://localhost:8081/api/mathang", {
         method: "POST",
         headers: {
@@ -232,20 +232,13 @@ const Clothes = ({ type }) => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (clData && brandData && typeData) {
-      if (type !== "add") {
-  
-      }
-    }
-  }, [clData.loading, brandData.loading, typeData.loading]);
-
   const removeError = (fieldName) => {
     setErrors((e) => ({
       ...e,
       [fieldName]: "",
     }));
   };
+
   const handleDelCtmh = (i) => {
     const filtered = ctmhRows.filter(
       (item) =>
@@ -344,6 +337,7 @@ const Clothes = ({ type }) => {
                 return (
                   <MenuItem key={i} value={e}>
                     {e.ttName}
+
                   </MenuItem>
                 );
               })}

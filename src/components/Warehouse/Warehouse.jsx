@@ -179,6 +179,7 @@ const Warehouse = () => {
                                     <TableRow>
                                         <StyledTableCell align='center'>Ảnh</StyledTableCell>
                                         <StyledTableCell>Tên mặt hàng</StyledTableCell>
+                                        <StyledTableCell>Trạng thái</StyledTableCell>
                                         <StyledTableCell align='right'>Tồn kho</StyledTableCell>
                                         <StyledTableCell align='center'>Thao tác</StyledTableCell>
                                     </TableRow>
@@ -190,6 +191,9 @@ const Warehouse = () => {
                                                 <StyledTableCell align="center"><img src={row.hinhanhDTOs.length === 0 ? '' : row.hinhanhDTOs[0].duongdan} alt='Goods' style={{ width: 60, height: 60 }}></img></StyledTableCell>
                                                 <StyledTableCell component="th" scope="row">
                                                     <Link className='link' to='/'>{row.tenmh}</Link>
+                                                </StyledTableCell>
+                                                <StyledTableCell component="th" scope="row">
+                                                    {row.trangthai == "0" ? 'Còn bán' : 'Ngừng kinh doanh'}
                                                 </StyledTableCell>
                                                 <StyledTableCell align="right">{row.ctMathangs.reduce((total, ct) => { return total + parseInt(ct.currentNumbeer) }, 0)}</StyledTableCell>
                                                 <StyledTableCell align="right">
