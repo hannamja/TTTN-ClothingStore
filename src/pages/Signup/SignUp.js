@@ -21,7 +21,7 @@ import {
   Select,
   Snackbar,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/userReducer";
 import {
   validateCmnd,
@@ -30,6 +30,7 @@ import {
   validatePassword,
   validatePhone,
 } from "../../utilities/validation";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -83,7 +84,8 @@ export default function SignUp() {
 
   const [gt, setGT] = useState("nam");
   const dispatch = useDispatch();
-
+  const user = useSelector(state => state.user)
+  const navigate = useNavigate()
   const validate = () => {
     const errors = {};
     validateNotNull(errors, ten, "ten");
@@ -165,7 +167,9 @@ export default function SignUp() {
               email: email,
               password: mk,
             })
-          );
+          ).unwrap((data) => data.json())
+            .then((data) => navigate('/'))
+            .catch();
         });
     }
   };
@@ -199,254 +203,257 @@ export default function SignUp() {
     setOpen404(false);
   };
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+
+    Object.keys(user).length != 0 ? <Navigate to={'/'} /> :
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  error={!!inputErrors.ten}
-                  helperText={inputErrors.ten}
-                  id="ten"
-                  name="ten"
-                  label="Họ và tên"
-                  fullWidth
-                  autoComplete="given-name"
-                  variant="standard"
-                  value={ten}
-                  onChange={(e) => {
-                    setTen(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  error={!!inputErrors.email}
-                  helperText={inputErrors.email}
-                  id="city"
-                  name="email"
-                  label="Email"
-                  fullWidth
-                  autoComplete="shipping address-level2"
-                  variant="standard"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  error={!!inputErrors.mk}
-                  helperText={inputErrors.mk}
-                  id="city"
-                  name="mk"
-                  label="Mật khẩu"
-                  type="password"
-                  fullWidth
-                  autoComplete="shipping address-level2"
-                  variant="standard"
-                  value={mk}
-                  onChange={(e) => {
-                    setMK(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  error={!!inputErrors.mk1}
-                  helperText={inputErrors.mk1}
-                  id="city"
-                  name="mk1"
-                  label="Nhập lại mật khẩu"
-                  type="password"
-                  fullWidth
-                  autoComplete="shipping address-level2"
-                  variant="standard"
-                  value={mk1}
-                  onChange={(e) => {
-                    setMK1(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ width: 300 }}>
-                  <InputLabel id="add-clothes-status-select-label">
-                    Giới tính
-                  </InputLabel>
-                  <Select
-                    labelId="add-clothes-status-select-label"
-                    id="add-clothes-status-select"
-                    value={gt}
-                    name="gt"
-                    label="Giới tính"
-                    onChange={(event) => {
-                      setGT(event.target.value);
-                    }}
-                  >
-                    {["nam", "nu"].map((e, i) => {
-                      return (
-                        <MenuItem key={i} value={e}>
-                          {e}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <p>Ngày sinh *</p>
-                <TextField
-                  required
-                  error={!!inputErrors.ngaysinh}
-                  helperText={inputErrors.ngaysinh}
-                  name="ngaysinh"
-                  // label="Ngày sinh"
-                  fullWidth
-                  variant="standard"
-                  type="date"
-                  value={ngaysinh}
-                  onChange={(e) => {
-                    setNgaysinh(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  error={!!inputErrors.dc}
-                  helperText={inputErrors.dc}
-                  id="address2"
-                  name="address2"
-                  label="Địa chỉ"
-                  fullWidth
-                  autoComplete="shipping address-line2"
-                  variant="standard"
-                  value={dc}
-                  onChange={(e) => setDc(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  error={!!inputErrors.sdt}
-                  helperText={inputErrors.sdt}
-                  id="city"
-                  name="sdt"
-                  label="SDT"
-                  inputProps={{ maxLength: 11 }}
-                  fullWidth
-                  autoComplete="shipping address-level2"
-                  variant="standard"
-                  value={sdt}
-                  onChange={(e) => {
-                    setSdt(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  error={!!inputErrors.cmnd}
-                  helperText={inputErrors.cmnd}
-                  id="state"
-                  name="cmnd"
-                  label="CMND"
-                  inputProps={{ maxLength: 12 }}
-                  fullWidth
-                  variant="standard"
-                  value={cmnd}
-                  onChange={(e) => {
-                    setCmnd(e.target.value);
-                    removeError(e.target.name);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleAdd}
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}
             >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="../signin" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    error={!!inputErrors.ten}
+                    helperText={inputErrors.ten}
+                    id="ten"
+                    name="ten"
+                    label="Họ và tên"
+                    fullWidth
+                    autoComplete="given-name"
+                    variant="standard"
+                    value={ten}
+                    onChange={(e) => {
+                      setTen(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    error={!!inputErrors.email}
+                    helperText={inputErrors.email}
+                    id="city"
+                    name="email"
+                    label="Email"
+                    fullWidth
+                    autoComplete="shipping address-level2"
+                    variant="standard"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    error={!!inputErrors.mk}
+                    helperText={inputErrors.mk}
+                    id="city"
+                    name="mk"
+                    label="Mật khẩu"
+                    type="password"
+                    fullWidth
+                    autoComplete="shipping address-level2"
+                    variant="standard"
+                    value={mk}
+                    onChange={(e) => {
+                      setMK(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    error={!!inputErrors.mk1}
+                    helperText={inputErrors.mk1}
+                    id="city"
+                    name="mk1"
+                    label="Nhập lại mật khẩu"
+                    type="password"
+                    fullWidth
+                    autoComplete="shipping address-level2"
+                    variant="standard"
+                    value={mk1}
+                    onChange={(e) => {
+                      setMK1(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl sx={{ width: 300 }}>
+                    <InputLabel id="add-clothes-status-select-label">
+                      Giới tính
+                    </InputLabel>
+                    <Select
+                      labelId="add-clothes-status-select-label"
+                      id="add-clothes-status-select"
+                      value={gt}
+                      name="gt"
+                      label="Giới tính"
+                      onChange={(event) => {
+                        setGT(event.target.value);
+                      }}
+                    >
+                      {["nam", "nu"].map((e, i) => {
+                        return (
+                          <MenuItem key={i} value={e}>
+                            {e}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <p>Ngày sinh *</p>
+                  <TextField
+                    required
+                    error={!!inputErrors.ngaysinh}
+                    helperText={inputErrors.ngaysinh}
+                    name="ngaysinh"
+                    // label="Ngày sinh"
+                    fullWidth
+                    variant="standard"
+                    type="date"
+                    value={ngaysinh}
+                    onChange={(e) => {
+                      setNgaysinh(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    error={!!inputErrors.dc}
+                    helperText={inputErrors.dc}
+                    id="address2"
+                    name="address2"
+                    label="Địa chỉ"
+                    fullWidth
+                    autoComplete="shipping address-line2"
+                    variant="standard"
+                    value={dc}
+                    onChange={(e) => setDc(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    error={!!inputErrors.sdt}
+                    helperText={inputErrors.sdt}
+                    id="city"
+                    name="sdt"
+                    label="SDT"
+                    inputProps={{ maxLength: 11 }}
+                    fullWidth
+                    autoComplete="shipping address-level2"
+                    variant="standard"
+                    value={sdt}
+                    onChange={(e) => {
+                      setSdt(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    error={!!inputErrors.cmnd}
+                    helperText={inputErrors.cmnd}
+                    id="state"
+                    name="cmnd"
+                    label="CMND"
+                    inputProps={{ maxLength: 12 }}
+                    fullWidth
+                    variant="standard"
+                    value={cmnd}
+                    onChange={(e) => {
+                      setCmnd(e.target.value);
+                      removeError(e.target.name);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox value="allowExtraEmails" color="primary" />
+                    }
+                    label="I want to receive inspiration, marketing promotions and updates via email."
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleAdd}
+              >
+                Sign Up
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="../signin" variant="body2">
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          Đăng kí thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-        <Alert onClose={handleClose1} severity="warning" sx={{ width: "100%" }}>
-          Mật khẩu không khớp!
-        </Alert>
-      </Snackbar>
-      <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
-        <Alert onClose={handleClose404} severity="error" sx={{ width: "100%" }}>
-          Email tồn tại!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={!!errorMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseErrorMessage}
-      >
-        <Alert
+          <Copyright sx={{ mt: 5 }} />
+        </Container>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+            Đăng kí thành công!
+          </Alert>
+        </Snackbar>
+        <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+          <Alert onClose={handleClose1} severity="warning" sx={{ width: "100%" }}>
+            Mật khẩu không khớp!
+          </Alert>
+        </Snackbar>
+        <Snackbar open={open404} autoHideDuration={6000} onClose={handleClose404}>
+          <Alert onClose={handleClose404} severity="error" sx={{ width: "100%" }}>
+            Email tồn tại!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={!!errorMessage}
+          autoHideDuration={6000}
           onClose={handleCloseErrorMessage}
-          severity="error"
-          sx={{ width: "100%" }}
         >
-          {errorMessage}
-        </Alert>
-      </Snackbar>
-    </ThemeProvider>
+          <Alert
+            onClose={handleCloseErrorMessage}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
+            {errorMessage}
+          </Alert>
+        </Snackbar>
+      </ThemeProvider>
+
   );
 }

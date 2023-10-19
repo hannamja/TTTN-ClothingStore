@@ -234,7 +234,19 @@ const Clothes = ({ type }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          if (data.errCode === "SAVE_SUCCESS") {
+            setMessage({
+              content: data.message,
+              type: "success",
+            });
+            setOpenSuccess(true);
+          } else {
+            setMessage({
+              content: data.message,
+              type: "error",
+            });
+            setOpenErr(true);
+          }
         });
     }
   };
@@ -285,8 +297,8 @@ const Clothes = ({ type }) => {
     }
     let filtered = ctmhRows.filter(
       (item) =>
-        item.id === i.colorDTO.id &&
-        item.id === i.sizeDTO.id
+        item.colorDTO.macolor === i.colorDTO.macolor &&
+        item.sizeDTO.masize === i.sizeDTO.masize
     );
 
     if (filtered.length > 0) {
