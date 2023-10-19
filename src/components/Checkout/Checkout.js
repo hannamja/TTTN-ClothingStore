@@ -58,6 +58,12 @@ export default function Checkout() {
   const dispatch = useDispatch()
 
   const handleNext = () => {
+    if(activeStep == 0) {
+      if(addr == '') {
+        alert("Vui lòng nhập địa chỉ!")
+        return
+      }
+    }
     setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleCheckout()

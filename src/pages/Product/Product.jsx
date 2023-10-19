@@ -61,41 +61,38 @@ const Product = () => {
     }
     dispatch(
       addToCart({
-        id: Object.keys(user).length == 0 ? null : user.info.khachhang.makh, product: {
-          id: data.mamh,
-          title: data.tenmh,
-          desc: data.mota,
-          img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
-          "hoadonDTO": {
-            "khachhang": null,
-            "nhanvien": null,
-            "ngaytao": null,
-            "tongtien": null,
-            "chitietTrangThaiDTO": null,
-            "chitietHoadonDTO": null
-          },
-          "chitietMathangDTO": {
-            ...data.ctMathangs[idCtmh],
-            "mathangDTO": {
-              "mamh": data.mamh,
-              "chatlieuDTO": null,
-              "loaimhDTO": null,
-              "nhanhieuDTO": null,
-              "tenmh": data.tenmh,
-              "mota": null,
-              "trangthai": null,
-              "cachlam": null,
-              "phanloai": null,
-              "gia": null,
-              "hinhanhDTOs": null,
-              "ctMathangs": null
-            }
-          },
-          quantity,
-          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
-        }
-      })
-    )
+        id: data.mamh,
+        title: data.tenmh,
+        desc: data.mota,
+        img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
+        "hoadonDTO": {
+          "khachhang": null,
+          "nhanvien": null,
+          "ngaytao": null,
+          "tongtien": null,
+          "chitietTrangThaiDTO": null,
+          "chitietHoadonDTO": null
+        },
+        "chitietMathangDTO": {
+          ...data.ctMathangs[idCtmh],
+          "mathangDTO": {
+            "mamh": data.mamh,
+            "chatlieuDTO": null,
+            "loaimhDTO": null,
+            "nhanhieuDTO": null,
+            "tenmh": data.tenmh,
+            "mota": null,
+            "trangthai": null,
+            "cachlam": null,
+            "phanloai": null,
+            "gia": null,
+            "hinhanhDTOs": null,
+            "ctMathangs": null
+          }
+        },
+        quantity,
+        price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
+      }))
     setOpenSuccess(true)
   }
   const handleChange = (event) => {
