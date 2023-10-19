@@ -158,9 +158,9 @@ const Clothes = ({ type }) => {
     } else {
       setErrors(initialErrors);
       const sp = {
-        chatlieuDTO: cl,
-        loaimhDTO: loai,
-        nhanhieuDTO: brand,
+        chatlieuDTO: { macl: cl, tenvai: null },
+        loaimhDTO: { maloaimh: loai, tenloadimh: null },
+        nhanhieuDTO: { manh: brand, tennh: null },
         tenmh: name,
         mota: "KO",
         trangthai: tt.tt,
@@ -211,9 +211,9 @@ const Clothes = ({ type }) => {
       setErrors(initialErrors);
       const sp = {
         mamh: manh,
-        chatlieuDTO: cl,
-        loaimhDTO: loai,
-        nhanhieuDTO: brand,
+        chatlieuDTO: { macl: cl, tenvai: null },
+        loaimhDTO: { maloaimh: loai, tenloadimh: null },
+        nhanhieuDTO: { manh: brand, tennh: null },
         tenmh: name,
         mota: "KO",
         trangthai: tt.tt,
@@ -245,11 +245,11 @@ const Clothes = ({ type }) => {
       console.log(data);
       if (type !== "add") {
         setMamh(data.mamh);
-        setLoai(data.loaimhDTO);
+        setLoai(data.loaimhDTO.maloaimh);
         setName(data.tenmh);
-        setBrand(data.nhanhieuDTO);
+        setBrand(data.nhanhieuDTO.manh);
         setCachlam(data.cachlam);
-        setCl(data.chatlieuDTO);
+        setCl(data.chatlieuDTO.macl);
         setTT(ttOpt[parseInt(data.trangthai)]);
         setPrice(data.gia);
         setPl(data.phanloai);
@@ -442,7 +442,7 @@ const Clothes = ({ type }) => {
             >
               {brandData.data.map((e, i) => {
                 return (
-                  <MenuItem key={i} value={e}>
+                  <MenuItem key={i} value={e.manh}>
                     {e.tennh}
                   </MenuItem>
                 );
@@ -471,7 +471,7 @@ const Clothes = ({ type }) => {
             >
               {typeData.data.map((e, i) => {
                 return (
-                  <MenuItem key={i} value={e}>
+                  <MenuItem key={i} value={e.maloaimh}>
                     {e.tenloadimh}
                   </MenuItem>
                 );
@@ -501,7 +501,7 @@ const Clothes = ({ type }) => {
             >
               {clData.data.map((e, i) => {
                 return (
-                  <MenuItem key={i} value={e}>
+                  <MenuItem key={i} value={e.macl}>
                     {e.tenvai}
                   </MenuItem>
                 );
@@ -699,8 +699,8 @@ const Clothes = ({ type }) => {
               onClick={
                 type === "add"
                   ? () => {
-                      handleAdd();
-                    }
+                    handleAdd();
+                  }
                   : handleMod
               }
             >
