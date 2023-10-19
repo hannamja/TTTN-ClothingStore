@@ -43,7 +43,7 @@ const Cart = ({ open }) => {
             <button className="quantityBtn" onClick={() => dispatch(add(item))}>+</button>
             <DeleteOutlinedIcon
               className="delete"
-              onClick={() => dispatch(removeItem(item.id))}
+              onClick={() => dispatch(removeItem(item.chitietMathangDTO.id))}
             />
           </div>
         </div>
