@@ -279,11 +279,12 @@ const Clothes = ({ type }) => {
   };
 
   const handleDelCtmh = (i) => {
+    console.log(i)
+    console.log(ctmhRows)
     const filtered = ctmhRows.filter(
-      (item) =>
-        item.id !== i.id &&
-        item.id !== i.id
+      (item) => item.colorDTO.macolor != i.colorDTO.macolor || item.sizeDTO.masize != i.sizeDTO.masize
     );
+
     setCtmhRows(filtered);
   };
 
@@ -297,8 +298,7 @@ const Clothes = ({ type }) => {
     }
     let filtered = ctmhRows.filter(
       (item) =>
-        item.colorDTO.macolor === i.colorDTO.macolor &&
-        item.sizeDTO.masize === i.sizeDTO.masize
+        item.colorDTO.macolor == i.colorDTO.macolor && item.sizeDTO.masize == i.sizeDTO.masize
     );
 
     if (filtered.length > 0) {
