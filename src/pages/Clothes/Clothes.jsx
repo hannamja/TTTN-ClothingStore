@@ -43,6 +43,11 @@ const initialErrors = {
   cachlam: "",
 };
 
+const initialMessage = {
+  content: "",
+  type: "error",
+};
+
 const Clothes = ({ type }) => {
   const { id } = useParams();
   const { data, loading } = useFetch(
@@ -55,24 +60,24 @@ const Clothes = ({ type }) => {
   const colorData = useFetchAdmin(`/color`);
   const sizeData = useFetchAdmin(`/size`);
 
+  const [message, setMessage] = useState(initialMessage);
   const [errors, setErrors] = useState(initialErrors);
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [cachlam, setCachlam] = useState('');
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [cachlam, setCachlam] = useState("");
 
   const [tt, setTT] = useState(ttOpt[0]);
 
   const [manh, setMamh] = useState();
-  const [cl, setCl] = useState('');
-  const [brand, setBrand] = useState('');
-  const [loai, setLoai] = useState('');
-  const [pl, setPl] = useState('');
-  const [size, setSize] = useState('');
+  const [cl, setCl] = useState("");
+  const [brand, setBrand] = useState("");
+  const [loai, setLoai] = useState("");
+  const [pl, setPl] = useState("");
+  const [size, setSize] = useState("");
   const [sl, setSl] = useState(0);
-  const [color, setColor] = React.useState('');
-  const [url, setUrl] = useState('');
-  const [message, setMessage] = useState('');
+  const [color, setColor] = React.useState("");
+  const [url, setUrl] = useState("");
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
 
@@ -91,22 +96,28 @@ const Clothes = ({ type }) => {
     }
     setOpenErr(false);
   };
+  const handleCloseMesssage = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setMessage(initialMessage);
+  };
 
   const validate = () => {
     const errors = {};
-    if (cl === undefined) {
+    if (!cl) {
       errors.cl = "Chưa chọn chất liệu!";
     }
-    if (loai === undefined) {
+    if (!loai) {
       errors.loai = "Chưa chọn loại!";
     }
-    if (brand === undefined) {
+    if (!brand) {
       errors.brand = "Chưa chọn thương hiệu!";
     }
     if (!name) {
       errors.name = "Tên không được để trống!";
     }
-    if (tt == null) {
+    if (!tt) {
       errors.tt = "Chưa chọn trạng thái!";
     }
     if (!cachlam) {
@@ -120,11 +131,30 @@ const Clothes = ({ type }) => {
     return errors;
   };
 
+  const resetForm = () => {
+    setName("");
+    setCachlam("");
+    setTT("");
+
+    setPrice("");
+
+    setCl("");
+    setBrand("");
+    setLoai("");
+    // ctmh
+    setColor("");
+    setSize("");
+    setSl(0);
+  };
+
   const handleAdd = () => {
     const returnErrors = validate();
     if (Object.keys(returnErrors).length > 0) {
       setErrors(returnErrors);
-      alert("Vui lòng nhập đầy đủ thông tin!");
+      setMessage({
+        content: "Vui lòng nhập đúng thông tin!",
+        type: "error",
+      });
     } else {
       setErrors(initialErrors);
       const sp = {
@@ -152,70 +182,67 @@ const Clothes = ({ type }) => {
         .then((res) => res.json())
         .then((data) => {
           if (data.errCode === "SAVE_SUCCESS") {
-            setMessage(data.message);
+            setMessage({
+              content: data.message,
+              type: "success",
+            });
             setOpenSuccess(true);
           } else {
-            setMessage(data.message);
+            setMessage({
+              content: data.message,
+              type: "error",
+            });
             setOpenErr(true);
           }
-          setName('');
-          setCachlam('');
-          setTT('');
-
-          setPrice('');
-
-          setCl('');
-          setBrand('');
-          setLoai('');
-          // ctmh
-          setColor('');
-          setSize('');
-          setSl(0);
+          resetForm();
         });
     }
   };
 
   const handleMod = () => {
-    if (
-      cl === "" ||
-      loai === "" ||
-      brand === "" ||
-      name === "" ||
-      tt == null ||
-      price == null
-    ) {
-      alert("Vui lòng nhập đầy đủ thông tin");
-      return;
-    }
-    const sp = {
-      mamh: manh,
-      chatlieuDTO: cl,
-      loaimhDTO: loai,
-      nhanhieuDTO: brand,
-      tenmh: name,
-      mota: "KO",
-      trangthai: tt.tt,
-      cachlam: cachlam,
-      phanloai: pl,
-      gia: price,
-      hinhanhDTOs: haRows,
-      ctMathangs: ctmhRows,
-    };
+    const returnErrors = validate();
+    if (Object.keys(returnErrors).length > 0) {
+      setErrors(returnErrors);
+      setMessage({
+        content: "Vui lòng nhập đúng thông tin!",
+        type: "error",
+      });
+    } else {
+      setErrors(initialErrors);
+      const sp = {
+        mamh: manh,
+        chatlieuDTO: cl,
+        loaimhDTO: loai,
+        nhanhieuDTO: brand,
+        tenmh: name,
+        mota: "KO",
+        trangthai: tt.tt,
+        cachlam: cachlam,
+        phanloai: pl,
+        gia: price,
+        hinhanhDTOs: haRows,
+        ctMathangs: ctmhRows,
+      };
 
-    fetch("http://localhost:8081/api/mathang", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(sp),
-    })
-      .then((res) => res.json())
-      .then((data) => { });
+      fetch("http://localhost:8081/api/mathang", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sp),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
   };
 
   useEffect(() => {
+    console.log("effect");
     if (data) {
+      console.log(data);
       if (type !== "add") {
         setMamh(data.mamh);
         setLoai(data.loaimhDTO);
@@ -231,7 +258,7 @@ const Clothes = ({ type }) => {
         setHaRows(data.hinhanhDTOs);
       }
     }
-  }, [loading]);
+  }, [loading, data]);
 
   const removeError = (fieldName) => {
     setErrors((e) => ({
@@ -250,11 +277,12 @@ const Clothes = ({ type }) => {
   };
 
   const handleAddCtmh = (i) => {
-    if (
-      !i.colorDTO.macolor ||
-      !i.sizeDTO.masize ||
-      parseInt(i.currentNumbeer) < 0
-    ) {
+    console.log(i);
+    if (!i.colorDTO || !i.sizeDTO || parseInt(i.currentNumbeer) < 0) {
+      setMessage({
+        content: "Vui lòng nhập đúng đủ màu, kích thước, số lượng!",
+        type: "error",
+      });
       return;
     }
     let filtered = ctmhRows.filter(
@@ -277,6 +305,9 @@ const Clothes = ({ type }) => {
     } else {
       setCtmhRows([...ctmhRows, i]);
     }
+    setColor(null);
+    setSize(null);
+    setSl(0);
   };
 
   return clData.loading || brandData.loading || typeData.loading ? (
@@ -462,6 +493,8 @@ const Clothes = ({ type }) => {
               value={cl}
               label="Chọn chất liệu"
               onChange={(event) => {
+                // value is object
+                console.log(event.target.value);
                 setCl(event.target.value);
                 removeError(event.target.name);
               }}
@@ -583,9 +616,6 @@ const Clothes = ({ type }) => {
                   sizeDTO: size,
                   currentNumbeer: sl,
                 });
-                setColor(null);
-                setSize(null);
-                setSl(0);
               }}
             >
               Thêm chi tiết sản phẩm
@@ -669,8 +699,8 @@ const Clothes = ({ type }) => {
               onClick={
                 type === "add"
                   ? () => {
-                    handleAdd();
-                  }
+                      handleAdd();
+                    }
                   : handleMod
               }
             >
@@ -684,23 +714,13 @@ const Clothes = ({ type }) => {
         autoHideDuration={6000}
         onClose={handleCloseSuccess}
       >
-        {type === "add" ? (
-          <Alert
-            onClose={handleCloseSuccess}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            {message}
-          </Alert>
-        ) : (
-          <Alert
-            onClose={handleCloseSuccess}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            Sửa quần áo thành công!
-          </Alert>
-        )}
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {type === "add" ? message.content : "Sửa quần áo thành công!"}
+        </Alert>
       </Snackbar>
 
       <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
@@ -709,7 +729,22 @@ const Clothes = ({ type }) => {
           severity="success"
           sx={{ width: "100%" }}
         >
-          {message}
+          {message.content}
+        </Alert>
+      </Snackbar>
+
+      {/* Message */}
+      <Snackbar
+        open={!!message.content}
+        autoHideDuration={3000}
+        onClose={handleCloseMesssage}
+      >
+        <Alert
+          onClose={handleCloseMesssage}
+          severity={message.type}
+          sx={{ width: "100%" }}
+        >
+          {message.content}
         </Alert>
       </Snackbar>
     </React.Fragment>
