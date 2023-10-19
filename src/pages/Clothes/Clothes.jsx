@@ -45,7 +45,7 @@ const initialErrors = {
 
 const initialMessage = {
   content: "",
-  type: "error",
+  type: "",
 };
 
 const Clothes = ({ type }) => {
@@ -81,26 +81,11 @@ const Clothes = ({ type }) => {
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
 
-  const [openSuccess, setOpenSuccess] = React.useState(false);
-  const handleCloseSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSuccess(false);
-  };
-
-  const [openErr, setOpenErr] = React.useState(false);
-  const handleCloseErr = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenErr(false);
-  };
   const handleCloseMesssage = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-    setMessage(initialMessage);
+    setMessage((m) => ({ ...m, content: "" }));
   };
 
   const validate = () => {
@@ -186,13 +171,11 @@ const Clothes = ({ type }) => {
               content: data.message,
               type: "success",
             });
-            setOpenSuccess(true);
           } else {
             setMessage({
               content: data.message,
               type: "error",
             });
-            setOpenErr(true);
           }
           resetForm();
         });
@@ -234,27 +217,24 @@ const Clothes = ({ type }) => {
       })
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data.errCode === "SAVE_SUCCESS") {
             setMessage({
               content: data.message,
               type: "success",
             });
-            setOpenSuccess(true);
           } else {
             setMessage({
               content: data.message,
               type: "error",
             });
-            setOpenErr(true);
           }
         });
     }
   };
 
   useEffect(() => {
-    console.log("effect");
     if (data) {
-      console.log(data);
       if (type !== "add") {
         setMamh(data.mamh);
         setLoai(data.loaimhDTO.maloaimh);
@@ -279,12 +259,11 @@ const Clothes = ({ type }) => {
   };
 
   const handleDelCtmh = (i) => {
-    console.log(i)
-    console.log(ctmhRows)
     const filtered = ctmhRows.filter(
-      (item) => item.colorDTO.macolor != i.colorDTO.macolor || item.sizeDTO.masize != i.sizeDTO.masize
+      (item) =>
+        item.colorDTO.macolor != i.colorDTO.macolor ||
+        item.sizeDTO.masize != i.sizeDTO.masize
     );
-
     setCtmhRows(filtered);
   };
 
@@ -298,7 +277,8 @@ const Clothes = ({ type }) => {
     }
     let filtered = ctmhRows.filter(
       (item) =>
-        item.colorDTO.macolor == i.colorDTO.macolor && item.sizeDTO.masize == i.sizeDTO.masize
+        item.colorDTO.macolor == i.colorDTO.macolor &&
+        item.sizeDTO.masize == i.sizeDTO.masize
     );
 
     if (filtered.length > 0) {
@@ -379,7 +359,6 @@ const Clothes = ({ type }) => {
                 return (
                   <MenuItem key={i} value={e}>
                     {e.ttName}
-
                   </MenuItem>
                 );
               })}
@@ -710,8 +689,8 @@ const Clothes = ({ type }) => {
               onClick={
                 type === "add"
                   ? () => {
-                    handleAdd();
-                  }
+                      handleAdd();
+                    }
                   : handleMod
               }
             >
@@ -721,26 +700,16 @@ const Clothes = ({ type }) => {
         )}
       </Grid>
       <Snackbar
-        open={openSuccess}
+        open={!!message.content}
         autoHideDuration={6000}
-        onClose={handleCloseSuccess}
+        onClose={handleCloseMesssage}
       >
         <Alert
-          onClose={handleCloseSuccess}
-          severity="success"
+          onClose={handleCloseMesssage}
+          severity={message.type}
           sx={{ width: "100%" }}
         >
-          {type === "add" ? message.content : "Sửa quần áo thành công!"}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar open={openErr} autoHideDuration={6000} onClose={handleCloseErr}>
-        <Alert
-          onClose={handleCloseErr}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {message.content}
+          {type === "add" ? message.content : message.content}
         </Alert>
       </Snackbar>
     </React.Fragment>
