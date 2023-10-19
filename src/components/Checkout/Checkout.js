@@ -36,7 +36,7 @@ const steps = ['Shipping address', 'Payment details', 'Review your order'];
 function getStepContent(step, setIsPaid, setAddr, addr) {
   switch (step) {
     case 0:
-      return <AddressForm setAddr={setAddr} addr={addr}/>;
+      return <AddressForm setAddr={setAddr} addr={addr} />;
     case 1:
       return <PaymentForm setIsPaid={setIsPaid} />;
     case 2:
@@ -58,16 +58,16 @@ export default function Checkout() {
   const dispatch = useDispatch()
 
   const handleNext = () => {
-    if(activeStep == 0) {
-      if(addr == '') {
+    if (activeStep == 0) {
+      if (addr == '') {
         alert("Vui lòng nhập địa chỉ!")
         return
       }
     }
-    setActiveStep(activeStep + 1);
     if (activeStep === steps.length - 1) {
       handleCheckout()
     }
+    else setActiveStep(activeStep + 1);
   };
 
   const handleBack = () => {
@@ -127,7 +127,13 @@ export default function Checkout() {
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
+        if (data.mahd == null) {
+          alert("Số lượng tồn không đủ")
+          return
+        }
         dispatch(resetCart())
+        setActiveStep(activeStep + 1);
       })
   }
 
