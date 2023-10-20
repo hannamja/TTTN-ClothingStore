@@ -295,6 +295,7 @@ const OrderBillList = () => {
                   display: "flex",
                   gap: 5,
                   justifyContent: "end",
+                  alignItems: 'center'
                 }}
               >
                 <div className="shipper">
