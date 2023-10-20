@@ -126,10 +126,13 @@ const Clothes = ({ type }) => {
     setCl("");
     setBrand("");
     setLoai("");
-    // ctmh
+    // ctmh input
     setColor("");
     setSize("");
     setSl(0);
+    // ctmh & hinh anh
+    setCtmhRows([]);
+    setHaRows([]);
   };
 
   const handleAdd = () => {
@@ -268,9 +271,20 @@ const Clothes = ({ type }) => {
   };
 
   const handleAddCtmh = (i) => {
-    if (!i.colorDTO || !i.sizeDTO || parseInt(i.currentNumbeer) < 0) {
+    if (
+      !i.colorDTO ||
+      !i.sizeDTO ||
+      !Number.isInteger(parseInt(i.currentNumbeer))
+    ) {
       setMessage({
         content: "Vui lòng nhập đúng đủ màu, kích thước, số lượng!",
+        type: "error",
+      });
+      return;
+    }
+    if (parseInt(i.currentNumbeer) < 0) {
+      setMessage({
+        content: "Số lượng không được nhỏ hơn 0!",
         type: "error",
       });
       return;
