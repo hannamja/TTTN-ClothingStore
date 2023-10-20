@@ -195,7 +195,7 @@ const OrderBillList = () => {
           setOpen(thisRow.madon);
         };
         return (
-          <div className='btns' style={{color: 'green'}}>
+          <div className='btns' style={{ color: 'green' }}>
             <div className='info' onClick={onClick}>
               <InfoOutlinedIcon />
             </div>
@@ -354,7 +354,7 @@ const OrderBillList = () => {
     <div className='orderBillList'>
       {/* Sửa lại UI Table */}
 
-      <Box sx={{ height: 500, width: '95%', margin: '0 auto' }}>
+      <Box sx={{ height: 500, width: '100%', margin: '0 auto' }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -381,15 +381,21 @@ const OrderBillList = () => {
               <HistoryList data={row} type='admin' />
             </Typography>
             {row.chitietTrangThaiDTO.trangthai.matthd < 3 &&
-            row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? (
+              row.chitietTrangThaiDTO.trangthai.matthd !== 6 ? (
               <div
                 style={{
+                  width: '100%',
                   display: 'flex',
-                  gap: 5,
-                  justifyContent: 'end',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  gap: 5
                 }}
               >
-                <div className='shipper'>
+                <div className='shipper'
+                  style={{
+                    width: '50%'
+                  }}
+                >
                   <FormControl fullWidth>
                     <InputLabel id='add-clothes-brand-select-label'>
                       Chọn shipper
