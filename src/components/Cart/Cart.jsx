@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { removeItem, resetCart, add, minus } from "../../redux/cartReducer";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { handleMoney } from "../../utilities/handleMoney";
 
 const Cart = ({ open }) => {
   const products = useSelector((state) => state.cart.products);
@@ -16,7 +17,7 @@ const Cart = ({ open }) => {
     products.forEach((item) => {
       total += item.quantity * item.price;
     });
-    return total.toFixed(2);
+    return total;
   };
 
   return (
@@ -29,7 +30,7 @@ const Cart = ({ open }) => {
             <h1>{item.title}</h1>
             <p>{item.desc?.substring(0, 100)}</p>
             <div className="price">
-              {item.quantity} x ${item.price}
+              {item.quantity} x ${handleMoney(item.price)}
             </div>
           </div>
           <div className="quantity">
@@ -42,14 +43,14 @@ const Cart = ({ open }) => {
             <button className="quantityBtn" onClick={() => dispatch(add(item))}>+</button>
             <DeleteOutlinedIcon
               className="delete"
-              onClick={() => dispatch(removeItem(item.id))}
+              onClick={() => dispatch(removeItem(item.chitietMathangDTO.id))}
             />
           </div>
         </div>
       ))}
       <div className="total">
         <span>SUBTOTAL</span>
-        <span>${totalPrice()}</span>
+        <span>${handleMoney(totalPrice())}</span>
       </div>
       <Link className="link" to={Object.keys(user).length == 0 ? '/signin' : '/checkout'} onClick={() => { open(false) }}>
         <button className="checkoutBtn">PROCEED TO CHECKOUT</button>

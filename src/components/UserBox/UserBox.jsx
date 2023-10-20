@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import './UserBox.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/userReducer.js'
+import { resetCart } from '../../redux/cartReducer';
 const UserBox = () => {
     const dispatch = useDispatch()
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -22,6 +23,7 @@ const UserBox = () => {
     const handleLogout = (event) => {
         event.preventDefault()
         dispatch(logout())
+        dispatch(resetCart());
     }
     const openUserBox = Boolean(anchorEl);
     const id = openUserBox ? 'simple-popover' : undefined;

@@ -80,6 +80,8 @@ const Clothes = ({ type }) => {
   const [url, setUrl] = useState("");
   const [ctmhRows, setCtmhRows] = React.useState([]);
   const [haRows, setHaRows] = React.useState([]);
+  if (sl == 0)
+    setSl(1);
 
   const handleCloseMesssage = (event, reason) => {
     if (reason === "clickaway") {
@@ -608,6 +610,7 @@ const Clothes = ({ type }) => {
               variant="outlined"
               type="number"
               onChange={(e) => setSl(e.target.value)}
+              InputProps={{ inputProps: { min: 1 } }}
             />
           </Grid>
           <Grid item xs={12}>

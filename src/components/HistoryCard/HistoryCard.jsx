@@ -1,5 +1,6 @@
 import React from 'react'
 import './HistoryCard.scss'
+import { handleMoney } from '../../utilities/handleMoney'
 const HistoryCard = ({ data }) => {
   return (
     <div className='historyCard'>
@@ -14,7 +15,7 @@ const HistoryCard = ({ data }) => {
         </div>
       </div>
       <div className="price">
-        <span className='itemPrice'>{data.gia*data.soluong}</span>
+        <span className='itemPrice'>{handleMoney(data.gia*data.soluong) + ' VND'}</span>
       </div>
     </div>
   )
