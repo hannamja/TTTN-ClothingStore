@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import List from "../../components/List/List";
@@ -11,10 +11,16 @@ const Products = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState([]);
-
-  const { data, loading, error } = useFetch(
+  const [sortData, setSortData] = useState(null)
+  const { data, loading, error, setData } = useFetch(
     `/mathang/getByLoai/${catId}`
   );
+  const sizeData = useFetch(`/size`);
+
+  useEffect(() => {
+    if (data) setSortData(data)
+  }, [loading])
+
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -27,25 +33,40 @@ const Products = () => {
     );
   };
 
+  const sorting = (price) => {
+    setSortData(data.filter(i => i.gia >= price))
+  }
+
+  const sizeFilter = (size) => {
+    data.filter(i => i.sizeDTO.tensize == size)
+  }
+
+  const priceFilter = (typeSort) => {
+    console.log(typeSort)
+    if (typeSort == 'asc') {
+      sortData.sort((a, b) => a.gia - b.gia)
+    }
+    else if (typeSort == 'desc') {
+      sortData.sort((a, b) => b.gia - a.gia)
+    }
+  }
   return (
-    loading ? 'loading...' :
+    loading || sizeData.loading ? 'loading...' :
       <div className="products">
         <div className="left">
           <div className="filterItem">
             <h2>Product Categories</h2>
-
           </div>
           <div className="filterItem">
             <h2>Filter by size</h2>
             <div className="inputItem">
               <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="S" />
-                <FormControlLabel control={<Checkbox />} label="M" />
-                <FormControlLabel control={<Checkbox />} label="L" />
-                <FormControlLabel control={<Checkbox />} label="XS" />
-                <FormControlLabel control={<Checkbox />} label="XL" />
+                {
+                  sizeData.data.map((i, idx) =>
+                    <FormControlLabel key={idx} control={<Checkbox defaultChecked={idx == 0 ? true : false} onChange={handleChange} />} label={i.tensize} value={i.masize} />
+                  )
+                }
               </FormGroup>
-
             </div>
           </div>
           <div className="filterItem">
@@ -56,7 +77,7 @@ const Products = () => {
                 type="range"
                 min={0}
                 max={1000}
-                onChange={(e) => setMaxPrice(e.target.value)}
+                onChange={(e) => { setMaxPrice(e.target.value); sorting(e.target.value * 1000) }}
               />
               <span>{maxPrice}</span>
             </div>
@@ -69,7 +90,7 @@ const Products = () => {
                 id="asc"
                 value="asc"
                 name="price"
-                onChange={(e) => setSort("asc")}
+                onChange={(e) => { setSort("asc"); priceFilter("asc") }}
               />
               <label htmlFor="asc">Price (Lowest first)</label>
             </div>
@@ -79,7 +100,7 @@ const Products = () => {
                 id="desc"
                 value="desc"
                 name="price"
-                onChange={(e) => setSort("desc")}
+                onChange={(e) => { setSort("desc"); priceFilter("desc") }}
               />
               <label htmlFor="desc">Price (Highest first)</label>
             </div>
@@ -91,7 +112,7 @@ const Products = () => {
             src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
-          <List data={data} />
+          <List data={sortData} />
         </div>
       </div>
   );
