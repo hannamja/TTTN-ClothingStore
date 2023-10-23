@@ -7,7 +7,7 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 // import useFetch from "../../hooks/useFetch";
 
 const owlOptions = {
-  items: 3,
+  items: 4,
   loop: true,
   margin: 10,
   autoplay: true,
