@@ -1,35 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Alert, Button, Input, Snackbar } from '@mui/material';
+import { Button } from '@mui/material';
 import './Material.scss'
 import { useParams } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
+import AlertMessage from "../../components/AlertMessage";
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
+
 const Material = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/chatlieu/` + id}`);
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
+    const [message, setMessage] = useState(initialMessage);
 
     const user = useSelector(state => state.user)
+
     const handleAdd = () => {
-        if (ten == '') {
-            alert('Vui lòng nhập tên chất liệu')
+        if (!ten.trim()) {
+            setMessage({content: "Vui lòng nhập tên chất liệu", type: "warning"})
             return
         }
         const cl = {
@@ -45,13 +38,13 @@ const Material = ({ type }) => {
             },
             body: JSON.stringify(cl)
         }).then(res => res.json()).then(()=>{
-            setOpen(true)
+            setMessage({content: "Thêm chất liệu thành công!", type: "success"})
         })
     }
 
     const handleMod = () => {
-        if (ten == '') {
-            alert('Vui lòng nhập tên chất liệu')
+        if (!ten.trim()) {
+            setMessage({content: "Vui lòng nhập tên chất liệu", type: "warning"})
             return
         }
         const cl = {
@@ -68,7 +61,7 @@ const Material = ({ type }) => {
             },
             body: JSON.stringify(cl)
         }).then(res => res.json()).then(()=>{
-            setOpen1(true)
+            setMessage({content: "Sửa chất liệu thành công!", type: "success"})
         })
     }
 
@@ -77,7 +70,7 @@ const Material = ({ type }) => {
         if (data) setTen(data.tenvai)
     }, [loading])
     return (
-        <React.Fragment>
+        <>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>
                     <img
@@ -114,17 +107,8 @@ const Material = ({ type }) => {
                         </Grid>
                 }
             </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Thêm chất liệu thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    Sửa chất liệu thành công!
-                </Alert>
-            </Snackbar>
-        </React.Fragment>
+            <AlertMessage message={message} setMessage={setMessage} />
+        </>
     )
 }
 

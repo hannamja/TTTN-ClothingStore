@@ -9,7 +9,7 @@ import { Alert, Snackbar } from "@mui/material";
  * @param {Function} param0.setMessage
  * @returns 
  */
-export default function AlertMessage({ message, setMessage }) {
+export default function AlertMessage({ message, setMessage, autoHideDuration = 6000 }) {
   const handleCloseMesssage = (_event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -19,7 +19,7 @@ export default function AlertMessage({ message, setMessage }) {
   return (
     <Snackbar
       open={!!message.content}
-      autoHideDuration={6000}
+      autoHideDuration={autoHideDuration}
       onClose={handleCloseMesssage}
     >
       {!!message.content && (

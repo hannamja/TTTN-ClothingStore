@@ -16,10 +16,10 @@ import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './MaterialList.scss'
 import { Link } from 'react-router-dom';
-import useFetch from '../../hooks/useFetch';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { Alert, Snackbar } from '@mui/material';
 import { useSelector } from 'react-redux';
+import AlertMessage from "../../components/AlertMessage";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -60,11 +60,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -116,28 +111,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
+
 const MaterialList = ({ type }) => {
     const [input, setInput] = useState('')
+    const [message, setMessage] = useState(initialMessage);
+
     const handldeChange = (e) => {
         setInput(e)
     }
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
     const user = useSelector(state => state.user)
 
     const handleDel = (id) => {
@@ -150,9 +136,10 @@ const MaterialList = ({ type }) => {
                     'Authorization': 'Bearer ' + user.token
                 },
             }).then(res => res.json()).then(data => {
-                if (data.status == 404) setOpen1(true)
+                if (data.status == 404)
+                    setMessage({content: "Lỗi!", type: "error"})
                 else {
-                    setOpen(true)
+                    setMessage({content: "Xóa chất liệu thành công!", type: "success"})
                     window.location.reload()
                 }
 
@@ -220,17 +207,7 @@ const MaterialList = ({ type }) => {
                                 <Link className='link' to='/admin/materialManagement/add'><span>Thêm mới</span></Link>
                             </div>
                         </div>
-                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                Xóa chất liệu thành công!
-                            </Alert>
-                        </Snackbar>
-
-                        <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                            <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                                Lỗi!
-                            </Alert>
-                        </Snackbar>
+                        <AlertMessage message={message} setMessage={setMessage} />
                     </div >
                 </>
             )
