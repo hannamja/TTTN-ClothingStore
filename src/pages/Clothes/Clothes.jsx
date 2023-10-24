@@ -721,13 +721,13 @@ const Clothes = ({ type }) => {
         autoHideDuration={6000}
         onClose={handleCloseMesssage}
       >
-        <Alert
+        {!!message.content && <Alert
           onClose={handleCloseMesssage}
           severity={message.type}
           sx={{ width: "100%" }}
         >
           {type === "add" ? message.content : message.content}
-        </Alert>
+        </Alert>}
       </Snackbar>
     </React.Fragment>
   );

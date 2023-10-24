@@ -18,7 +18,7 @@ import './BrandList.scss'
 import { Link } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
-import { Alert, Snackbar } from '@mui/material';
+import AlertMessage from '../AlertMessage/AlertMessage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -59,18 +59,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const Search = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -122,28 +110,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
+
 const BrandList = () => {
+    const [message, setMessage] = useState(initialMessage);
+
     const [input, setInput] = useState('')
     const handldeChange = (e) => {
         setInput(e)
     }
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
 
-        setOpen(false);
-    };
-
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
     const user = useSelector(state => state.user)
 
     const handleDel = (id) => {
@@ -155,10 +135,12 @@ const BrandList = () => {
                 'Authorization': 'Bearer ' + user.token
             },
         }).then(res => res.json()).then(data => {
-            console.log(data)
-            if (data.status == 404) setOpen1(true)
+            // console.log(data)
+            if (data.status == 404) {
+                setMessage({content: data.message, type: "error"})
+            }
             else {
-                setOpen(true)
+                setMessage({content: "Xóa nhãn hiệu thành công!", type: "success"})
                 window.location.reload()
             }
         }
@@ -222,17 +204,7 @@ const BrandList = () => {
                     <Link className='link' to='/admin/brandManagement/add'><span>Thêm mới</span></Link>
                 </div>
             </div>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Xóa nhãn hiệu thành công!
-                </Alert>
-            </Snackbar>
-
-            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                <Alert onClose={handleClose1} severity="error" sx={{ width: '100%' }}>
-                    Lỗi!
-                </Alert>
-            </Snackbar>
+            <AlertMessage message={message} setMessage={setMessage} />
         </div>
     </>
     )
