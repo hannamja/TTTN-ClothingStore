@@ -1,6 +1,8 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
 import useFetch from "../../hooks/useFetch";
 
 export default function DropDownPhanLoai() {
@@ -27,6 +29,7 @@ export default function DropDownPhanLoai() {
           onClick={handleClick}
         >
           Phân loại
+          <KeyboardArrowDownIcon sx={{rotate: open ? "180deg" : "inherit"}} />
         </Button>
         <Menu
           id="basic-menu"
@@ -38,7 +41,7 @@ export default function DropDownPhanLoai() {
           }}
         >
           {
-            data.map((e, i) =>
+            data?.map((e, i) =>
               <MenuItem
                 onClick={() => {
                   navigate(`/products/${e.maloaimh}`);
