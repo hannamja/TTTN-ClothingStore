@@ -1,10 +1,11 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../../hooks/useFetch";
 
 export default function DropDownPhanLoai() {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const { data, loading, error } = useFetch('/loaimh')
   const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
@@ -15,52 +16,40 @@ export default function DropDownPhanLoai() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
-    <div>
-      <Button
-        id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
-      >
-        Phân loại
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem
-          onClick={() => {
-            navigate("/products/2");
-            handleClose();
+    loading ? 'loading...' :
+      <div>
+        <Button
+          id="basic-button"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+        >
+          Phân loại
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
           }}
         >
-          ÁO SƠ MI
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            navigate("/products/5");
-            handleClose();
-          }}
-        >
-          QUẦN TÂY
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            navigate("/products/1");
-            handleClose();
-          }}
-        >
-          ÁO THUN
-        </MenuItem>
-      </Menu>
-    </div>
+          {
+            data.map((e, i) =>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/products/${e.maloaimh}`);
+                  handleClose();
+                }}
+              >
+                {e.tenloadimh}
+              </MenuItem>
+            )
+          }
+        </Menu>
+      </div >
   );
 }
