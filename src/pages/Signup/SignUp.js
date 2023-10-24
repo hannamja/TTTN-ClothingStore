@@ -108,6 +108,10 @@ export default function SignUp() {
       errors.mk1 = "Mật khẩu xác nhận không khớp!";
     }
     validateNotNull(errors, ngaysinh, "ngaysinh");
+    if (!errors.ngaysinh) {
+      if (new Date(ngaysinh).getTime() > new Date().getTime())
+        errors.ngaysinh = "Ngày sinh không hợp lệ"
+    }
     if (cmnd) {
       validateCmnd(errors, cmnd, "cmnd");
     }
