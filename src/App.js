@@ -1,54 +1,59 @@
-import { Children, useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
-import Footer from "./components/Footer/Footer";
-import NavBar from "./components/NavBar/Navbar";
-import Home from "./pages/Home/Home";
-import Product from "./pages/Product/Product";
-import Products from "./pages/Products/Products";
-import "./app.scss"
-import AdminSideBar from "./components/AdminSideBar/AdminSideBar";
-import WarehouseTabs from "./pages/WarehouseTabs/WarehouseTabs";
-import UserSideBar from "./components/UserSideBar/UserSideBar";
-import UserInfo from "./components/UserInfo/UserInfo";
-import ImportVoucherTabs from "./pages/ImportVoucherTabs/ImportVoucherTabs";
-import EmployeeTabs from "./pages/EmployeeTabs/EmployeeTabs";
-import ChartTabs from "./pages/ChartTabs/ChartTabs";
-import Clothes from "./pages/Clothes/Clothes";
-import Import from "./pages/Import/Import";
-import Employee from "./pages/Employee/Employee";
-import SignUp from "./pages/Signup/SignUp";
-import SignInSide from "./pages/Signin/SignInSide";
-import Forgot from "./pages/Forgot/Forgot";
-import OrderDetails from "./pages/OrderDetails/OrderDetails";
-import Purchase from "./pages/Purchase/Purchase";
-import Export from "./pages/Export/Export";
-import ExportVoucherTabs from "./pages/ExportVoucherTabs/ExportVoucherTabs";
-import UserTabs from "./pages/UserTabs/UserTabs";
-import User from "./pages/User/User";
-import OrderBillTabs from "./pages/OrderBillTabs/OrderBillTabs";
-import OrderVoucherTabs from "./pages/OrderVoucherTabs/OrderVoucherTabs";
-import OrderVoucher from "./pages/OrderVoucher/OrderVoucher";
-import Checkout from "./components/Checkout/Checkout";
-import Provider from "./pages/Provider/Provider";
-import ProviderTabs from "./pages/ProviderTabs/ProviderTabs";
-import RoleTabs from "./pages/RoleTabs/RoleTabs";
-import Role from "./pages/Role/Role";
-import PriceManagementTabs from "./pages/PriceManagementTabs/PriceManagementTabs";
-import PriceManagement from "./pages/PriceManagement/PriceManagement";
-import KMTabs from "./pages/KMTabs/KMTabs";
-import KM from "./pages/KM/KM";
-import SearchResult from "./pages/SearchResult/SearchResult";
-import Brand from "./pages/Brand/Brand";
-import Type from "./pages/Type/Type";
-import Material from "./pages/Material/Material";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "./redux/userReducer";
-import jwt_decode from "jwt-decode";
-import { Alert, Snackbar } from "@mui/material";
+import { Children, useEffect, useState } from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
+import Footer from './components/Footer/Footer';
+import NavBar from './components/NavBar/Navbar';
+import Home from './pages/Home/Home';
+import Product from './pages/Product/Product';
+import Products from './pages/Products/Products';
+import './app.scss';
+import AdminSideBar from './components/AdminSideBar/AdminSideBar';
+import WarehouseTabs from './pages/WarehouseTabs/WarehouseTabs';
+import UserSideBar from './components/UserSideBar/UserSideBar';
+import UserInfo from './components/UserInfo/UserInfo';
+import ImportVoucherTabs from './pages/ImportVoucherTabs/ImportVoucherTabs';
+import EmployeeTabs from './pages/EmployeeTabs/EmployeeTabs';
+import ChartTabs from './pages/ChartTabs/ChartTabs';
+import Clothes from './pages/Clothes/Clothes';
+import Import from './pages/Import/Import';
+import Employee from './pages/Employee/Employee';
+import SignUp from './pages/Signup/SignUp';
+import SignInSide from './pages/Signin/SignInSide';
+import Forgot from './pages/Forgot/Forgot';
+import OrderDetails from './pages/OrderDetails/OrderDetails';
+import Purchase from './pages/Purchase/Purchase';
+import Export from './pages/Export/Export';
+import ExportVoucherTabs from './pages/ExportVoucherTabs/ExportVoucherTabs';
+import UserTabs from './pages/UserTabs/UserTabs';
+import User from './pages/User/User';
+import OrderBillTabs from './pages/OrderBillTabs/OrderBillTabs';
+import OrderVoucherTabs from './pages/OrderVoucherTabs/OrderVoucherTabs';
+import OrderVoucher from './pages/OrderVoucher/OrderVoucher';
+import Checkout from './components/Checkout/Checkout';
+import Provider from './pages/Provider/Provider';
+import ProviderTabs from './pages/ProviderTabs/ProviderTabs';
+import RoleTabs from './pages/RoleTabs/RoleTabs';
+import Role from './pages/Role/Role';
+import PriceManagementTabs from './pages/PriceManagementTabs/PriceManagementTabs';
+import PriceManagement from './pages/PriceManagement/PriceManagement';
+import KMTabs from './pages/KMTabs/KMTabs';
+import KM from './pages/KM/KM';
+import SearchResult from './pages/SearchResult/SearchResult';
+import Brand from './pages/Brand/Brand';
+import Type from './pages/Type/Type';
+import Material from './pages/Material/Material';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from './redux/userReducer';
+import jwt_decode from 'jwt-decode';
+import { Alert, Snackbar } from '@mui/material';
 
 const Layout = () => {
   return (
-    <div className="app">
+    <div className='app'>
       <NavBar />
       <Outlet />
       <Footer />
@@ -57,7 +62,7 @@ const Layout = () => {
 };
 const AdminLayout = () => {
   return (
-    <div className="appAdmin">
+    <div className='appAdmin'>
       <Outlet />
       <AdminSideBar />
     </div>
@@ -66,99 +71,97 @@ const AdminLayout = () => {
 
 const UserLayout = () => {
   return (
-    <div className="appUser">
+    <div className='appUser'>
       <Outlet />
       <UserSideBar />
     </div>
   );
 };
 
-
-
 function App() {
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.user);
 
   const visitorRoutes = createBrowserRouter([
     // user usecase
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       children: [
         {
-          path: "/",
+          path: '/',
           element: <Home />,
         },
         {
-          path: "/products/:id",
+          path: '/products/:id',
           element: <Products />,
         },
         {
-          path: "/products/search",
+          path: '/products/search',
           element: <SearchResult />,
         },
         {
-          path: "/product/:id",
+          path: '/product/:id',
           element: <Product />,
         },
         {
-          path: "/signin",
+          path: '/signin',
           element: <SignInSide />,
         },
         {
-          path: "/signup",
+          path: '/signup',
           element: <SignUp />,
         },
         {
-          path: "/forgot",
+          path: '/forgot',
           element: <Forgot />,
         },
         {
-          path: "/search/:q",
+          path: '/search/:q',
           element: <SearchResult />,
         },
       ],
     },
-  ])
+  ]);
   const userRoutes = createBrowserRouter([
     // user usecase
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       children: [
         {
-          path: "/",
+          path: '/',
           element: <Home />,
         },
         {
-          path: "/products/:id",
+          path: '/products/:id',
           element: <Products />,
         },
         {
-          path: "/products/search",
+          path: '/products/search',
           element: <SearchResult />,
         },
         {
-          path: "/product/:id",
+          path: '/product/:id',
           element: <Product />,
         },
         {
-          path: "/signin",
+          path: '/signin',
           element: <SignInSide />,
         },
         {
-          path: "/signup",
+          path: '/signup',
           element: <SignUp />,
         },
         {
-          path: "/forgot",
+          path: '/forgot',
           element: <Forgot />,
         },
         {
-          path: "/checkout",
+          path: '/checkout',
           element: <Checkout />,
         },
         {
-          path: "/search/:q",
+          path: '/search/:q',
           element: <SearchResult />,
         },
       ],
@@ -170,9 +173,9 @@ function App() {
       children: [
         {
           path: '/user/setting',
-          element: <UserInfo />
-        }
-      ]
+          element: <UserInfo />,
+        },
+      ],
     },
     // quản lí đơn
     {
@@ -181,51 +184,51 @@ function App() {
       children: [
         {
           path: '/user/purchase',
-          element: <Purchase />
+          element: <Purchase />,
         },
         {
           path: '/user/purchase/order/:id',
-          element: <OrderDetails />
-        }
-      ]
-    }
-  ])
+          element: <OrderDetails />,
+        },
+      ],
+    },
+  ]);
   const adminRoutes = createBrowserRouter([
     // user usecase
     {
-      path: "/",
+      path: '/',
       element: <Layout />,
       children: [
         {
-          path: "/",
+          path: '/',
           element: <Home />,
         },
         {
-          path: "/products/:id",
+          path: '/products/:id',
           element: <Products />,
         },
         {
-          path: "/products/search",
+          path: '/products/search',
           element: <SearchResult />,
         },
         {
-          path: "/product/:id",
+          path: '/product/:id',
           element: <Product />,
         },
         {
-          path: "/signin",
+          path: '/signin',
           element: <SignInSide />,
         },
         {
-          path: "/signup",
+          path: '/signup',
           element: <SignUp />,
         },
         {
-          path: "/forgot",
+          path: '/forgot',
           element: <Forgot />,
         },
         {
-          path: "/search/:q",
+          path: '/search/:q',
           element: <SearchResult />,
         },
       ],
@@ -237,9 +240,9 @@ function App() {
       children: [
         {
           path: '/user/setting',
-          element: <UserInfo />
-        }
-      ]
+          element: <UserInfo />,
+        },
+      ],
     },
 
     //admin usecase
@@ -250,227 +253,227 @@ function App() {
         // quản lí kho
         {
           path: '/admin',
-          element: <WarehouseTabs />
+          element: <WarehouseTabs />,
         },
         {
           path: '/admin/addClothes',
-          element: <Clothes type='add' />
+          element: <Clothes type='add' />,
         },
         {
           path: '/admin/detailClothes/:id',
-          element: <Clothes type='detail' />
+          element: <Clothes type='detail' />,
         },
         {
           path: '/admin/modifyClothes/:id',
-          element: <Clothes type='mod' />
+          element: <Clothes type='mod' />,
         },
         //quản lí đơn khách
         {
           path: '/admin/orderBill',
-          element: <OrderBillTabs />
+          element: <OrderBillTabs />,
         },
         // quản lí nhập
         {
           path: '/admin/importManagement',
-          element: <ImportVoucherTabs />
+          element: <ImportVoucherTabs />,
         },
         {
           path: '/admin/importManagement/add',
-          element: <Import type='add' />
+          element: <Import type='add' />,
         },
         {
           path: '/admin/importManagement/detailImport/:id',
-          element: <Import type='detail' />
+          element: <Import type='detail' />,
         },
         {
           path: '/admin/importManagement/modifyImport/:id',
-          element: <Import type='mod' />
+          element: <Import type='mod' />,
         },
         // quản lí đặt
         {
           path: '/admin/orderManagement',
-          element: <OrderVoucherTabs />
+          element: <OrderVoucherTabs />,
         },
         {
           path: '/admin/orderManagement/add',
-          element: <OrderVoucher type='add' />
+          element: <OrderVoucher type='add' />,
         },
         {
           path: '/admin/orderManagement/detailOrder/:id',
-          element: <OrderVoucher type='detail' />
+          element: <OrderVoucher type='detail' />,
         },
         {
           path: '/admin/orderManagement/modifyOrder/:id',
-          element: <OrderVoucher type='mod' />
+          element: <OrderVoucher type='mod' />,
         },
         // quản lí xuất
         {
           path: '/admin/exportManagement',
-          element: <ExportVoucherTabs />
+          element: <ExportVoucherTabs />,
         },
         {
           path: '/admin/exportManagement/add',
-          element: <Export type='add' />
+          element: <Export type='add' />,
         },
         {
           path: '/admin/exportManagement/detailExport/:id',
-          element: <Export type='detail' />
+          element: <Export type='detail' />,
         },
         {
           path: '/admin/exportManagement/modifyExport/:id',
-          element: <Export type='mod' />
+          element: <Export type='mod' />,
         },
 
         // quản lí khách
         {
           path: '/admin/userManagement',
-          element: <UserTabs />
+          element: <UserTabs />,
         },
         {
           path: '/admin/userManagement/add',
-          element: <User type='add' />
+          element: <User type='add' />,
         },
         {
           path: '/admin/userManagement/detailUser/:id',
-          element: <User type='detail' />
+          element: <User type='detail' />,
         },
         {
           path: '/admin/userManagement/modifyUser/:id',
-          element: <User type='mod' />
+          element: <User type='mod' />,
         },
         //quản lí nhân viên
         {
           path: '/admin/empManagement',
-          element: <EmployeeTabs />
+          element: <EmployeeTabs />,
         },
         {
           path: '/admin/empManagement/add',
-          element: <Employee type='add' />
+          element: <Employee type='add' />,
         },
         {
           path: '/admin/empManagement/detailEmp/:id',
-          element: <Employee type='detail' />
+          element: <Employee type='detail' />,
         },
         {
           path: '/admin/empManagement/modifyEmp/:id',
-          element: <Employee type='mod' />
+          element: <Employee type='mod' />,
         },
         // thống kê
         {
           path: '/admin/reports',
-          element: <ChartTabs />
+          element: <ChartTabs />,
         },
         // quản lí nhà cung cấp
         {
           path: '/admin/providerManagement',
-          element: <ProviderTabs />
+          element: <ProviderTabs />,
         },
         {
           path: '/admin/providerManagement/add',
-          element: <Provider type='add' />
+          element: <Provider type='add' />,
         },
         {
           path: '/admin/providerManagement/modifyProvider/:id',
-          element: <Provider type='mod' />
+          element: <Provider type='mod' />,
         },
         {
           path: '/admin/providerManagement/detailProvider/:id',
-          element: <Provider type='detail' />
+          element: <Provider type='detail' />,
         },
         // quản lí role
         {
           path: '/admin/roleManagement',
-          element: <RoleTabs />
+          element: <RoleTabs />,
         },
         {
           path: '/admin/roleManagement/add',
-          element: <Role type='add' />
+          element: <Role type='add' />,
         },
         {
           path: '/admin/roleManagement/modifyRole/:id',
-          element: <Role type='mod' />
+          element: <Role type='mod' />,
         },
         {
           path: '/admin/roleManagement/detailRole/:id',
-          element: <Role type='detail' />
+          element: <Role type='detail' />,
         },
         // quản lí giá
         {
           path: '/admin/priceManagement',
-          element: <PriceManagementTabs />
+          element: <PriceManagementTabs />,
         },
         {
           path: '/admin/priceManagement/add',
-          element: <PriceManagement type='add' />
+          element: <PriceManagement type='add' />,
         },
         {
           path: '/admin/priceManagement/modifyPrice/:id',
-          element: <PriceManagement type='mod' />
+          element: <PriceManagement type='mod' />,
         },
         {
           path: '/admin/priceManagement/detailPrice/:id',
-          element: <PriceManagement type='detail' />
+          element: <PriceManagement type='detail' />,
         },
         // quản lí km
         {
           path: '/admin/kmManagement',
-          element: <KMTabs />
+          element: <KMTabs />,
         },
         {
           path: '/admin/kmManagement/add',
-          element: <KM type='add' />
+          element: <KM type='add' />,
         },
         {
           path: '/admin/kmManagement/modifyKM/:id',
-          element: <KM type='mod' />
+          element: <KM type='mod' />,
         },
         {
           path: '/admin/kmManagement/detailKM/:id',
-          element: <KM type='detail' />
+          element: <KM type='detail' />,
         },
         // quản lí brand
         {
           path: '/admin/brandManagement/add',
-          element: <Brand type='add' />
+          element: <Brand type='add' />,
         },
         {
           path: '/admin/brandManagement/modifyBrand/:id',
-          element: <Brand type='mod' />
+          element: <Brand type='mod' />,
         },
         {
           path: '/admin/brandManagement/detailBrand/:id',
-          element: <Brand type='detail' />
+          element: <Brand type='detail' />,
         },
         // quản lí type
         {
           path: '/admin/typeManagement/add',
-          element: <Type type='add' />
+          element: <Type type='add' />,
         },
         {
           path: '/admin/typeManagement/modifyType/:id',
-          element: <Type type='mod' />
+          element: <Type type='mod' />,
         },
         {
           path: '/admin/typeManagement/detailType/:id',
-          element: <Type type='detail' />
+          element: <Type type='detail' />,
         },
         // quản lí chất liệu
         {
           path: '/admin/materialManagement/add',
-          element: <Material type='add' />
+          element: <Material type='add' />,
         },
         {
           path: '/admin/materialManagement/modifyMaterial/:id',
-          element: <Material type='mod' />
+          element: <Material type='mod' />,
         },
         {
           path: '/admin/materialManagement/detailMaterial/:id',
-          element: <Material type='detail' />
+          element: <Material type='detail' />,
         },
-      ]
-    }
-  ])
-  const dispatch = useDispatch()
+      ],
+    },
+  ]);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       let token = user.token;
@@ -481,18 +484,18 @@ function App() {
       // JWT exp is in seconds
       if (decodedToken.exp * 1000 < currentDate.getTime()) {
         // console.log("Token expired.");
-        dispatch(logout())
+        dispatch(logout());
       } else {
         // console.log("Valid token");
       }
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (Object.keys(user).length !== 0) setOpen(true)
-    return () => setOpen(false)
-  }, [user])
-  const [open, setOpen] = useState(false)
+    if (Object.keys(user).length !== 0) setOpen(true);
+    return () => setOpen(false);
+  }, [user]);
+  const [open, setOpen] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -502,9 +505,17 @@ function App() {
   };
   return (
     <div>
-      <RouterProvider router={Object.keys(user).length === 0 ? visitorRoutes : user.info.role[user.info.role.length - 1] === 3 ? userRoutes : adminRoutes} />
+      <RouterProvider
+        router={
+          Object.keys(user).length === 0
+            ? visitorRoutes
+            : user.info.role[user.info.role.length - 1] === 3
+            ? userRoutes
+            : adminRoutes
+        }
+      />
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity='success' sx={{ width: '100%' }}>
           Đã đăng nhập thành công!
         </Alert>
       </Snackbar>
