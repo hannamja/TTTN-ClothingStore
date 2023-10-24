@@ -16,8 +16,12 @@ const initialMessage = {
 const Brand = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/nhanhieu/` + id}`);
+    
+    const user = useSelector(state => state.user)
 
+    const [ten, setTen] = useState('')
     const [message, setMessage] = useState(initialMessage);
+    
     const handleAdd = () => {
         if (!ten.trim()) {
             setMessage({content: "Vui lòng nhập tên nhãn hiệu!", type: "warning"})
@@ -37,10 +41,15 @@ const Brand = ({ type }) => {
             body: JSON.stringify(nh)
         }).then(res => res.json()).then(()=>{
             setMessage({content: "Thêm nhãn hiệu thành công!", type: "success"})
+            setTen("");
         })
     }
 
     const handleMod = () => {
+        if (!ten.trim()) {
+            setMessage({content: "Vui lòng nhập tên nhãn hiệu!", type: "warning"})
+            return;
+        }
         const nh = {
             "manh": data.manh,
             "tennh": ten
@@ -59,8 +68,6 @@ const Brand = ({ type }) => {
         })
     }
 
-    const user = useSelector(state => state.user)
-    const [ten, setTen] = useState('')
     useEffect(() => {
         if (data) setTen(data.tennh)
     }, [loading])

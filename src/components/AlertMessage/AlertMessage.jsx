@@ -7,6 +7,7 @@ import { Alert, Snackbar } from "@mui/material";
  * @param {string} param0.message.content 
  * @param {string} param0.message.type 
  * @param {Function} param0.setMessage
+ * @param {number} param0.autoHideDuration
  * @returns 
  */
 export default function AlertMessage({ message, setMessage, autoHideDuration = 6000 }) {

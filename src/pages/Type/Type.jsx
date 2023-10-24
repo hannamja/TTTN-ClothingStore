@@ -1,32 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Alert, Button, Input, Snackbar } from '@mui/material';
+import {Button} from '@mui/material';
 import './Type.scss'
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import AlertMessage from "../../components/AlertMessage";
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
+
 const Type = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/loaimh/` + id}`);
 
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
+    const user = useSelector(state => state.user)
+    const [ten, setTen] = useState('')
+    const [message, setMessage] = useState(initialMessage);
     const handleAdd = () => {
+        if (!ten.trim()) {
+            setMessage({content: "Vui lòng nhập tên loại!", type: "warning"})
+            return;
+        }
         const t = {
             "tenloadimh": ten
         }
@@ -40,11 +38,16 @@ const Type = ({ type }) => {
             },
             body: JSON.stringify(t)
         }).then(res => res.json()).then(() => {
-            setOpen(true)
+            setMessage({content: "Thêm loại thành công!", type: "success"})
+            setTen("");
         })
     }
 
     const handleMod = () => {
+        if (!ten.trim()) {
+            setMessage({content: "Vui lòng nhập tên loại!", type: "warning"})
+            return;
+        }
         const t = {
             "maloaimh": data.maloadmh,
             "tenloadimh": ten
@@ -59,12 +62,9 @@ const Type = ({ type }) => {
             },
             body: JSON.stringify(t)
         }).then(res => res.json()).then(() => {
-            setOpen1(true)
+            setMessage({content: "Sửa loại thành công!", type: "success"})
         })
     }
-
-    const user = useSelector(state => state.user)
-    const [ten, setTen] = useState('')
     useEffect(() => {
         if (data) setTen(data.tenloadimh)
     }, [loading])
@@ -107,16 +107,7 @@ const Type = ({ type }) => {
                         </Grid>
                 }
             </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Thêm loại thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    Sửa loại thành công!
-                </Alert>
-            </Snackbar>
+            <AlertMessage message={message} setMessage={setMessage} />
         </React.Fragment>
     )
 }
