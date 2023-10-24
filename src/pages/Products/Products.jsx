@@ -62,7 +62,7 @@ const Products = () => {
             <div className="inputItem">
               <FormGroup>
                 {
-                  sizeData.data.map((i, idx) =>
+                  sizeData.data?.map((i, idx) =>
                     <FormControlLabel key={idx} control={<Checkbox defaultChecked={idx == 0 ? true : false} onChange={handleChange} />} label={i.tensize} value={i.masize} />
                   )
                 }
