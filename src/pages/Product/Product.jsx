@@ -14,8 +14,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
-import { Alert, Snackbar } from "@mui/material";
 import { handleMoney } from "../../utilities/handleMoney";
+import AlertMessage from "../../components/AlertMessage";
+
+const initialMessage = {
+  content: "",
+  type: ""
+}
 
 const Product = () => {
   const id = useParams().id;
@@ -25,9 +30,11 @@ const Product = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
+
   const [hds, setHds] = useState(null)
-  const [openSuccess, setOpenSuccess] = React.useState(false);
+  // const [openSuccess, setOpenSuccess] = React.useState(false);
   const [isOutOfStock, setIsOutOfStock] = useState(true);
+  const [message, setMessage] = useState(initialMessage);
   // if (data?.ctMathangs[idCtmh]?.currentNumbeer  === 0) {
   //   setIsOutOfStock(true);
   // }else  {
@@ -44,12 +51,12 @@ const Product = () => {
   console.log('idctmh: ', idCtmh);
   console.log('outOfStock: ', isOutOfStock);
   console.log('stock: ' ,data?.ctMathangs[idCtmh]?.currentNumbeer)
-  const handleCloseSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSuccess(false);
-  };
+  // const handleCloseSuccess = (event, reason) => {
+  //   if (reason === "clickaway") {
+  //     return;
+  //   }
+  //   setOpenSuccess(false);
+  // };
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -73,8 +80,13 @@ const Product = () => {
   }
 
   const handleAddToCart = () => {
+    if (!Object.keys(user).length) {
+      setMessage({content: "Vui lòng đăng nhập!", type: "warning"})
+      return;
+    }
     if (idCtmh == null) {
-      alert('Vui lòng chọn phân loại mặt hàng')
+      // alert('Vui lòng chọn phân loại mặt hàng')
+      setMessage({content: "Vui lòng chọn phân loại mặt hàng!", type: "warning"})
       return
     }
     dispatch(
@@ -111,7 +123,8 @@ const Product = () => {
         quantity,
         price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
       }))
-    setOpenSuccess(true)
+    // setOpenSuccess(true)
+    setMessage({content: "Đã thêm vào giỏ", type: "success"})
   }
   const handleChange = (event) => {
     setIdCtmh(event.target.value);
@@ -279,7 +292,7 @@ const Product = () => {
           </div>
         </>
       )}
-      <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+      {/* <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
         <Alert
           onClose={handleCloseSuccess}
           severity="success"
@@ -287,7 +300,8 @@ const Product = () => {
         >
           Đã thêm vào giỏ
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      <AlertMessage message={message} setMessage={setMessage} />
     </div>
   );
 };
