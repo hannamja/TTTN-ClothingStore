@@ -55,6 +55,10 @@ const UserBox = () => {
                                         <ExitToAppOutlinedIcon />
                                         <Link className='link' to='/signin'>Login</Link>
                                     </div>
+                                    <div className="item">
+                                        <ExitToAppOutlinedIcon />
+                                        <Link className='link' to='/signup'>SignUp</Link>
+                                    </div>
                                 </div>
                             </>
                         ) : (

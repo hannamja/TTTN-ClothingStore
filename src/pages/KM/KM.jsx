@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Table from '@mui/material/Table';
@@ -9,98 +9,135 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Alert, Button, Input, Snackbar } from '@mui/material';
+import { Button } from '@mui/material';
 import './KM.scss'
 import { useParams } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
 import useFetch from '../../hooks/useFetch';
 import { ClearOutlined } from '@mui/icons-material';
+import AlertMessage from "../../components/AlertMessage";
+import { dateToString } from '../../utilities/helpers';
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
+
 const KM = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `/km` : `/km/` + id}`);
+
+    const currentDate = new Date().toISOString().slice(0, 10);
+
     const user = useSelector(state => state.user)
     const mh = useFetch('/mathang')
 
-    const [value, setValue] = React.useState(null);
-    const [inputValue, setInputValue] = React.useState('');
-    const [ctkmRows, setCtkmRows] = useState([])
-    const [ld, setLd] = useState('')
-    const [bd, setBd] = useState(`${type === 'add' ? new Date().toISOString().slice(0, 10) : ''}`)
-    const [kt, setKt] = useState(new Date().toISOString().slice(0, 10))
-    const [mucgiam, setMucgiam] = useState(null)
-    const [mucgiamInput, setMucgiamInput] = useState(null)
+    const [message, setMessage] = useState(initialMessage);
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = useState("");
+    const [ctkmRows, setCtkmRows] = useState([]);
+    const [ld, setLd] = useState("");
+    const [bd, setBd] = useState(currentDate);
+    const [kt, setKt] = useState(currentDate);
+    const [mucgiam, setMucgiam] = useState(null);
+    const [mucgiamInput, setMucgiamInput] = useState(null);
 
     useEffect(() => {
         if (data) {
             if (type !== 'add') {
-                setBd(data.ctKhuyenmais.ngaybd)
-                setKt(data.ctKhuyenmais.ngaykt)
+                setBd(dateToString(parseInt(data?.ngaybd)))
+                setKt(dateToString(parseInt(data?.ngaykt)))
                 setLd(data.lydo)
                 setCtkmRows(data.ctKhuyenmais)
             }
         }
     }, [loading])
 
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
-
     const handleAdd = () => {
-        if (ld == '') {
-            alert('Vui lòng nhập đầy đủ thông tin')
-            return
+        if (!ld.trim()) {
+            setMessage({content: "Vui lòng nhập lý do!", type: "warning"})
+            return;
+        }
+        if (!bd) {
+            setMessage({content: "Vui lòng chọn ngày bắt đầu!", type: "warning"})
+            return;
+        }
+        if (!kt) {
+            setMessage({content: "Vui lòng chọn ngày kết thúc!", type: "warning"})
+            return;
         }
         const km = {
             "lydo": ld,
             "nhanvien": { 'manv': user.info.nhanvien.manv },
+            ngaybd: bd,
+            ngaykt: kt,
             "ctKhuyenmais": ctkmRows
         }
-        fetch('http://localhost:8081/api/km', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.token
-            },
-            body: JSON.stringify(km)
-        }).then(res => res.json()).then(data => { setOpen(true) })
+        fetch("http://localhost:8081/api/km", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + user.token,
+          },
+          body: JSON.stringify(km),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setLd("");
+            setBd(`${type === "add" ? currentDate : ""}`);
+            setKt(currentDate);
+            setCtkmRows([])
+            setMessage({
+              content: "Thêm khuyến mãi thành công!",
+              type: "success",
+            });
+          })
+          .catch(()=>{
+            setMessage({
+                content: "Thêm khuyến mãi thất bại!",
+                type: "error",
+              });
+          })
     }
 
     const handleMod = () => {
-        if (ld == '') {
-            alert('Vui lòng nhập đầy đủ thông tin')
-            return
+        if (!ld.trim()) {
+            setMessage({content: "Vui lòng nhập lý do!", type: "warning"})
+            return;
         }
         const km = {
             "makm": data.makm,
             "lydo": ld,
             "nhanvien": { 'manv': user.info.nhanvien.manv },
+            ngaybd: bd,
+            ngaykt: kt,
             "ctKhuyenmais": ctkmRows
         }
 
-        fetch('http://localhost:8081/api/km', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.token
-            },
-            body: JSON.stringify(km)
-        }).then(res => res.json()).then(data => setOpen1(true))
+        fetch("http://localhost:8081/api/km", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + user.token,
+          },
+          body: JSON.stringify(km),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setMessage({
+              content: "Sửa khuyến mãi thành công!",
+              type: "success",
+            });
+          })
+          .catch(()=>{
+            setMessage({
+                content: "Sửa khuyến mãi thất bại!",
+                type: "error",
+              });
+          })
     }
 
 
@@ -117,11 +154,11 @@ const KM = ({ type }) => {
         else {
             setCtkmRows([...ctkmRows, i])
         }
+        setValue(null);
+        setMucgiam(null);
     }
-
-
     return (
-        <React.Fragment>
+        <>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>
                     <img
@@ -142,9 +179,56 @@ const KM = ({ type }) => {
                         label="Lý do"
                         fullWidth
                         autoComplete="given-name"
+                        inputProps={{maxLength: 45}}
                         variant="standard"
                         value={ld}
                         onChange={(e) => setLd(e.target.value)}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <span>Ngày bắt đầu</span>
+                    <TextField
+                        required
+                        disabled={type === "add" ? false : true}
+                        id="lastName"
+                        name="lastName"
+                        fullWidth
+                        autoComplete="family-name"
+                        variant="standard"
+                        type='date'
+                        inputProps={{
+                            min: type === "add" ? new Date().toISOString().slice(0, 10) : "inherit"
+                        }}
+                        value={bd}
+                        onChange={(e) => {
+                            const dateValue = e.target.value;
+                            if (dateValue) {
+                                if (new Date(dateValue).getTime() > new Date(kt).getTime()) {
+                                    setKt("");
+                                }
+                            } else {
+                                setKt("");
+                            }
+                            setBd(dateValue)
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <span>Ngày kết thúc</span>
+                    <TextField
+                        required
+                        disabled = {!bd || type === "add" ? false : true}
+                        id="firstName"
+                        name="firstName"
+                        fullWidth
+                        autoComplete="given-name"
+                        variant="standard"
+                        type='date'
+                        inputProps={{
+                            min: bd ? new Date(bd).toISOString().slice(0, 10) : ""
+                        }}
+                        value={kt}
+                        onChange={(e) => setKt(e.target.value)}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -176,7 +260,7 @@ const KM = ({ type }) => {
                         </Table>
                     </TableContainer>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                     <Autocomplete
                         disablePortal
                         id="combo-box-demo"
@@ -197,35 +281,6 @@ const KM = ({ type }) => {
                         renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
                     />
                 </Grid>
-
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        name="lastName"
-                        label="Ngày bắt đầu"
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                        type='date'
-                        value={bd}
-                        onChange={(e) => setBd(e.target.value)}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="firstName"
-                        name="firstName"
-                        label="Ngày kết thúc"
-                        fullWidth
-                        autoComplete="given-name"
-                        variant="standard"
-                        type='date'
-                        value={kt}
-                        onChange={(e) => setKt(e.target.value)}
-                    />
-                </Grid>
                 <Grid item xs={12} sm={6}>
                     <Autocomplete
                         disablePortal
@@ -233,16 +288,13 @@ const KM = ({ type }) => {
                         value={mucgiam}
                         onChange={(event, newValue) => {
                             setMucgiam(newValue);
-
                         }}
-
                         inputValue={mucgiamInput}
                         onInputChange={(event, newInputValue) => {
                             setMucgiamInput(newInputValue);
                         }}
                         options={['10%', '20%', '30%', '40%', '50%', '70%', '80%']}
                         sx={{ width: 300 }}
-
                         renderInput={(params) => <TextField {...params} label="Mức giảm" />}
                     />
                 </Grid>
@@ -250,15 +302,19 @@ const KM = ({ type }) => {
 
                 <Grid item xs={12}>
                     <Button variant="outlined" onClick={() => {
-
-                        if (bd == '' || kt == '' || value == null || mucgiam == '') {
-                            alert('Vui lòng nhập đủ thông tin sản phẩm, mức giảm, ngày bắt đầu và kết thúc')
+                        if (!value) {
+                            setMessage({content: "vui lòng chọn sản phẩm!", type: "warning"})
                             return
+                        }
+                        if (!mucgiam) {
+                            setMessage({content: "Vui lòng chọn mức giảm!", type: "warning"})
+                            return;
                         }
                         handleAddCtmh({
                             id: {
                                 "mamh": value.mamh
-                            }, ngaybd: new Date(bd), ngaykt: new Date(kt), mucgiam: mucgiam
+                            }, 
+                            mucgiam: mucgiam
                         });
                     }}>
                         Thêm sản phẩm
@@ -274,17 +330,8 @@ const KM = ({ type }) => {
                         </Grid>
                 }
             </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Thêm khuyến mãi thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    Sửa khuyến mãi thành công!
-                </Alert>
-            </Snackbar>
-        </React.Fragment>
+            <AlertMessage message={message} setMessage={setMessage} />
+        </>
     )
 }
 

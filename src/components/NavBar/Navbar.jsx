@@ -31,15 +31,6 @@ const NavBar = () => {
               <KeyboardArrowDownIcon />
             </div>
             <DropDownPhanLoai />
-            {/* <div className="item">
-              <Link className="link" to="/products/2">ÁO SƠ MI</Link>
-            </div>
-            <div className="item">
-              <Link className="link" to="/products/5">QUẦN TÂY</Link>
-            </div>
-            <div className="item">
-              <Link className="link" to="/products/1">ÁO THUN</Link>
-            </div> */}
           </div>
           <div className="center">
             <Link className="link" to="/">HUKISTORE</Link>
