@@ -41,6 +41,7 @@ const OrderBillList = () => {
   const [open, setOpen] = React.useState("");
   const [input, setInput] = useState("");
   const { data, loading, error } = useFetchAdmin(`/hoadon`);
+  console.log(data);
   // rows: Danh sách hóa đơn trong API
 
   const columns = [
@@ -92,7 +93,6 @@ const OrderBillList = () => {
 
       renderCell: (params) => {
         const onClick = (e) => {
-          console.log("params: ", params);
           e.stopPropagation();
 
           const thisRow = {};
@@ -140,7 +140,6 @@ const OrderBillList = () => {
   };
 
   const handleConfirm = (hd) => {
-    console.log(shipper);
     if (!shipper) {
       setMessage({ content: "Chọn shipper!", type: "warning" });
       return;
@@ -170,7 +169,6 @@ const OrderBillList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.errCode == "BILL_CONFIRMED_SUCCESS") {
           setMessage({ content: data.message, type: "success" });
         } else {

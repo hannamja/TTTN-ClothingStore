@@ -27,7 +27,6 @@ const Role = ({ type }) => {
         setOpen1(false);
     };
     const handleAdd = () => {
-        console.log(ten)
         if (ten == '') {
             alert('Vui lòng nhập tên quyền')
             return

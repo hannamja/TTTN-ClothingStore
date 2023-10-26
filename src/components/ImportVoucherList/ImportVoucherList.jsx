@@ -145,7 +145,6 @@ const ImportVoucherList = () => {
                 'Authorization': 'Bearer ' + user.token
             },
         }).then(res => res.json()).then(data => {
-            console.log(data)
             if (data.status == 404) setOpen1(true)
             else setOpen(true)
         }

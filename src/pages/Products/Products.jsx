@@ -42,7 +42,6 @@ const Products = () => {
   }
 
   const priceFilter = (typeSort) => {
-    console.log(typeSort)
     if (typeSort == 'asc') {
       sortData.sort((a, b) => a.gia - b.gia)
     }

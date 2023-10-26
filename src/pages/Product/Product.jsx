@@ -41,16 +41,12 @@ const Product = () => {
   //   setIsOutOfStock(false);
   // }
   useEffect(() => {
-    console.log('stock in effect: ', data?.ctMathangs[idCtmh]?.currentNumbeer)
     if(data?.ctMathangs[idCtmh]?.currentNumbeer  == 0) {
       setIsOutOfStock(true);
     } else 
       setIsOutOfStock(false);
   },[idCtmh]);
 
-  console.log('idctmh: ', idCtmh);
-  console.log('outOfStock: ', isOutOfStock);
-  console.log('stock: ' ,data?.ctMathangs[idCtmh]?.currentNumbeer)
   // const handleCloseSuccess = (event, reason) => {
   //   if (reason === "clickaway") {
   //     return;

@@ -15,7 +15,6 @@ import { logout } from '../../redux/userReducer.js'
 import { resetCart } from '../../redux/cartReducer';
 const UserSideBar = () => {
     const user = useSelector(state => state.user);
-console.log(user);
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)

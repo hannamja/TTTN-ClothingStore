@@ -27,7 +27,6 @@ const SearchResult = () => {
     };
     const [searchParams] = useSearchParams()
     const q = searchParams.get('q')
-    console.log(q)
     return (
         <div className='searchResult'>
             <div className="left">
