@@ -32,14 +32,8 @@ const Product = () => {
   const user = useSelector(state => state.user)
 
   const [hds, setHds] = useState(null)
-  // const [openSuccess, setOpenSuccess] = React.useState(false);
   const [isOutOfStock, setIsOutOfStock] = useState(true);
   const [message, setMessage] = useState(initialMessage);
-  // if (data?.ctMathangs[idCtmh]?.currentNumbeer  === 0) {
-  //   setIsOutOfStock(true);
-  // }else  {
-  //   setIsOutOfStock(false);
-  // }
   useEffect(() => {
     if(data?.ctMathangs[idCtmh]?.currentNumbeer  == 0) {
       setIsOutOfStock(true);
@@ -47,12 +41,6 @@ const Product = () => {
       setIsOutOfStock(false);
   },[idCtmh]);
 
-  // const handleCloseSuccess = (event, reason) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-  //   setOpenSuccess(false);
-  // };
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -126,6 +114,7 @@ const Product = () => {
     setIdCtmh(event.target.value);
     setQuantity(1);
   };
+  console.log('isOutOfStock: ', isOutOfStock);
   return (
     <div className="product">
       {loading ? (
@@ -207,21 +196,23 @@ const Product = () => {
                 {quantity}
                 <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
               </div>
-              {
-                data.ctMathangs.length === 0 ?
-                  <button
-                    disabled={data.ctMathangs.length === 0}
-                    className="add"
-                  >
-                    <AddShoppingCartIcon /> OUT OF STOCK
-                  </button>
-                  : <button
-                    className="add"
-                    onClick={handleAddToCart}
-                  >
-                    <AddShoppingCartIcon /> ADD TO CART
-                  </button>
-              }
+
+                  {
+                    isOutOfStock ?
+                      <button
+                        disabled={isOutOfStock}
+                        className="add"
+                        style={{background: '#777'}}
+                      >
+                        <AddShoppingCartIcon /> OUT OF STOCK
+                      </button>
+                      : <button
+                        className="add"
+                        onClick={handleAddToCart}
+                      >
+                        <AddShoppingCartIcon /> ADD TO CART
+                      </button>
+                  }
               <div className="links">
                 <div className="item">
                   <FavoriteBorderIcon /> ADD TO WISH LIST
