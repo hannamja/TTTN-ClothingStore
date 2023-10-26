@@ -15,7 +15,10 @@ const payments = [
 ];
 
 export default function Review() {
-  const products = useSelector((state) => state.cart.products);
+  const user = useSelector((state) => state.user)
+  const cart = useSelector((state) => state.cart.carts);
+  console.log(cart)
+  const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   
   return (
     <React.Fragment>
@@ -23,7 +26,7 @@ export default function Review() {
         Order summary
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
+        {userCart.products.map((product) => (
           <ListItem key={product.title} sx={{ py: 1, px: 0 }}>
             <ListItemText primary={product.title} secondary={product.desc} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -35,7 +38,7 @@ export default function Review() {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {products.reduce((total, ct) => total + ct.price*ct.quantity, 0)}
+            {userCart.products.reduce((total, ct) => total + ct.price*ct.quantity, 0)}
           </Typography>
         </ListItem>
       </List>

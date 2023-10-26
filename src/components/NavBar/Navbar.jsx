@@ -15,8 +15,10 @@ import DropDownPhanLoai from "../DropDownPhanLoai/DropDownPhanLoai";
 const NavBar = () => {
   const [open, setOpen] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)
-  const products = useSelector((state) => state.cart.products);
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user)
+  const cart = useSelector((state) => state.cart.carts);
+  console.log(cart)
+  const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   return (
     <>
       <div className="navbar">
@@ -59,13 +61,13 @@ const NavBar = () => {
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{products.length}</span>
+                    <span>{userCart.products.length}</span>
                   </div>
                 </> : user.info.role[user.info.role.length - 1] === 3 ? <>
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{products.length}</span>
+                    <span>{userCart.products.length}</span>
                   </div>
                 </> :
                   <></>
