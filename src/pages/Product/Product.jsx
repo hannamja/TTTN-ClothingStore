@@ -16,6 +16,7 @@ import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
 import { handleMoney } from "../../utilities/handleMoney";
 import AlertMessage from "../../components/AlertMessage";
+import { Alert, Snackbar } from "@mui/material";
 
 const initialMessage = {
   content: "",
@@ -33,10 +34,12 @@ const Product = () => {
 
   const [hds, setHds] = useState(null)
   const [isOutOfStock, setIsOutOfStock] = useState(true);
+  const [openToast, setOpenToast] = useState(false);
   const [message, setMessage] = useState(initialMessage);
   useEffect(() => {
     if(data?.ctMathangs[idCtmh]?.currentNumbeer  == 0) {
       setIsOutOfStock(true);
+      setOpenToast(true);
     } else 
       setIsOutOfStock(false);
   },[idCtmh]);
@@ -121,6 +124,11 @@ const Product = () => {
         "loading"
       ) : (
         <>
+        <Snackbar open={openToast} autoHideDuration={4000} onClose={() => setOpenToast(false)} anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+  <Alert onClose={() => setOpenToast(false)} severity="info" sx={{ width: '100%' }}>
+  Xin lỗi quý khách, mặt hàng này hiện tại đã hết
+  </Alert>
+</Snackbar>
           <div className="left">
             <div className="top">
               <div className="images">
