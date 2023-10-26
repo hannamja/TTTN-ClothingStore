@@ -14,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/userReducer.js'
 import { resetCart } from '../../redux/cartReducer';
 const UserSideBar = () => {
+    const user = useSelector(state => state.user);
+console.log(user);
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)
@@ -27,53 +29,83 @@ const UserSideBar = () => {
         navigate('/')
     }
     return (
-        <>
-            <Fab color="inherit" aria-label="add" sx={open ? {
-                position: 'fixed',
-                bottom: 16,
-                right: 16,
-            } : { display: 'none' }} onClick={handleClose}>
-                <MenuOutlinedIcon />
-            </Fab >
-            <div className='userSideBar' style={open ? { display: "none" } : { display: 'block' }}>
-                <div className="close" onClick={handleClose}>
-                    <CloseOutlinedIcon />
-                </div>
+      <>
+        <Fab
+          color="inherit"
+          aria-label="add"
+          sx={
+            open
+              ? {
+                  position: "fixed",
+                  bottom: 16,
+                  right: 16,
+                }
+              : { display: "none" }
+          }
+          onClick={handleClose}
+        >
+          <MenuOutlinedIcon />
+        </Fab>
+        <div
+          className="userSideBar"
+          style={open ? { display: "none" } : { display: "block" }}
+        >
+          <div className="close" onClick={handleClose}>
+            <CloseOutlinedIcon />
+          </div>
 
-                <div className='top'>
-                    <div className='user'>
-                        <img src='/img/admin.png' alt='Admin'></img>
-                        <div className="userInfo">
-                            <span className='name'>Nguyễn Văn A</span>
-                            <span className='role'>Admin</span>
-                        </div>
-                    </div>
-
-                    <div className='logout' onClick={handleLogout}>
-                        <ExitToAppOutlinedIcon style={{ color: "red" }} />
-                    </div>
-                </div>
-                <div className="bottom">
-                    <div className="item">
-                        <HomeOutlinedIcon />
-                        <Link className='link' to='/'>Back to homepage</Link>
-                        <ArrowLeftOutlined />
-                    </div>
-                    <div className="item">
-                        <InfoOutlinedIcon />
-                        <Link className='link' to='/user/setting'>Thông tin chung</Link>
-                        <ArrowRightOutlinedIcon />
-                    </div>
-
-                    <div className="item">
-                        <SecurityOutlinedIcon />
-                        <Link className='link' to='/admin'>Bảo mật</Link>
-                        <ArrowRightOutlinedIcon />
-                    </div>
-                </div>
+          <div className="top">
+            <div className="user">
+              <img src="/img/admin.png" alt="Admin"></img>
+              <div className="userInfo">
+                <span className="name">
+                  {user.info.nhanvien
+                    ? user.info.nhanvien.tennv
+                      ? user.info.nhanvien.tennv
+                      : "Unknown Staff"
+                    : user.info.khachhang.hotenkh
+                    ? user.info.khachhang.hotenkh
+                    : "Unknown Customer"}
+                </span>
+                {/* <span className='name'>Nguyễn Văn A</span> */}
+                <span className="role">
+                  {user.info.nhanvien ? "Admin" : "Khách hàng"}
+                </span>
+                {/* <span className='role'>Admin</span> */}
+              </div>
             </div>
-        </>
-    )
+
+            <div className="logout" onClick={handleLogout}>
+              <ExitToAppOutlinedIcon style={{ color: "red" }} />
+            </div>
+          </div>
+          <div className="bottom">
+            <div className="item">
+              <HomeOutlinedIcon />
+              <Link className="link" to="/">
+                Back to homepage
+              </Link>
+              <ArrowLeftOutlined />
+            </div>
+            <div className="item">
+              <InfoOutlinedIcon />
+              <Link className="link" to="/user/setting">
+                Thông tin chung
+              </Link>
+              <ArrowRightOutlinedIcon />
+            </div>
+
+            <div className="item">
+              <SecurityOutlinedIcon />
+              <Link className="link" to="/admin">
+                Bảo mật
+              </Link>
+              <ArrowRightOutlinedIcon />
+            </div>
+          </div>
+        </div>
+      </>
+    );
 }
 
 export default UserSideBar
