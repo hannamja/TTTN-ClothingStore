@@ -54,8 +54,7 @@ export default function Checkout() {
   const [isPaid, setIsPaid] = React.useState(false)
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  console.log(cart)
-  const userCart = Object.keys(user) == 0 ? [] : cart.find(i => i.id == user.info.khachhang.makh)
+  const userCart = Object.keys(user) == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   const [addr, setAddr] = React.useState(user.info.khachhang.diachi)
   const dispatch = useDispatch()
 

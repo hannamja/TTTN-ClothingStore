@@ -18,7 +18,7 @@ const payments = [
 export default function Review() {
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
+  const userCart = Object.keys(user) == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   
   return (
     <React.Fragment>
