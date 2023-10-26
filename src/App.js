@@ -51,6 +51,11 @@ import { logout } from './redux/userReducer';
 import jwt_decode from 'jwt-decode';
 import { Alert, Snackbar } from '@mui/material';
 
+const ProtectedRoute = ({ redirectPath = "/signin" }) => {
+  const currentPathName = window.location.pathname;
+  return <Navigate to={`${redirectPath}?next=${encodeURIComponent(currentPathName)}`} replace />;
+};
+
 const Layout = () => {
   return (
     <div className='app'>
@@ -119,6 +124,10 @@ function App() {
           path: '/search/:q',
           element: <SearchResult />,
         },
+        {
+          path: "*",
+          element: <ProtectedRoute />
+        }
       ],
     },
   ]);
@@ -192,6 +201,10 @@ function App() {
         },
       ],
     },
+    {
+      path: "*",
+      element: <Navigate to={"/"} />
+    }
   ]);
   const adminRoutes = createBrowserRouter([
     // user usecase
@@ -472,6 +485,10 @@ function App() {
         },
       ],
     },
+    {
+      path: "*",
+      element: <Navigate to={"/"} />
+    }
   ]);
   const dispatch = useDispatch();
   useEffect(() => {
