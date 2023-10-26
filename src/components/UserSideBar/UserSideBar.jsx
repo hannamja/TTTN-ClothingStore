@@ -24,7 +24,6 @@ const UserSideBar = () => {
     const handleLogout = (event) => {
         event.preventDefault()
         dispatch(logout())
-        dispatch(resetCart())
         navigate('/')
     }
     return (

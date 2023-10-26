@@ -76,7 +76,7 @@ export default function SignInSide() {
       )
         .unwrap((data) => data.json())
         .then((data) => {
-          dispatch(addKH({ idKH: data.info.khachhang.makh }))
+          if (data.info.khachhang != null) dispatch(addKH({ idKH: data.info.khachhang.makh }))
           navigate(-1)
         })
         .catch(() => setOpen1(true));
