@@ -17,3 +17,8 @@ export const dateToString = (initialDate) => {
 export const toVND = (number) => {
 	return Intl.NumberFormat().format(number) + " VNĐ";
 };
+
+export const redirectLogin = ()=>{
+  const currentPathName = window.location.pathname;
+  return `/signin?next=${encodeURIComponent(currentPathName)}`;
+}

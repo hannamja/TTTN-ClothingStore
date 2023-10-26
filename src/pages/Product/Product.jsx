@@ -10,13 +10,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import useFetch from "../../hooks/useFetch";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
 import { handleMoney } from "../../utilities/handleMoney";
 import AlertMessage from "../../components/AlertMessage";
 import { Alert, Snackbar } from "@mui/material";
+import { redirectLogin } from "../../utilities/helpers";
 
 const initialMessage = {
   content: "",
@@ -28,7 +29,10 @@ const Product = () => {
   const [selectedImg, setSelectedImg] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [idCtmh, setIdCtmh] = React.useState(null);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
 
@@ -68,8 +72,8 @@ const Product = () => {
 
   const handleAddToCart = () => {
     if (!Object.keys(user).length) {
-      setMessage({content: "Vui lòng đăng nhập!", type: "warning"})
-      return;
+      // setMessage({content: "Vui lòng đăng nhập!", type: "warning"})
+      return navigate(redirectLogin());
     }
     if (idCtmh == null) {
       // alert('Vui lòng chọn phân loại mặt hàng')
