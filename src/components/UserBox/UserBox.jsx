@@ -23,7 +23,7 @@ const UserBox = () => {
     const handleLogout = (event) => {
         event.preventDefault()
         dispatch(logout())
-        dispatch(resetCart());
+        // dispatch(resetCart());
     }
     const openUserBox = Boolean(anchorEl);
     const id = openUserBox ? 'simple-popover' : undefined;

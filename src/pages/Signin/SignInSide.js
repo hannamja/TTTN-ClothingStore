@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { login } from "../../redux/userReducer";
+import { addKH } from "../../redux/cartReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Alert, Snackbar } from "@mui/material";
@@ -74,7 +75,10 @@ export default function SignInSide() {
         })
       )
         .unwrap((data) => data.json())
-        .then((data) => navigate(-1))
+        .then((data) => {
+          dispatch(addKH({ idKH: data.info.khachhang.makh }))
+          navigate(-1)
+        })
         .catch(() => setOpen1(true));
     },
   });

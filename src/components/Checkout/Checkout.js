@@ -52,8 +52,10 @@ const defaultTheme = createTheme();
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [isPaid, setIsPaid] = React.useState(false)
-  const products = useSelector((state) => state.cart.products);
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user)
+  const cart = useSelector((state) => state.cart.carts);
+  console.log(cart)
+  const userCart = Object.keys(user) == 0 ? [] : cart.find(i => i.id == user.info.khachhang.makh)
   const [addr, setAddr] = React.useState(user.info.khachhang.diachi)
   const dispatch = useDispatch()
 
@@ -102,7 +104,7 @@ export default function Checkout() {
     }
 
     const productsList = []
-    products.forEach(element => {
+    userCart.products.forEach(element => {
       let ele = { "hoadonDTO": element.hoadonDTO, "chitietMathangDTO": element.chitietMathangDTO, "soluong": element.quantity, "gia": element.quantity * element.price }
       productsList.push(ele)
     });
@@ -112,7 +114,7 @@ export default function Checkout() {
       "shipper": null,
       "diachi": addr,
       "ngaytao": new Date().toISOString().slice(0, 10),
-      "tongtien": products.reduce((total, cur) => total + cur.price * cur.quantity, 0),
+      "tongtien": userCart.products.reduce((total, cur) => total + cur.price * cur.quantity, 0),
       "chitietTrangThaiDTO": defaultTT,
       "chitietHoadonDTO": productsList
     }
@@ -131,7 +133,7 @@ export default function Checkout() {
           alert("Số lượng tồn không đủ")
           return
         }
-        dispatch(resetCart())
+        dispatch(resetCart({ idU: Object.keys(user) == 0 ? '' : user.info.khachhang.makh }))
         setActiveStep(activeStep + 1);
       })
   }

@@ -15,7 +15,7 @@ const HistoryCard = ({ data }) => {
         </div>
       </div>
       <div className="price">
-        <span className='itemPrice'>{handleMoney(data.gia*data.soluong) + ' VND'}</span>
+        <span className='itemPrice'>{handleMoney(data.gia) + ' VND'}</span>
       </div>
     </div>
   )

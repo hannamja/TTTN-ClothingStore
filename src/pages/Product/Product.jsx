@@ -42,7 +42,7 @@ const Product = () => {
       setOpenToast(true);
     } else 
       setIsOutOfStock(false);
-  },[idCtmh]);
+  }, [idCtmh]);
 
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
@@ -78,37 +78,39 @@ const Product = () => {
     }
     dispatch(
       addToCart({
-        id: data.mamh,
-        title: data.tenmh,
-        desc: data.mota,
-        img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
-        "hoadonDTO": {
-          "khachhang": null,
-          "nhanvien": null,
-          "ngaytao": null,
-          "tongtien": null,
-          "chitietTrangThaiDTO": null,
-          "chitietHoadonDTO": null
-        },
-        "chitietMathangDTO": {
-          ...data.ctMathangs[idCtmh],
-          "mathangDTO": {
-            "mamh": data.mamh,
-            "chatlieuDTO": null,
-            "loaimhDTO": null,
-            "nhanhieuDTO": null,
-            "tenmh": data.tenmh,
-            "mota": null,
-            "trangthai": null,
-            "cachlam": null,
-            "phanloai": null,
-            "gia": null,
-            "hinhanhDTOs": null,
-            "ctMathangs": null
-          }
-        },
-        quantity,
-        price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
+        idU: Object.keys(user) == 0 ? '' : user.info.khachhang.makh, item: {
+          id: data.mamh,
+          title: data.tenmh,
+          desc: data.mota,
+          img: data.hinhanhDTOs.length === 0 ? '' : data.hinhanhDTOs[0].duongdan,
+          "hoadonDTO": {
+            "khachhang": null,
+            "nhanvien": null,
+            "ngaytao": null,
+            "tongtien": null,
+            "chitietTrangThaiDTO": null,
+            "chitietHoadonDTO": null
+          },
+          "chitietMathangDTO": {
+            ...data.ctMathangs[idCtmh],
+            "mathangDTO": {
+              "mamh": data.mamh,
+              "chatlieuDTO": null,
+              "loaimhDTO": null,
+              "nhanhieuDTO": null,
+              "tenmh": data.tenmh,
+              "mota": null,
+              "trangthai": null,
+              "cachlam": null,
+              "phanloai": null,
+              "gia": null,
+              "hinhanhDTOs": null,
+              "ctMathangs": null
+            }
+          },
+          quantity,
+          price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
+        }
       }))
     // setOpenSuccess(true)
     setMessage({content: "Đã thêm vào giỏ", type: "success"})
@@ -249,7 +251,7 @@ const Product = () => {
                       <button
                         disabled={isOutOfStock}
                         className="add"
-                        style={{background: '#777'}}
+                        style={{ background: '#777' }}
                       >
                         <AddShoppingCartIcon /> OUT OF STOCK
                       </button>

@@ -171,7 +171,9 @@ export default function SignUp() {
               password: mk,
             })
           ).unwrap((data) => data.json())
-            .then((data) => navigate('/'))
+            .then((data) => {
+              navigate('/')
+            })
             .catch();
         });
     }
