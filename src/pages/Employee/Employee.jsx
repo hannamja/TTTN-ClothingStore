@@ -98,7 +98,6 @@ const Employee = ({ type }) => {
                 },
                 body: JSON.stringify(ctqRows)
             }).then(res => res.json()).then(data => {
-                console.log(data)
                 setOpen(true)
             })
         })
@@ -141,7 +140,6 @@ const Employee = ({ type }) => {
                 },
                 body: JSON.stringify(ctqRows)
             }).then(res => res.json()).then(data => {
-                console.log(data)
                 setOpen1(true)
             })
         })

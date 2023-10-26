@@ -117,7 +117,6 @@ const OrderVoucher = ({ type }) => {
             },
             body: JSON.stringify(phieudat)
         }).then(res => res.json()).then(data => {
-            console.log(data)
             setOpen(true)
         }
         )
@@ -162,7 +161,6 @@ const OrderVoucher = ({ type }) => {
             },
             body: JSON.stringify(phieudat)
         }).then(res => res.json()).then(data => {
-            console.log(data)
             setOpen1(true)
         }
         )

@@ -66,7 +66,6 @@ const Forgot = () => {
       otp: '',
     },
     onSubmit: async values => {
-      console.log('onSubmit: ', values);
       if (!enableOTP) {
         const response = await fetch(
           `http://localhost:8081/api/auth/check-email-exist?email=${values.email}&isCreateOTP=true`,
@@ -78,7 +77,6 @@ const Forgot = () => {
             },
           }
         );
-        console.log('response: ', response);
         if (response.ok) {
           const accountId = await response.json();
           setMessageEnable(true);
@@ -89,12 +87,11 @@ const Forgot = () => {
               severity: 'info',
               message: 'Xin hãy điền OTP nhận từ email của bạn',
             });
-            console.log('accountId: ', accountId);
           } else {
             setMessage({ severity: 'error', message: 'Email không tồn tại' });
           }
         } else {
-          console.log('check-email-exist error');
+          // console.log('check-email-exist error');
         }
       } else {
         // Tồn tại email rồi

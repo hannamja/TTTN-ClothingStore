@@ -160,7 +160,6 @@ export default function SignUp() {
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 404) {
-            console.log(data);
             setOpen404(true);
             return;
           }

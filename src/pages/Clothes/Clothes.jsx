@@ -222,7 +222,6 @@ const Clothes = ({ type }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.errCode === "SAVE_SUCCESS") {
             setMessage({
               content: data.message,
@@ -500,7 +499,6 @@ const Clothes = ({ type }) => {
               label="Chọn chất liệu"
               onChange={(event) => {
                 // value is object
-                console.log(event.target.value);
                 setCl(event.target.value);
                 removeError(event.target.name);
               }}

@@ -14,8 +14,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartReducer";
 import RatingSection from "../../components/RatingSection/RatingSection";
-import { Alert, Snackbar } from "@mui/material";
 import { handleMoney } from "../../utilities/handleMoney";
+import AlertMessage from "../../components/AlertMessage";
+
+const initialMessage = {
+  content: "",
+  type: ""
+}
 
 const Product = () => {
   const id = useParams().id;
@@ -25,31 +30,17 @@ const Product = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useFetch(`/mathang/${id}`);
   const user = useSelector(state => state.user)
+
   const [hds, setHds] = useState(null)
-  const [openSuccess, setOpenSuccess] = React.useState(false);
   const [isOutOfStock, setIsOutOfStock] = useState(true);
-  // if (data?.ctMathangs[idCtmh]?.currentNumbeer  === 0) {
-  //   setIsOutOfStock(true);
-  // }else  {
-  //   setIsOutOfStock(false);
-  // }
+  const [message, setMessage] = useState(initialMessage);
   useEffect(() => {
-    console.log('stock in effect: ', data?.ctMathangs[idCtmh]?.currentNumbeer)
-    if (data?.ctMathangs[idCtmh]?.currentNumbeer == 0) {
+    if(data?.ctMathangs[idCtmh]?.currentNumbeer  == 0) {
       setIsOutOfStock(true);
     } else
       setIsOutOfStock(false);
   }, [idCtmh]);
 
-  console.log('idctmh: ', idCtmh);
-  console.log('outOfStock: ', isOutOfStock);
-  console.log('stock: ', data?.ctMathangs[idCtmh]?.currentNumbeer)
-  const handleCloseSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSuccess(false);
-  };
   useEffect(() => {
     if (Object.keys(user).length !== 0) {
       if (user.info.khachhang !== null) {
@@ -73,8 +64,13 @@ const Product = () => {
   }
 
   const handleAddToCart = () => {
+    if (!Object.keys(user).length) {
+      setMessage({content: "Vui lòng đăng nhập!", type: "warning"})
+      return;
+    }
     if (idCtmh == null) {
-      alert('Vui lòng chọn phân loại mặt hàng')
+      // alert('Vui lòng chọn phân loại mặt hàng')
+      setMessage({content: "Vui lòng chọn phân loại mặt hàng!", type: "warning"})
       return
     }
     dispatch(
@@ -113,12 +109,14 @@ const Product = () => {
           price: data.chitietKhuyenmaiDTO === null ? data.gia : (data.gia - data.gia * 0.1) * quantity,
         }
       }))
-    setOpenSuccess(true)
+    // setOpenSuccess(true)
+    setMessage({content: "Đã thêm vào giỏ", type: "success"})
   }
   const handleChange = (event) => {
     setIdCtmh(event.target.value);
     setQuantity(1);
   };
+  console.log('isOutOfStock: ', isOutOfStock);
   return (
     <div className="product">
       {loading ? (
@@ -200,21 +198,23 @@ const Product = () => {
                 {quantity}
                 <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
               </div>
-              {
-                data.ctMathangs.length === 0 ?
-                  <button
-                    disabled={data.ctMathangs.length === 0}
-                    className="add"
-                  >
-                    <AddShoppingCartIcon /> OUT OF STOCK
-                  </button>
-                  : <button
-                    className="add"
-                    onClick={handleAddToCart}
-                  >
-                    <AddShoppingCartIcon /> ADD TO CART
-                  </button>
-              }
+
+                  {
+                    isOutOfStock ?
+                      <button
+                        disabled={isOutOfStock}
+                        className="add"
+                        style={{background: '#777'}}
+                      >
+                        <AddShoppingCartIcon /> OUT OF STOCK
+                      </button>
+                      : <button
+                        className="add"
+                        onClick={handleAddToCart}
+                      >
+                        <AddShoppingCartIcon /> ADD TO CART
+                      </button>
+                  }
               <div className="links">
                 <div className="item">
                   <FavoriteBorderIcon /> ADD TO WISH LIST
@@ -281,7 +281,7 @@ const Product = () => {
           </div>
         </>
       )}
-      <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+      {/* <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
         <Alert
           onClose={handleCloseSuccess}
           severity="success"
@@ -289,7 +289,8 @@ const Product = () => {
         >
           Đã thêm vào giỏ
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      <AlertMessage message={message} setMessage={setMessage} />
     </div>
   );
 };

@@ -114,7 +114,6 @@ const Import = ({ type }) => {
             },
             body: JSON.stringify(phieunhap)
         }).then(res => res.json()).then(data => {
-            console.log(data)
             setOpen(true)
         }
         )
@@ -154,7 +153,6 @@ const Import = ({ type }) => {
             },
             body: JSON.stringify(phieunhap)
         }).then(res => res.json()).then(data => {
-            console.log(data)
             setOpen1(true)
         }
         )

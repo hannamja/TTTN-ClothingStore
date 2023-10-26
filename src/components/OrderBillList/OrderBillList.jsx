@@ -23,11 +23,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 600,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  p: 2,
 };
 
 import { DataGrid } from "@mui/x-data-grid";
@@ -92,7 +92,6 @@ const OrderBillList = () => {
 
       renderCell: (params) => {
         const onClick = (e) => {
-          console.log("params: ", params);
           e.stopPropagation();
 
           const thisRow = {};
@@ -140,7 +139,6 @@ const OrderBillList = () => {
   };
 
   const handleConfirm = (hd) => {
-    console.log(shipper);
     if (!shipper) {
       setMessage({ content: "Chọn shipper!", type: "warning" });
       return;
@@ -170,7 +168,6 @@ const OrderBillList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.errCode == "BILL_CONFIRMED_SUCCESS") {
           setMessage({ content: data.message, type: "success" });
         } else {
@@ -295,7 +292,8 @@ const OrderBillList = () => {
                   display: "flex",
                   gap: 5,
                   justifyContent: "end",
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  marginTop: "10px"
                 }}
               >
                 <div className="shipper">

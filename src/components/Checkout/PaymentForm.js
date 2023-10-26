@@ -10,7 +10,6 @@ export default function PaymentForm({ setIsPaid }) {
   const [value, setValue] = React.useState(0);
   const handleChange = (event) => {
     setValue(event.target.value);
-    console.log(event.target.value == 1)
     if (event.target.value == 1) setIsPaid(true)
     else setIsPaid(false)
   };

@@ -129,7 +129,6 @@ export default function Checkout() {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         if (data.mahd == null) {
           alert("Số lượng tồn không đủ")
           return
