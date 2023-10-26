@@ -119,7 +119,6 @@ const Product = () => {
     setIdCtmh(event.target.value);
     setQuantity(1);
   };
-  console.log('isOutOfStock: ', isOutOfStock);
   return (
     <div className="product">
       {loading ? (
