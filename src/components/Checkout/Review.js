@@ -18,7 +18,6 @@ const payments = [
 export default function Review() {
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  console.log(cart)
   const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   
   return (
@@ -39,7 +38,7 @@ export default function Review() {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            ${handleMoney(products.reduce((total, ct) => total + ct.price*ct.quantity, 0))}
+            ${handleMoney(userCart.products.reduce((total, ct) => total + ct.price*ct.quantity, 0))}
           </Typography>
         </ListItem>
       </List>

@@ -159,8 +159,8 @@ const Product = () => {
           </div>
           <div className="right">
             <h1>{data?.tenmh}</h1>
-            <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `$${data.gia - data.gia * 0.1}`}</span>
-            <span className="price">${handleMoney(data?.gia)}</span>
+            <span className="price-1">{data?.chitietKhuyenmaiDTO === null ? '' : `${handleMoney(data.gia - data.gia * 0.1)} VND`}</span>
+            <span className="price">{handleMoney(data?.gia)} VND</span>
             <p>{data?.mota}</p>
             <Box sx={{ width: 500, display: 'flex', alignItems: 'center', gap: 1 }}>
               <FormControl sx={{ width: 150 }}>

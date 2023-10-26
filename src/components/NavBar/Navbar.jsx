@@ -17,7 +17,6 @@ const NavBar = () => {
   const [openSearch, setOpenSearch] = useState(false)
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  console.log(cart)
   const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   return (
     <>

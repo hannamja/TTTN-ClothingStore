@@ -11,7 +11,6 @@ const Cart = ({ open }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  console.log(cart)
   const userCart = Object.keys(user) == 0 ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   const totalPrice = () => {
     let total = 0;
@@ -31,7 +30,7 @@ const Cart = ({ open }) => {
             <h1>{item.title}</h1>
             <p>{item.desc?.substring(0, 100)}</p>
             <div className="price">
-              {item.quantity} x ${handleMoney(item.price)}
+              {item.quantity} x {handleMoney(item.price)} VND
             </div>
           </div>
           <div className="quantity">
@@ -54,7 +53,7 @@ const Cart = ({ open }) => {
       }
       <div className="total">
         <span>SUBTOTAL</span>
-        <span>${handleMoney(totalPrice())}</span>
+        <span>{handleMoney(totalPrice())} VND</span>
       </div>
       <Link className="link" to={Object.keys(user).length == 0 ? '/signin' : '/checkout'} onClick={() => { open(false) }}>
         <button className="checkoutBtn">PROCEED TO CHECKOUT</button>

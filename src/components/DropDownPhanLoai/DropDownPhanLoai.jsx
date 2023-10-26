@@ -42,7 +42,7 @@ export default function DropDownPhanLoai() {
         >
           {
             data?.map((e, i) =>
-              <MenuItem
+              <MenuItem key={i}
                 onClick={() => {
                   navigate(`/products/${e.maloaimh}`);
                   handleClose();

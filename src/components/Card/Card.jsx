@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Card.scss";
 import { Link } from "react-router-dom";
-
+import { handleMoney } from "../../utilities/handleMoney";
 const Card = ({ item }) => {
   const [km, setKm] = useState(0)
   useEffect(() => {
@@ -40,7 +40,7 @@ const Card = ({ item }) => {
         <h2>{item?.tenmh}</h2>
         <div className="prices">
           <h3 className="km" style={{ display: item?.chitietKhuyenmaiDTO === null ? 'none' : 'inline' }}>{item?.chitietKhuyenmaiDTO === null ? '' : `$${item.gia}`}</h3>
-          <h3>${item?.gia - item.gia * km}</h3>
+          <h3>{handleMoney(item?.gia - item.gia * km)} VND</h3>
         </div>
       </div>
     </Link>
