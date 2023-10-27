@@ -5,7 +5,6 @@ import HistoryCard from '../HistoryCard/HistoryCard';
 import './HistoryList.scss'
 import { toVND } from '../../utilities/helpers';
 const HistoryList = ({ data, type }) => {
-    console.log(data);
     const customer = data.khachhang || {};
     return (
       <div className="historyList">
@@ -30,7 +29,7 @@ const HistoryList = ({ data, type }) => {
                     <></>
                 )}
             </div>
-            <div className='info'>
+            {type === "admin" && <div className='info'>
                 <div>
                     <span>Khách hàng: </span>
                     <span>{customer.hotenkh || "Không tìm thấy họ tên!"}</span>
@@ -47,7 +46,7 @@ const HistoryList = ({ data, type }) => {
                     <span>Thanh toán bằng: </span>
                     <span>{data.chitietTrangThaiDTO.trangthai?.matthd === 2 ? "Chuyển khoản" : "Tiền mặt"}</span>
                 </div>
-            </div>
+            </div>}
         <div className="center">
           {data.chitietHoadonDTO.map((e, i) => (
             <HistoryCard key={i} data={e} />

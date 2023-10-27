@@ -60,13 +60,13 @@ const NavBar = () => {
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{userCart.products.length}</span>
+                    <span>{userCart.products?.length}</span>
                   </div>
                 </> : user.info.role[user.info.role.length - 1] === 3 ? <>
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{userCart.products.length}</span>
+                    <span>{userCart.products?.length}</span>
                   </div>
                 </> :
                   <></>
