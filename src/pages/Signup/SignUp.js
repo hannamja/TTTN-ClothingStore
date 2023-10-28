@@ -172,6 +172,8 @@ export default function SignUp() {
             })
           ).unwrap((data) => data.json())
             .then((data) => {
+              if (data.info.khachhang != null)
+                dispatch(addKH({ idKH: data.info.khachhang.makh }))
               navigate('/')
             })
             .catch();

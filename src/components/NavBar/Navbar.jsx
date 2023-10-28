@@ -17,7 +17,7 @@ const NavBar = () => {
   const [openSearch, setOpenSearch] = useState(false)
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  const userCart = Object.keys(user) == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
+  const userCart = Object.keys(user).length == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   return (
     <>
       <div className="navbar">
@@ -60,13 +60,13 @@ const NavBar = () => {
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{userCart.products?.length}</span>
+                    <span>{userCart?.products?.length}</span>
                   </div>
                 </> : user.info.role[user.info.role.length - 1] === 3 ? <>
                   <FavoriteBorderOutlinedIcon />
                   <div className="cartIcon" onClick={() => setOpen(!open)}>
                     <ShoppingCartOutlinedIcon />
-                    <span>{userCart.products?.length}</span>
+                    <span>{userCart?.products?.length}</span>
                   </div>
                 </> :
                   <></>

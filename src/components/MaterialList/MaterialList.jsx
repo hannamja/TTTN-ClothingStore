@@ -136,11 +136,12 @@ const MaterialList = ({ type }) => {
                     'Authorization': 'Bearer ' + user.token
                 },
             }).then(res => res.json()).then(data => {
+                console.log(data)
                 if (data.status == 404)
                     setMessage({content: "Lỗi!", type: "error"})
                 else {
                     setMessage({content: "Xóa chất liệu thành công!", type: "success"})
-                    window.location.reload()
+                    
                 }
 
             }

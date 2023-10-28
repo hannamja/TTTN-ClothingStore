@@ -16,15 +16,15 @@ const initialMessage = {
 const Brand = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `` : `/nhanhieu/` + id}`);
-    
+
     const user = useSelector(state => state.user)
 
     const [ten, setTen] = useState('')
     const [message, setMessage] = useState(initialMessage);
-    
+
     const handleAdd = () => {
         if (!ten.trim()) {
-            setMessage({content: "Vui lòng nhập tên nhãn hiệu!", type: "warning"})
+            setMessage({ content: "Vui lòng nhập tên nhãn hiệu!", type: "warning" })
             return;
         }
         const nh = {
@@ -39,15 +39,19 @@ const Brand = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(nh)
-        }).then(res => res.json()).then(()=>{
-            setMessage({content: "Thêm nhãn hiệu thành công!", type: "success"})
+        }).then(res => res.json()).then((data) => {
+            if (data.manh == null) {
+                setMessage({ content: "Tên nhãn hiệu đã tồn tại!", type: "error" })
+                return
+            }
+            setMessage({ content: "Thêm nhãn hiệu thành công!", type: "success" })
             setTen("");
         })
     }
 
     const handleMod = () => {
         if (!ten.trim()) {
-            setMessage({content: "Vui lòng nhập tên nhãn hiệu!", type: "warning"})
+            setMessage({ content: "Vui lòng nhập tên nhãn hiệu!", type: "warning" })
             return;
         }
         const nh = {
@@ -63,53 +67,62 @@ const Brand = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(nh)
-        }).then(res => res.json()).then(()=>{
-            setMessage({content: "Sửa nhãn hiệu thành công!", type: "success"})
+        }).then(res => res.json()).then((data) => {
+            if (data.manh == null) {
+                setMessage({ content: "Tên nhãn hiệu đã tồn tại!", type: "error" })
+                return
+            }
+            setMessage({ content: "Sửa nhãn hiệu thành công!", type: "success" })
         })
     }
 
     useEffect(() => {
         if (data) setTen(data.tennh)
     }, [loading])
-    return (
-        <>
-            <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
-                <Grid xs={12} sm={12}>
-                    <img
-                        className="catImg"
-                        src="https://images.pexels.com/photos/7679740/pexels-photo-7679740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt=""
-                    />
-                </Grid>
-                <Grid xs={12} sm={12}>
-                    <h1>Thông tin thương hiệu</h1>
-                </Grid>
+    return data?.status == 404 ?
+        <div id="main">
+            <div class="fof">
+                <h1>Error 404</h1>
+            </div>
+        </div> : (
+            <>
+                <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
+                    <Grid xs={12} sm={12}>
+                        <img
+                            className="catImg"
+                            src="https://images.pexels.com/photos/7679740/pexels-photo-7679740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            alt=""
+                        />
+                    </Grid>
+                    <Grid xs={12} sm={12}>
+                        <h1>Thông tin thương hiệu</h1>
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="firstName"
-                        name="firstName"
-                        label="Tên nhãn hiệu"
-                        fullWidth
-                        autoComplete="given-name"
-                        variant="standard"
-                        value={ten}
-                        onChange={(e)=>setTen(e.target.value)}
-                    />
-                </Grid>
-                
-                {
-                    type === 'detail' ? <></> :
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="firstName"
+                            name="firstName"
+                            label="Tên nhãn hiệu"
+                            fullWidth
+                            autoComplete="given-name"
+                            variant="standard"
+                            value={ten}
+                            onChange={(e) => setTen(e.target.value)}
+                        />
+                    </Grid>
 
-                        <Grid item xs={12}>
-                            <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
-                                Save
-                            </Button>
-                        </Grid>
-                }
-            </Grid>
-            {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    {
+                        type === 'detail' ? <></> :
+
+                            <Grid item xs={12}>
+                                <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
+                                    Save
+                                </Button>
+                            </Grid>
+                    }
+                </Grid>
+                {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                     Thêm nhãn hiệu thành công!
                 </Alert>
@@ -119,9 +132,9 @@ const Brand = ({ type }) => {
                     Sửa nhãn hiệu thành công!
                 </Alert>
             </Snackbar> */}
-            <AlertMessage message={message} setMessage={setMessage} />
-        </>
-    )
+                <AlertMessage message={message} setMessage={setMessage} />
+            </>
+        )
 }
 
 export default Brand

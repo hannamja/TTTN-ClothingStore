@@ -82,8 +82,7 @@ export default function SignInSide() {
       )
         .unwrap((data) => data.json())
         .then((data) => {
-          if (data.info.khachhang != null) 
-            dispatch(addKH({ idKH: data.info.khachhang.makh }))
+      
         })
         .catch(() => setOpen1(true));
     },
@@ -98,14 +97,16 @@ export default function SignInSide() {
 
     setOpen1(false);
   };
-  useEffect(()=>{
+  useEffect(() => {
     if (Object.keys(user).length) {
-			if (next) {
-				navigate(next);
-			} else {
-				navigate("/");
-			}
-		}
+      if (user.info.khachhang != null)
+        dispatch(addKH({ idKH: user.info.khachhang.makh }))
+      if (next) {
+        navigate(next);
+      } else {
+        navigate("/");
+      }
+    }
   }, [user, navigate, next])
   return (
     <ThemeProvider theme={defaultTheme}>

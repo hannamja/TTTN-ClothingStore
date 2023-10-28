@@ -127,23 +127,24 @@ const BrandList = () => {
     const user = useSelector(state => state.user)
 
     const handleDel = (id) => {
-        fetch('http://localhost:8081/api/nhanhieu/' + id, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.token
-            },
-        }).then(res => res.json()).then(data => {
-            if (data.status == 404) {
-                setMessage({content: data.message, type: "error"})
+        if (window.confirm('Bạn có muốn xóa nhãn hiệu có id: ' + id + '?'))
+            fetch('http://localhost:8081/api/nhanhieu/' + id, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + user.token
+                },
+            }).then(res => res.json()).then(data => {
+                if (data.status == 404) {
+                    setMessage({ content: data.message, type: "error" })
+                }
+                else {
+                    setMessage({ content: "Xóa nhãn hiệu thành công!", type: "success" })
+                    window.location.reload()
+                }
             }
-            else {
-                setMessage({content: "Xóa nhãn hiệu thành công!", type: "success"})
-                window.location.reload()
-            }
-        }
-        )
+            )
 
     }
     const { data, loading, error } = useFetchAdmin(`/nhanhieu`);

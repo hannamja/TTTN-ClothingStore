@@ -11,7 +11,7 @@ const Cart = ({ open }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
-  const userCart = Object.keys(user) == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
+  const userCart = Object.keys(user).length == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
   const totalPrice = () => {
     let total = 0;
     userCart.products.forEach((item) => {

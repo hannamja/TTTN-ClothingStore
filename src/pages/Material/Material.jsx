@@ -22,7 +22,7 @@ const Material = ({ type }) => {
 
     const handleAdd = () => {
         if (!ten.trim()) {
-            setMessage({content: "Vui lòng nhập tên chất liệu", type: "warning"})
+            setMessage({ content: "Vui lòng nhập tên chất liệu", type: "warning" })
             return
         }
         const cl = {
@@ -37,18 +37,22 @@ const Material = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(cl)
-        }).then(res => res.json()).then(()=>{
-            setMessage({content: "Thêm chất liệu thành công!", type: "success"})
+        }).then(res => res.json()).then((data) => {
+            if (data.macl == null) {
+                setMessage({ content: "Tên chât liệu đã tồn tại!", type: "error" })
+                return
+            }
+            setMessage({ content: "Thêm chất liệu thành công!", type: "success" })
         })
     }
 
     const handleMod = () => {
         if (!ten.trim()) {
-            setMessage({content: "Vui lòng nhập tên chất liệu", type: "warning"})
+            setMessage({ content: "Vui lòng nhập tên chất liệu", type: "warning" })
             return
         }
         const cl = {
-            "macl": data.manh,
+            "macl": data.macl,
             "tenvai": ten
         }
 
@@ -60,8 +64,12 @@ const Material = ({ type }) => {
                 'Authorization': 'Bearer ' + user.token
             },
             body: JSON.stringify(cl)
-        }).then(res => res.json()).then(()=>{
-            setMessage({content: "Sửa chất liệu thành công!", type: "success"})
+        }).then(res => res.json()).then((data) => {
+            if (data.macl == null) {
+                setMessage({ content: "Tên chất liệu đã tồn tại!", type: "error" })
+                return
+            }
+            setMessage({ content: "Sửa chất liệu thành công!", type: "success" })
         })
     }
 
@@ -69,47 +77,52 @@ const Material = ({ type }) => {
     useEffect(() => {
         if (data) setTen(data.tenvai)
     }, [loading])
-    return (
-        <>
-            <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
-                <Grid xs={12} sm={12}>
-                    <img
-                        className="catImg"
-                        src="https://images.pexels.com/photos/7679740/pexels-photo-7679740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt=""
-                    />
-                </Grid>
-                <Grid xs={12} sm={12}>
-                    <h1>Thông tin chất liệu</h1>
-                </Grid>
+    return data?.status == 404 ?
+        <div id="main">
+            <div class="fof">
+                <h1>Error 404</h1>
+            </div>
+        </div> : (
+            <>
+                <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
+                    <Grid xs={12} sm={12}>
+                        <img
+                            className="catImg"
+                            src="https://images.pexels.com/photos/7679740/pexels-photo-7679740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            alt=""
+                        />
+                    </Grid>
+                    <Grid xs={12} sm={12}>
+                        <h1>Thông tin chất liệu</h1>
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        required
-                        id="lastName"
-                        name="lastName"
-                        label="Tên chất liệu"
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                        value={ten}
-                        onChange={(e) => setTen(e.target.value)}
-                    />
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="lastName"
+                            name="lastName"
+                            label="Tên chất liệu"
+                            fullWidth
+                            autoComplete="family-name"
+                            variant="standard"
+                            value={ten}
+                            onChange={(e) => setTen(e.target.value)}
+                        />
+                    </Grid>
+
+                    {
+                        type === 'detail' ? <></> :
+
+                            <Grid item xs={12}>
+                                <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
+                                    Save
+                                </Button>
+                            </Grid>
+                    }
                 </Grid>
-
-                {
-                    type === 'detail' ? <></> :
-
-                        <Grid item xs={12}>
-                            <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
-                                Save
-                            </Button>
-                        </Grid>
-                }
-            </Grid>
-            <AlertMessage message={message} setMessage={setMessage} />
-        </>
-    )
+                <AlertMessage message={message} setMessage={setMessage} />
+            </>
+        )
 }
 
 export default Material
