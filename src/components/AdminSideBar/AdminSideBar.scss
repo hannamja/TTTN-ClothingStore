@@ -39,6 +39,8 @@
     }
 
     .bottom {
+        height: calc(100vh - 40px - 50px - 50px);
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 25px;
@@ -49,6 +51,8 @@
             align-items: center;
         }
 
+        &::-webkit-scrollbar{
+            display: none;
+        }
     }
-
 }
