@@ -50,6 +50,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './redux/userReducer';
 import jwt_decode from 'jwt-decode';
 import { Alert, Snackbar } from '@mui/material';
+import E404 from './components/404/E404';
 
 const ProtectedRoute = ({ redirectPath = "/signin" }) => {
   const currentPathName = window.location.pathname;
@@ -203,7 +204,7 @@ function App() {
     },
     {
       path: "*",
-      element: <Navigate to={"/"} />
+      element: <E404 />
     }
   ]);
   const adminRoutes = createBrowserRouter([
@@ -487,7 +488,7 @@ function App() {
     },
     {
       path: "*",
-      element: <Navigate to={"/"} />
+      element: <E404 />
     }
   ]);
   const dispatch = useDispatch();

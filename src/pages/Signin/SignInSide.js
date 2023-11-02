@@ -82,7 +82,7 @@ export default function SignInSide() {
       )
         .unwrap((data) => data.json())
         .then((data) => {
-      
+
         })
         .catch(() => setOpen1(true));
     },
@@ -104,7 +104,7 @@ export default function SignInSide() {
       if (next) {
         navigate(next);
       } else {
-        navigate("/");
+        navigate(-1);
       }
     }
   }, [user, navigate, next])

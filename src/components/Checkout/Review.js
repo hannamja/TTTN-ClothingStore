@@ -19,7 +19,7 @@ export default function Review() {
   const user = useSelector((state) => state.user)
   const cart = useSelector((state) => state.cart.carts);
   const userCart = Object.keys(user) == 0 || user.info.khachhang == null ? cart.find(i => i.id == '') : cart.find(i => i.id == user.info.khachhang.makh)
-  
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -31,14 +31,14 @@ export default function Review() {
             <ListItemText primary={product.title} secondary={product.desc} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <Typography variant="body2">Quantity: {product.quantity}</Typography>
-              <Typography variant="body2">Price: ${handleMoney(product.price * product.quantity)}</Typography>
+              <Typography variant="body2">Price: {handleMoney(product.price * product.quantity)} VND</Typography>
             </div>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            ${handleMoney(userCart.products.reduce((total, ct) => total + ct.price*ct.quantity, 0))}
+            {handleMoney(userCart.products.reduce((total, ct) => total + ct.price * ct.quantity, 0))} VND
           </Typography>
         </ListItem>
       </List>

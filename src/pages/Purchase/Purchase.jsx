@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import HistoryList from "../../components/HistoryList/HistoryList";
 import "./Purchase.scss";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Alert, Snackbar } from "@mui/material";
 function TabPanel(props) {
@@ -122,9 +121,9 @@ const Purchase = () => {
               hd.chitietTrangThaiDTO.trangthai.matthd === 6 ? (
                 <></>
               ) : (
-                <Link className="link" to={`/user/purchase/order/${hd.mahd}`}>
+
                   <HistoryList data={hd} />
-                </Link>
+
               )
             )
           ) : (
@@ -137,9 +136,9 @@ const Purchase = () => {
               hd.chitietTrangThaiDTO.trangthai.matthd === 6 ? (
                 <></>
               ) : hd.chitietTrangThaiDTO.trangthai.matthd < 3 ? (
-                <Link className="link" to={`/user/purchase/order/${hd.mahd}`}>
+
                   <HistoryList data={hd} />
-                </Link>
+
               ) : (
                 <></>
               )
@@ -154,9 +153,9 @@ const Purchase = () => {
               hd.chitietTrangThaiDTO.trangthai.matthd === 6 ? (
                 <></>
               ) : hd.chitietTrangThaiDTO.trangthai.matthd === 3 ? (
-                <Link className="link" to={`/user/purchase/order/${hd.mahd}`}>
+              
                   <HistoryList data={hd} />
-                </Link>
+
               ) : (
                 <></>
               )
@@ -171,9 +170,9 @@ const Purchase = () => {
               hd.chitietTrangThaiDTO.trangthai.matthd === 6 ? (
                 <></>
               ) : hd.chitietTrangThaiDTO.trangthai.matthd === 4 ? (
-                <Link className="link" to={`/user/purchase/order/${hd.mahd}`}>
+
                   <HistoryList data={hd} />
-                </Link>
+
               ) : (
                 <></>
               )
@@ -188,9 +187,9 @@ const Purchase = () => {
               hd.chitietTrangThaiDTO.trangthai.matthd === 6 ? (
                 <></>
               ) : hd.chitietTrangThaiDTO.trangthai.matthd === 5 ? (
-                <Link className="link" to={`/user/purchase/order/${hd.mahd}`}>
+                
                   <HistoryList data={hd} />
-                </Link>
+                
               ) : (
                 <></>
               )

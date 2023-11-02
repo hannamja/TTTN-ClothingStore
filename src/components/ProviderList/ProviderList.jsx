@@ -21,6 +21,7 @@ import { InfoOutlined } from '@mui/icons-material';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
 import { Alert, Snackbar } from '@mui/material';
+import AlertMessage from '../AlertMessage';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -116,29 +117,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         },
     },
 }));
+
+const initialMessage = {
+    content: "",
+    type: "",
+};
 const ProviderList = () => {
     const [input, setInput] = useState('')
+    const [message, setMessage] = useState(initialMessage);
     const handldeChange = (e) => {
         setInput(e)
     }
     const { data, loading, error } = useFetchAdmin(`/nhacungcap`);
-    const [open, setOpen] = React.useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-
-    const [open1, setOpen1] = React.useState(false);
-    const handleClose1 = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen1(false);
-    };
     const user = useSelector(state => state.user)
 
     const handleDel = (id) => {
@@ -151,9 +141,11 @@ const ProviderList = () => {
                     'Authorization': 'Bearer ' + user.token
                 },
             }).then(res => res.json()).then(data => {
-                if (data.status == 404) setOpen1(true)
+                if (data.status == 404) {
+                    setMessage({ content: data.message, type: "error" })
+                }
                 else {
-                    setOpen(true)
+                    setMessage({ content: "Xóa nhà cung cấp thành công!", type: "success" })
                     window.location.reload()
                 }
             }
@@ -220,17 +212,7 @@ const ProviderList = () => {
                                 <Link className='link' to='/admin/providerManagement/add'><span>Thêm mới</span></Link>
                             </div>
                         </div>
-                        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                Xóa nhà cung cấp thành công!
-                            </Alert>
-                        </Snackbar>
-
-                        <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                            <Alert onClose={handleClose1} severity="error" sx={{ width: '100%' }}>
-                                Lỗi!
-                            </Alert>
-                        </Snackbar>
+                        <AlertMessage message={message} setMessage={setMessage} />
                     </>
                     )}
         </div>

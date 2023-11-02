@@ -7,7 +7,7 @@ import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AlertMessage from "../../components/AlertMessage";
-
+import E404 from '../../components/404/E404'
 const initialMessage = {
     content: "",
     type: "",
@@ -77,11 +77,7 @@ const Type = ({ type }) => {
         if (data) setTen(data.tenloadimh)
     }, [loading])
     return data?.status == 404 ?
-        <div id="main">
-            <div class="fof">
-                <h1>Error 404</h1>
-            </div>
-        </div> : (
+        <E404 /> : (
             <React.Fragment>
                 <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                     <Grid xs={12} sm={12}>
