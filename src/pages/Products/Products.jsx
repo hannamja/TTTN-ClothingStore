@@ -12,7 +12,7 @@ const Products = () => {
   const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState([]);
   const [sortData, setSortData] = useState(null)
-  const { data, loading, error, setData } = useFetch(
+  const { data, loading, error } = useFetch(
     `/mathang/getByLoai/${catId}`
   );
   const sizeData = useFetch(`/size`);
@@ -111,11 +111,7 @@ const Products = () => {
             src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
-          <div>
-            <input type="text" />
-            <button>Search</button>
-          </div>
-          <List data={sortData} />
+          <List data={sortData} size={selectedSubCats} />
         </div>
       </div>
   );

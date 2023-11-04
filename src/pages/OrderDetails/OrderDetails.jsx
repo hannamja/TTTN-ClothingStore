@@ -3,24 +3,40 @@ import OrderTracker from '../../components/OrderTracker/OrderTracker'
 import './OrderDetail.scss'
 import { json, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import HistoryList from '../../components/HistoryList/HistoryList'
 import HistoryCard from '../../components/HistoryCard/HistoryCard'
 import { Button } from '@mui/material'
+import AlertMessage from '../../components/AlertMessage'
+
+const initialMessage = {
+  content: "",
+  type: "",
+};
 const OrderDetails = () => {
   const user = useSelector(state => state.user)
   const { id } = useParams()
 
   const [hoadon, setHoadon] = useState(null)
+  const [message, setMessage] = useState(initialMessage);
   const handelCancel = async () => {
-    const res = await fetch('http://localhost:8081/api/hoadon/cancel', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': 'Bearer ' + user.token
-      },
-      body: JSON.stringify(hoadon)
-    })
-    const data = await res.json()
+    if (window.confirm('Bạn có muốn hủy hóa đơn ?')) {
+      const res = await fetch('http://localhost:8081/api/hoadon/cancel', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + user.token
+        },
+        body: JSON.stringify(hoadon)
+      })
+      const data = await res.json()
+      if (data.errCode == 'BILL_CANCELED_SUCCESS') {
+        setMessage({ content: "Hủy đơn thành công!", type: "success" })
+        window.location.reload()
+      }
+      else {
+        setMessage({ content: "Lỗi!", type: "error" })
+      }
+    }
+
   }
   useEffect(() => {
 
@@ -55,6 +71,7 @@ const OrderDetails = () => {
           </div>
           : <></>
       }
+      <AlertMessage message={message} setMessage={setMessage} />
     </div>
   )
 }
