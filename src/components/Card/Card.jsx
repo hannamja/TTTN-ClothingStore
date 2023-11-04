@@ -28,6 +28,9 @@ const Card = ({ item }) => {
             }
             alt=""
             className="mainImg"
+            onError={(e)=>{
+              e.target.src = "/img/no-product.webp"
+            }}
           />
           <img
             src={
@@ -35,6 +38,9 @@ const Card = ({ item }) => {
             }
             alt=""
             className="secondImg"
+            onError={(e)=>{
+              e.target.src = "/img/no-product.webp"
+            }}
           />
         </div>
         <h2>{item?.tenmh}</h2>

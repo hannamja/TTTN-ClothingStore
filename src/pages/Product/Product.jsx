@@ -143,6 +143,9 @@ const Product = () => {
                   }
                   alt=""
                   onClick={(e) => setSelectedImg(0)}
+                  onError={(e)=>{
+                    e.target.src = "/img/no-product.webp"
+                  }}
                 />
                 <img
                   src={
@@ -150,6 +153,9 @@ const Product = () => {
                   }
                   alt=""
                   onClick={(e) => setSelectedImg(0)}
+                  onError={(e)=>{
+                    e.target.src = "/img/no-product.webp"
+                  }}
                 />
               </div>
               <div className="mainImg">
@@ -158,6 +164,9 @@ const Product = () => {
                     data?.hinhanhDTOs.length === 0 ? '' : data?.hinhanhDTOs[selectedImg].duongdan
                   }
                   alt=""
+                  onError={(e)=>{
+                    e.target.src = "/img/no-product.webp"
+                  }}
                 />
 
               </div>

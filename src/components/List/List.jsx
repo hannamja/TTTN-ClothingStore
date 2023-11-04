@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import "./List.scss";
 import Card from "../Card/Card";
 
@@ -12,4 +12,4 @@ const List = ({ data }) => {
   );
 };
 
-export default List;
+export default memo(List);
