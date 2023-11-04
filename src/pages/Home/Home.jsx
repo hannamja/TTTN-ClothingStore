@@ -11,16 +11,29 @@ const Home = () => {
   const [featured, setFeatured] = useState([])
   const user = useSelector(state => state.user)
   useEffect(() => {
-    clothesServices.getAllClothes().then(data => setFeatured(data))
+    // clothesServices.getAllClothes().then(data => setFeatured(data))
+    let active = true;
+    (async () => {
+      try {
+        const data = await clothesServices.getAllClothes()
+        if (active) {
+          setFeatured(data)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })()
+    return () => {
+      active = false;
+    }
   }, [])
-
 
   return (
     <div className='home'>
       <Slider />
-      <FeaturedProducts type="featured" dataSet={featured} />
+      {featured.length > 0 && <FeaturedProducts type="featured" dataSet={featured} />}
       <Categories />
-      <FeaturedProducts type="trending" dataSet={featured} />
+      {featured.length > 0 && <FeaturedProducts type="trending" dataSet={featured} />}
       <Contact />
     </div>
   )

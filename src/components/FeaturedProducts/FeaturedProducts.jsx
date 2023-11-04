@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Card from "../Card/Card";
 import "./FeaturedProducts.scss";
 import OwlCarousel from "react-owl-carousel"
@@ -18,7 +18,11 @@ const FeaturedProducts = ({ type, dataSet }) => {
   // const { data, loading, error } = useFetch(
   //   `/products?populate=*&[filters][type][$eq]=${type}`
   // );
+<<<<<<< HEAD
 
+=======
+  console.log("dataSet", dataSet);
+>>>>>>> 915300c098a127bea5d715084635170d484a9a8b
   return (
     <div className="featuredProducts">
       <div className="top">
@@ -44,4 +48,4 @@ const FeaturedProducts = ({ type, dataSet }) => {
   );
 };
 
-export default FeaturedProducts;
+export default memo(FeaturedProducts);
