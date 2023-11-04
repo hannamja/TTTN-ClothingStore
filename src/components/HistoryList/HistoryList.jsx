@@ -12,16 +12,23 @@ const HistoryList = ({ data, type }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user)
     const navigate = useNavigate()
+
     const handleClick = () => {
         let isEnough = true
+        let isActive = true
         data.chitietHoadonDTO.forEach(element => {
             if (parseInt(element.chitietMathangDTO.currentNumbeer) < parseInt(element.soluong)) {
                 alert(`Mặt hàng có tên ${element.chitietMathangDTO.mathangDTO.tenmh} không còn đủ số lượng`)
                 isEnough = false
                 return
             }
+            if (parseInt(element.chitietMathangDTO.mathangDTO.trangthai) == 1) {
+                alert(`Mặt hàng có tên ${element.chitietMathangDTO.mathangDTO.tenmh} không còn kinh doanh`)
+                isActive = false
+                return
+            }
         });
-        if (!isEnough) return
+        if (!isEnough || !isActive) return
         data.chitietHoadonDTO.forEach(element => {
             dispatch(addToCart({
                 idU: Object.keys(user) == 0 ? '' : user.info.khachhang.makh, item: {
