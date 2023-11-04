@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase'
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import './SearchBox.scss'
+import { Link } from 'react-router-dom';
 
 
 const Search = styled('div')(({ theme }) => ({
@@ -61,17 +62,20 @@ const SearchBox = () => {
     const handldeChange = (e) => {
         setInput(e)
     }
+    console.log(input)
     return (
         <div className='searchBox'>
             <Search>
-                <SearchIconWrapper>
-                    <SearchIcon />
-                </SearchIconWrapper>
+                <Link to={`/products/search?name=${input}`}>
+                    <SearchIconWrapper>
+                        <SearchIcon />
+                    </SearchIconWrapper>
+                </Link>
 
                 <StyledInputBase
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => { handldeChange(e.value) }}
+                    onChange={(e) => { handldeChange(e.target.value) }}
                     value={input}
                 />
                 <BackspaceIconWrapper onClick={() => { setInput('') }}>
