@@ -18,7 +18,6 @@ const FeaturedProducts = ({ type, dataSet }) => {
   // const { data, loading, error } = useFetch(
   //   `/products?populate=*&[filters][type][$eq]=${type}`
   // );
-  console.log("dataSet", dataSet);
   return (
     <div className="featuredProducts">
       <div className="top">
