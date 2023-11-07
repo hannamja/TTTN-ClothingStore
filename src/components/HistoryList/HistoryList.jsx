@@ -46,7 +46,7 @@ const HistoryList = ({ data, type }) => {
                     },
                     "chitietMathangDTO": element.chitietMathangDTO,
                     quantity: element.soluong,
-                    price: element.chitietMathangDTO.mathangDTO.chitietKhuyenmaiDTO === null ? element.gia : (element.gia - element.gia * 0.1) * element.soluong,
+                    price: element.chitietMathangDTO.mathangDTO.chitietKhuyenmaiDTO === null ? element.gia : (element.gia - element.gia * 0.01 * parseFloat(element.chitietMathangDTO.mathangDTO.chitietKhuyenmaiDTO?.mucgiam.slice(0, element.chitietMathangDTO.mathangDTO.chitietKhuyenmaiDTO?.length))) * element.soluong,
                 }
             }))
         });

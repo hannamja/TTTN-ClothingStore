@@ -31,7 +31,7 @@ const KM = ({ type }) => {
     const currentDate = new Date().toISOString().slice(0, 10);
 
     const user = useSelector(state => state.user)
-    const mh = useFetch('/mathang')
+    const mh = useFetchAdmin('/mathangAd')
 
     const [message, setMessage] = useState(initialMessage);
     const [value, setValue] = useState(null);
