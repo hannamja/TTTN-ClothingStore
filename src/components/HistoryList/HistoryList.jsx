@@ -108,12 +108,11 @@ const HistoryList = ({ data, type }) => {
                     <span>{data?.ngaytao}</span>
                 </div>
             </div>
-            <div className="action">
+            {user.info.khachhang && <div className="action">
                 <Link className="link" to={`/user/purchase/order/${data.mahd}`}>
                     <Button variant="outlined">Xem chi tiết</Button>
                 </Link>
-
-            </div>
+            </div>}
             {type !== "admin" ? data.chitietTrangThaiDTO.trangthai.matthd === 5 ? (
                 <div className="action">
                     <Button variant="contained" onClick={handleClick}>Mua lại</Button>

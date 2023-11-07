@@ -22,7 +22,6 @@ import { logout } from '../../redux/userReducer.js'
 
 const AdminSideBar = ({ isOpen }) => {
     const user = useSelector(state => state.user);
-    console.log(user);
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
