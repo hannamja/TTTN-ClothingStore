@@ -11,7 +11,8 @@ const SearchResult = () => {
     const [maxPrice, setMaxPrice] = useState(1000);
     const [sort, setSort] = useState(null);
     const [selectedSubCats, setSelectedSubCats] = useState([]);
-    const [sortData, setSortData] = useState(null)
+    // const [sortData, setSortData] = useState(null)
+    const [sortData, setSortData] = useState([])
     const { data, loading, error } = useFetch(
         `/mathang/search?name=${q}`
     );

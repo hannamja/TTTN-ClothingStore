@@ -14,7 +14,6 @@ import './KM.scss'
 import { useParams } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
-import useFetch from '../../hooks/useFetch';
 import { ClearOutlined } from '@mui/icons-material';
 import AlertMessage from "../../components/AlertMessage";
 import { dateToString } from '../../utilities/helpers';
@@ -27,7 +26,6 @@ const initialMessage = {
 const KM = ({ type }) => {
     const { id } = useParams()
     const { data, loading, error } = useFetchAdmin(`${type === 'add' ? `/km` : `/km/` + id}`);
-
     const currentDate = new Date().toISOString().slice(0, 10);
 
     const user = useSelector(state => state.user)
@@ -146,6 +144,7 @@ const KM = ({ type }) => {
         setCtkmRows(filtered)
     }
     const handleAddCtmh = (i) => {
+        console.log(i);
         let filtered = ctkmRows.filter(item => item.id.mamh === i.id.mamh)
 
         if (filtered.length > 0) {

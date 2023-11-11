@@ -139,6 +139,7 @@ const OrderBillList = () => {
   };
 
   const handleConfirm = (hd) => {
+    console.log(hd);
     if (!shipper) {
       setMessage({ content: "Chọn shipper!", type: "warning" });
       return;
