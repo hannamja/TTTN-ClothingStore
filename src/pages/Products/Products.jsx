@@ -17,6 +17,7 @@ const Products = () => {
   );
   const sizeData = useFetch(`/size`);
 
+  console.log(data)
   useEffect(() => {
     if (data) setSortData(data)
   }, [loading])
@@ -50,7 +51,7 @@ const Products = () => {
     }
   }
   return (
-    loading || sizeData.loading || sortData.length == 0 ? 'loading...' :
+    loading || sizeData.loading || sortData == null || sortData.length == 0 ? 'loading...' :
       <div className="products">
         <div className="left">
           <div className="filterItem">

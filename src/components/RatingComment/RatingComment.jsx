@@ -2,6 +2,7 @@ import { VerifiedOutlined } from '@mui/icons-material'
 import { Rating } from '@mui/material'
 import React from 'react'
 import './RatingComment.scss'
+
 const RatingComment = ({comment}) => {
     return (
         <div className='rtComment'>

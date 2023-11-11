@@ -241,7 +241,7 @@ const OrderBillList = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.errCode == "BILL_PROCESSED_SUCCESS") {
+        if (data.errCode == "BILL_PROCESSING_SUCCESS") {
           setMessage({content: data.message, type: "success"});
         } else {
           setMessage({content: data.message, type: 'error'});

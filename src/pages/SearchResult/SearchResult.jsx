@@ -50,7 +50,7 @@ const SearchResult = () => {
         }
     }
     return (
-        loading || sizeData.loading || sortData.length == 0 ? 'loading...' :
+        loading || sizeData.loading || sortData == null || sortData.length == 0 ? 'loading...' :
             <div className="products">
                 <div className="left">
                     <div className="filterItem">

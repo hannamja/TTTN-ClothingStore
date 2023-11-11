@@ -6,7 +6,9 @@
 export const dateToString = (initialDate) => {
   const dateValue = new Date(initialDate);
   const arr = dateValue.toLocaleDateString().split(/-|\//);
-  return arr[2] + "-" + arr[1] + "-" + arr[0];
+
+  if (arr[0] < 9) return arr[2] + "-" + arr[1] + "-" + '0' + arr[0];
+  else return arr[2] + "-" + arr[1] + "-" + arr[0];
 };
 
 /**
@@ -15,10 +17,10 @@ export const dateToString = (initialDate) => {
  * @returns 
  */
 export const toVND = (number) => {
-	return Intl.NumberFormat().format(number) + " VNĐ";
+  return Intl.NumberFormat().format(number) + " VNĐ";
 };
 
-export const redirectLogin = ()=>{
+export const redirectLogin = () => {
   const currentPathName = window.location.pathname;
   return `/signin?next=${encodeURIComponent(currentPathName)}`;
 }
