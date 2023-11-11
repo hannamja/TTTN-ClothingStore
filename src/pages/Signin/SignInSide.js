@@ -82,7 +82,7 @@ export default function SignInSide() {
       )
         .unwrap((data) => data.json())
         .then((data) => {
-
+          if (Object.keys(data).length == 0) setOpen1(true)
         })
         .catch(() => setOpen1(true));
     },
