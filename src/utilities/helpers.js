@@ -7,7 +7,9 @@ export const dateToString = (initialDate) => {
   const dateValue = new Date(initialDate);
   const arr = dateValue.toLocaleDateString().split(/-|\//);
 
+  if (arr[0] < 9 && arr[1] < 9) return arr[2] + "-" + "0" + arr[1] + "-" + "0" + arr[0];
   if (arr[0] < 9) return arr[2] + "-" + arr[1] + "-" + '0' + arr[0];
+  if (arr[1] < 9) return arr[2] + "-" + "0" + arr[1] + "-" + arr[0];
   else return arr[2] + "-" + arr[1] + "-" + arr[0];
 };
 

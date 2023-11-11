@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useSelector } from 'react-redux';
 import { ClearOutlined } from '@mui/icons-material';
+import { dateToString } from '../../utilities/helpers';
 const Employee = ({ type }) => {
     const user = useSelector(state => state.user)
     const { id } = useParams()
@@ -44,7 +45,7 @@ const Employee = ({ type }) => {
                 setEmaol(data.email)
                 setSdt(data.sdt)
                 setGT(data.gioitinh)
-                setNgaysinh(new Date(data.ngaysinh))
+                setNgaysinh(dateToString(data.ngaysinh))
                 setCmnd(data.cmnd)
                 fetch('http://localhost:8081/api/ctquyen/' + data.email, {
                     headers: {
@@ -60,7 +61,7 @@ const Employee = ({ type }) => {
     }, [loading])
 
     const handleAdd = () => {
-        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == null || cmnd == null) {
+        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == '' || cmnd == '') {
             alert('Vui lòng nhập đầy đủ thông tin')
             return
         }
@@ -105,7 +106,7 @@ const Employee = ({ type }) => {
 
     }
     const handleMod = () => {
-        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == null || cmnd == null) {
+        if (ten == '' || gt == '' || ngaysinh == '' || sdt == '' || email == '' || cmnd == '') {
             alert('Vui lòng nhập đầy đủ thông tin')
             return
         }
@@ -122,7 +123,7 @@ const Employee = ({ type }) => {
 
         }
 
-        fetch('http://localhost:8081/api/nhanvien', {
+        fetch('http://localhost:8081/api/nhanvien/mod', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -181,7 +182,6 @@ const Employee = ({ type }) => {
     };
 
     const [open404, setOpen404] = React.useState(false);
-
     const handleClose404 = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -316,18 +316,18 @@ const Employee = ({ type }) => {
 
 
                 <Grid item xs={12}>
-                    <h5>Danh sách sản phẩm được đặt</h5>
+                    <h5>Danh sách quyền</h5>
                     <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
                                 <TableRow>
                                     <TableCell>Mã quyền</TableCell>
                                     <TableCell align="right">Tên quyền</TableCell>
-                                    <TableCell align="right">Số lượng</TableCell>
+                                    <TableCell align="right">Ngày kết thúc</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {ctqRows.map((row) => (
+                                {ctqRows?.map((row) => (
                                     <TableRow
                                         key={row.id.maquyen}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -336,7 +336,7 @@ const Employee = ({ type }) => {
                                             {row.id.maquyen}
                                         </TableCell>
                                         <TableCell align="right">{row.quyen.tenquyen}</TableCell>
-                                        <TableCell align="right">{row.ngayend}</TableCell>
+                                        <TableCell align="right">{dateToString(row.ngayend)}</TableCell>
                                         <TableCell><ClearOutlined onClick={
                                             () => handleDelCtmh(row)
                                         } sx={{ color: 'red' }} /></TableCell>
