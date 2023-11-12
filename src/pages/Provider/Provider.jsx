@@ -11,6 +11,7 @@ import {
     validateEmail,
     validatePhone,
 } from "../../utilities/validation";
+import E404 from '../../components/404/E404';
 
 const initialMessage = {
     content: "",

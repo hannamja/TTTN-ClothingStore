@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useParams } from 'react-router-dom';
 import { ClearOutlined } from '@mui/icons-material';
+import E404 from '../../components/404/E404';
 
 
 const Import = ({ type }) => {
@@ -192,6 +193,7 @@ const Import = ({ type }) => {
         }
     }
     return (
+        pdValue == null ? <E404 /> :
         <React.Fragment>
             <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
                 <Grid xs={12} sm={12}>

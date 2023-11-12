@@ -31,6 +31,7 @@ import {
   validatePhone,
 } from "../../utilities/validation";
 import { Navigate, useNavigate } from "react-router-dom";
+import { addKH } from "../../redux/cartReducer";
 
 function Copyright(props) {
   return (
@@ -174,7 +175,6 @@ export default function SignUp() {
             .then((data) => {
               if (data.info.khachhang != null)
                 dispatch(addKH({ idKH: data.info.khachhang.makh }))
-              navigate('/')
             })
             .catch();
         });

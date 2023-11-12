@@ -20,6 +20,7 @@ const SearchResult = () => {
 
     useEffect(() => {
         if (data) setSortData(data)
+        if (error) setSortData([])
     }, [loading])
 
 

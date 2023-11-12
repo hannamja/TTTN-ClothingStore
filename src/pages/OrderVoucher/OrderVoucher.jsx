@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import useFetchAdmin from '../../hooks/useFetchAdmin';
 import { useParams } from 'react-router-dom';
 import { ClearOutlined } from '@mui/icons-material';
+import E404 from '../../components/404/E404';
 
 
 const OrderVoucher = ({ type }) => {
@@ -184,162 +185,163 @@ const OrderVoucher = ({ type }) => {
         }
     }
     return (
-        <React.Fragment>
-            <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
-                <Grid xs={12} sm={12}>
-                    <img
-                        className="catImg"
-                        src="https://images.pexels.com/photos/7679456/pexels-photo-7679456.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt=""
-                    />
-                </Grid>
-                <Grid xs={12} sm={12}>
-                    <h1>Thông tin phiếu đặt</h1>
-                </Grid>
+        nccValue == null ? <E404 /> :
+            <React.Fragment>
+                <Grid container spacing={3} style={{ margin: '50px', alignItems: 'center' }}>
+                    <Grid xs={12} sm={12}>
+                        <img
+                            className="catImg"
+                            src="https://images.pexels.com/photos/7679456/pexels-photo-7679456.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            alt=""
+                        />
+                    </Grid>
+                    <Grid xs={12} sm={12}>
+                        <h1>Thông tin phiếu đặt</h1>
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <h5>Nhân viên lập</h5>
-                    <TextField
-                        id="firstName"
-                        name="firstName"
-                        label={user.info.nhanvien.tennv}
-                        fullWidth
-                        autoComplete="given-name"
-                        variant="standard"
-                        disabled
-                    />
-                </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <h5>Nhân viên lập</h5>
+                        <TextField
+                            id="firstName"
+                            name="firstName"
+                            label={user.info.nhanvien.tennv}
+                            fullWidth
+                            autoComplete="given-name"
+                            variant="standard"
+                            disabled
+                        />
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                    <h5>Mã số nhân viên</h5>
-                    <TextField
-                        id="lastName"
-                        name="lastName"
-                        label={user.info.nhanvien.manv}
-                        fullWidth
-                        autoComplete="family-name"
-                        variant="standard"
-                        disabled
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        value={nccValue}
-                        onChange={(event, newValue) => {
-                            setNccValue(newValue);
+                    <Grid item xs={12} sm={6}>
+                        <h5>Mã số nhân viên</h5>
+                        <TextField
+                            id="lastName"
+                            name="lastName"
+                            label={user.info.nhanvien.manv}
+                            fullWidth
+                            autoComplete="family-name"
+                            variant="standard"
+                            disabled
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            value={nccValue}
+                            onChange={(event, newValue) => {
+                                setNccValue(newValue);
 
-                        }}
+                            }}
 
-                        inputValue={nccInputValue}
-                        onInputChange={(event, newInputValue) => {
-                            setNccInputValue(newInputValue);
-                        }}
-                        options={ncc.data === null ? { lable: 'none' } : ncc.data}
-                        getOptionLabel={option => ncc.data === null ? option.lable : option.tenncc + ' ' + `(mancc: ${option.mancc})`}
-                        sx={{ width: 300 }}
+                            inputValue={nccInputValue}
+                            onInputChange={(event, newInputValue) => {
+                                setNccInputValue(newInputValue);
+                            }}
+                            options={ncc.data === null ? { lable: 'none' } : ncc.data}
+                            getOptionLabel={option => ncc.data === null ? option.lable : option.tenncc + ' ' + `(mancc: ${option.mancc})`}
+                            sx={{ width: 300 }}
 
-                        renderInput={(params) => <TextField {...params} label="Nhà cung cấp" />}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <h5>Danh sách sản phẩm được đặt</h5>
-                    <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
-                                <TableRow>
-                                    <TableCell>Mã sản phẩm</TableCell>
-                                    <TableCell align="right">Tên sản phẩm</TableCell>
-                                    <TableCell align="right">Màu sắc</TableCell>
-                                    <TableCell align="right">Kích cỡ</TableCell>
-                                    <TableCell align="right">Số lượng</TableCell>
-                                    <TableCell align="right">Đơn giá</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.map((row) => (
-                                    <TableRow
-                                        key={row.ctMathangDTOs.mathangDTO.mamh}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {row.ctMathangDTOs.mathangDTO.mamh}
-                                        </TableCell>
-                                        <TableCell align="right">{row.ctMathangDTOs.mathangDTO.tenmh}</TableCell>
-                                        <TableCell align="right">{row.ctMathangDTOs.color}</TableCell>
-                                        <TableCell align="right">{row.ctMathangDTOs.size}</TableCell>
-                                        <TableCell align="right">{row.soluong}</TableCell>
-                                        <TableCell align="right">{row.dongia}</TableCell>
-                                        <TableCell><ClearOutlined onClick={
-                                            () => handleDelCtmh(row)
-                                        } sx={{ color: 'red' }} /></TableCell>
+                            renderInput={(params) => <TextField {...params} label="Nhà cung cấp" />}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <h5>Danh sách sản phẩm được đặt</h5>
+                        <TableContainer component={Paper} sx={{ height: 400, overflow: 'scroll', marginTop: 5 }}>
+                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                <TableHead sx={{ position: 'sticky', top: 0, backgroundColor: 'yellow' }}>
+                                    <TableRow>
+                                        <TableCell>Mã sản phẩm</TableCell>
+                                        <TableCell align="right">Tên sản phẩm</TableCell>
+                                        <TableCell align="right">Màu sắc</TableCell>
+                                        <TableCell align="right">Kích cỡ</TableCell>
+                                        <TableCell align="right">Số lượng</TableCell>
+                                        <TableCell align="right">Đơn giá</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid>
-                <Grid item xs={4}>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        value={value}
-                        onChange={(event, newValue) => {
-                            setValue(newValue);
+                                </TableHead>
+                                <TableBody>
+                                    {rows.map((row) => (
+                                        <TableRow
+                                            key={row.ctMathangDTOs.mathangDTO.mamh}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                {row.ctMathangDTOs.mathangDTO.mamh}
+                                            </TableCell>
+                                            <TableCell align="right">{row.ctMathangDTOs.mathangDTO.tenmh}</TableCell>
+                                            <TableCell align="right">{row.ctMathangDTOs.color}</TableCell>
+                                            <TableCell align="right">{row.ctMathangDTOs.size}</TableCell>
+                                            <TableCell align="right">{row.soluong}</TableCell>
+                                            <TableCell align="right">{row.dongia}</TableCell>
+                                            <TableCell><ClearOutlined onClick={
+                                                () => handleDelCtmh(row)
+                                            } sx={{ color: 'red' }} /></TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            value={value}
+                            onChange={(event, newValue) => {
+                                setValue(newValue);
 
-                        }}
+                            }}
 
-                        inputValue={inputValue}
-                        onInputChange={(event, newInputValue) => {
-                            setInputValue(newInputValue);
-                        }}
-                        options={ctmh === null ? { lable: 'none' } : ctmh}
-                        getOptionLabel={option => ctmh === null ? option.lable : option.mathangDTO.tenmh + ' [-' + option.colorDTO.tencolor + '-] [--' + option.sizeDTO.tensize + '--] ' + `(mamh: ${option.mathangDTO.mamh})`}
-                        sx={{ width: 300 }}
+                            inputValue={inputValue}
+                            onInputChange={(event, newInputValue) => {
+                                setInputValue(newInputValue);
+                            }}
+                            options={ctmh === null ? { lable: 'none' } : ctmh}
+                            getOptionLabel={option => ctmh === null ? option.lable : option.mathangDTO.tenmh + ' [-' + option.colorDTO.tencolor + '-] [--' + option.sizeDTO.tensize + '--] ' + `(mamh: ${option.mathangDTO.mamh})`}
+                            sx={{ width: 300 }}
 
-                        renderInput={(params) => <TextField {...params} label="Sản phẩm" key={params.id}/>}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField value={sl || ''} id="outlined-basic" label="Số lượng" variant="outlined" type='number' onChange={e => setSl(e.target.value)} />
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField value={gia || ''} id="outlined-basic" label="Đơn giá" variant="outlined" type='number' onChange={e => setGia(e.target.value)} />
-                </Grid>
+                            renderInput={(params) => <TextField {...params} label="Sản phẩm" key={params.id} />}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField value={sl || ''} id="outlined-basic" label="Số lượng" variant="outlined" type='number' onChange={e => setSl(e.target.value)} />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField value={gia || ''} id="outlined-basic" label="Đơn giá" variant="outlined" type='number' onChange={e => setGia(e.target.value)} />
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Button variant="outlined" onClick={() => {
-                        if (value == null || gia == null || sl == null) {
-                            alert('Vui lòng nhập đầy đủ thông tin')
-                            return
-                        }
-                        handleAddCtmh({ ctMathangDTOs: value, soluong: sl, dongia: gia }); setValue(null); setGia(null); setSl(null)
-                    }}>
-                        Thêm sản phẩm
-                    </Button>
-                </Grid>
-                {
-                    type === 'detail' ? <></> :
+                    <Grid item xs={12}>
+                        <Button variant="outlined" onClick={() => {
+                            if (value == null || gia == null || sl == null) {
+                                alert('Vui lòng nhập đầy đủ thông tin')
+                                return
+                            }
+                            handleAddCtmh({ ctMathangDTOs: value, soluong: sl, dongia: gia }); setValue(null); setGia(null); setSl(null)
+                        }}>
+                            Thêm sản phẩm
+                        </Button>
+                    </Grid>
+                    {
+                        type === 'detail' ? <></> :
 
-                        <Grid item xs={12}>
-                            <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
-                                Save
-                            </Button>
-                        </Grid>
-                }
-            </Grid>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    Thêm phiếu đặt thành công!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    Sửa phiếu đặt thành công!
-                </Alert>
-            </Snackbar>
-        </React.Fragment>
+                            <Grid item xs={12}>
+                                <Button variant="contained" onClick={type === 'add' ? handleAdd : handleMod}>
+                                    Save
+                                </Button>
+                            </Grid>
+                    }
+                </Grid>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        Thêm phiếu đặt thành công!
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={open1} autoHideDuration={6000} onClose={handleClose1}>
+                    <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
+                        Sửa phiếu đặt thành công!
+                    </Alert>
+                </Snackbar>
+            </React.Fragment>
     )
 }
 

@@ -12,6 +12,7 @@ const Products = () => {
   const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState([]);
   const [sortData, setSortData] = useState([])
+
   const { data, loading, error } = useFetch(
     `/mathang/getByLoai/${catId}`
   );
@@ -19,6 +20,7 @@ const Products = () => {
 
   useEffect(() => {
     if (data) setSortData(data)
+    if (error) setSortData([])
   }, [loading])
 
 
@@ -50,7 +52,7 @@ const Products = () => {
     }
   }
   return (
-    loading || sizeData.loading || sortData == null || sortData.length == 0 ? 'loading...' :
+    loading || sizeData.loading || sortData.length == 0 ? 'loading...' :
       <div className="products">
         <div className="left">
           <div className="filterItem">
@@ -111,7 +113,7 @@ const Products = () => {
             src="https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
-          <List data={sortData} size={selectedSubCats} />
+          <List data={[...sortData]} size={selectedSubCats} />
         </div>
       </div>
   )

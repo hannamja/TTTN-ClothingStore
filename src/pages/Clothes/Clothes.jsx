@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import "./Clothes.scss";
 import useFetch from "../../hooks/useFetch";
+import E404 from "../../components/404/E404";
 import { useParams } from "react-router-dom";
 import useFetchAdmin from "../../hooks/useFetchAdmin";
 import Snackbar from "@mui/material/Snackbar";
@@ -51,7 +52,7 @@ const initialMessage = {
 
 const Clothes = ({ type }) => {
   const { id } = useParams();
-  const { data, loading } = useFetch(
+  const { data, loading, error } = useFetch(
     `${type === "add" ? `/mathang` : `/mathang/` + id}`
   );
 
@@ -242,7 +243,7 @@ const Clothes = ({ type }) => {
 
   useEffect(() => {
     if (data) {
-      if (type !== "add") {
+      if (type !== "add" && data?.status != 404) {
         setMamh(data.mamh);
         setLoai(data.loaimhDTO.maloaimh);
         setName(data.tenmh);
@@ -327,7 +328,7 @@ const Clothes = ({ type }) => {
     setSl(0);
   };
 
-  return clData.loading || brandData.loading || typeData.loading ? (
+  return error || data?.status == 404 ? <E404 /> : clData.loading || brandData.loading || typeData.loading ? (
     "loading..."
   ) : (
     <React.Fragment>
@@ -716,8 +717,8 @@ const Clothes = ({ type }) => {
               onClick={
                 type === "add"
                   ? () => {
-                      handleAdd();
-                    }
+                    handleAdd();
+                  }
                   : handleMod
               }
             >
