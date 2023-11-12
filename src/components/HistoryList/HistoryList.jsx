@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import HistoryCard from '../HistoryCard/HistoryCard';
 import './HistoryList.scss'
 import { Link, useNavigate } from "react-router-dom";
-import { toVND } from '../../utilities/helpers';
+import { dateToString, toVND } from '../../utilities/helpers';
 import { addToCart } from '../../redux/cartReducer';
 import { useDispatch, useSelector } from 'react-redux';
 const HistoryList = ({ data, type }) => {
@@ -105,7 +105,7 @@ const HistoryList = ({ data, type }) => {
                 </div>
                 <div>
                     <span>Ngày đặt: </span>
-                    <span>{data?.ngaytao}</span>
+                    <span>{dateToString(data?.ngaytao)}</span>
                 </div>
             </div>
             {user.info.khachhang && <div className="action">

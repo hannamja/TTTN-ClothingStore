@@ -69,6 +69,7 @@ const Purchase = () => {
       );
       const data = await res.json();
       setHoadon(data);
+      
       if (data?.length <= 0) {
         setShowMessage(true);
       }

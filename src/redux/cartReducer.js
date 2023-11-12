@@ -64,6 +64,7 @@ export const cartSlice = createSlice({
     minus: (state, action) => {
       const userCart = state.carts.find((item) => item.id === action.payload.idU);
       const item = userCart.products.find((item) => item.chitietMathangDTO.id === action.payload.item.chitietMathangDTO.id);
+      if (item.quantity == 1) return
       item.quantity -= 1;
     }
   },

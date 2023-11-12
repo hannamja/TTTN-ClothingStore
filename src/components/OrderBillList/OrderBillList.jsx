@@ -31,6 +31,7 @@ const style = {
 };
 
 import { DataGrid } from "@mui/x-data-grid";
+import { dateToString } from "../../utilities/helpers";
 
 const initialMessage = {
   content: "",
@@ -42,7 +43,6 @@ const OrderBillList = () => {
   const [input, setInput] = useState("");
   const { data, loading, error } = useFetchAdmin(`/hoadon`);
   // rows: Danh sách hóa đơn trong API
-
   const columns = [
     { field: "makh", headerName: "Mã khách hàng", width: 150 },
     {
@@ -115,7 +115,7 @@ const OrderBillList = () => {
       id: index,
       makh: item.khachhang.makh,
       madon: item.mahd,
-      ngaydat: item.ngaytao,
+      ngaydat: dateToString(item.ngaytao),
       trangthai: item.chitietTrangThaiDTO.trangthai.matthd,
     };
   });
@@ -139,7 +139,6 @@ const OrderBillList = () => {
   };
 
   const handleConfirm = (hd) => {
-    console.log(hd);
     if (!shipper) {
       setMessage({ content: "Chọn shipper!", type: "warning" });
       return;
