@@ -24,6 +24,10 @@ const initialMessage = {
   type: ""
 }
 
+const errCode = {
+  'BELOW_1_AMOUNT': "Vui lòng mua ít nhất 1 sản phẩm!",
+  'PRODUCT_NOT_ENOUGH': "Số lượng tồn không đủ"
+}
 const Product = () => {
   const id = useParams().id;
   const [selectedImg, setSelectedImg] = useState(0);
@@ -209,14 +213,18 @@ const Product = () => {
               <div className="quantity">
                 <button
                   onClick={() =>
-                    setQuantity((prev) => (prev === 1 ? 1 : prev - 1))
+                    quantity == 1 ? setMessage({ content: errCode.BELOW_1_AMOUNT, type: 'error' }) : setQuantity((prev) => (prev - 1))
                   }
                   disabled={idCtmh === null}
                 >
                   -
                 </button>
                 {quantity}
-                <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
+                <button onClick={() =>
+                  data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setMessage({ content: errCode.PRODUCT_NOT_ENOUGH, type: 'error' }) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}
+                >
+                  +
+                </button>
               </div>
 
               {
@@ -249,14 +257,18 @@ const Product = () => {
                   <div className="quantity">
                     <button
                       onClick={() =>
-                        setQuantity((prev) => (prev === 1 ? 1 : prev - 1))
+                        quantity == 1 ? setMessage({ content: errCode.BELOW_1_AMOUNT, type: 'error' }) : setQuantity((prev) => (prev - 1))
                       }
                       disabled={idCtmh === null}
                     >
                       -
                     </button>
                     {quantity}
-                    <button onClick={() => data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setQuantity(quantity) : setQuantity((prev) => prev + 1)} disabled={idCtmh === null}>+</button>
+                    <button onClick={() =>
+                      data.ctMathangs[idCtmh].currentNumbeer <= quantity ? setMessage({ content: errCode.PRODUCT_NOT_ENOUGH, type: 'error' }) : setQuantity((prev) => prev + 1)}
+                      disabled={idCtmh === null}>
+                      +
+                    </button>
                   </div>
                   {
                     isOutOfStock ?
@@ -300,7 +312,8 @@ const Product = () => {
             </div>
           </div>
         </>
-      )}
+      )
+      }
       {/* <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
         <Alert
           onClose={handleCloseSuccess}
@@ -311,7 +324,7 @@ const Product = () => {
         </Alert>
       </Snackbar> */}
       <AlertMessage message={message} setMessage={setMessage} />
-    </div>
+    </div >
   );
 };
 

@@ -19,8 +19,15 @@ const RatingSection = ({ data, isBuy }) => {
         if (Object.keys(user).length === 0) setIsNotLogined(true)
         setOpen(!open)
     }
+
     const handlePost = () => {
-        comment == '' ? setNotFullField(true) : setNotFullField(false)
+        if (comment == '') {
+            setNotFullField(true)
+            return
+        }
+        else {
+            setNotFullField(false)
+        }
         const commentPost = {
             'ngaybl': new Date(),
             'mathangDTO': {
@@ -42,7 +49,13 @@ const RatingSection = ({ data, isBuy }) => {
         }).then(data => data.json()).then(data => console.log(data))
     }
     const handleRating = () => {
-        rating == '' ? setNotChooseRating(true) : setNotChooseRating(false)
+        if (rating == 0) {
+            setNotChooseRating(true)
+            return
+        }
+        else {
+            setNotChooseRating(false)
+        }
         const commentPost = {
             'ngaybl': new Date(),
             'mathangDTO': {
