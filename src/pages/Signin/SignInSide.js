@@ -104,7 +104,7 @@ export default function SignInSide() {
       if (next) {
         navigate(next);
       } else {
-        navigate(-1);
+        navigate("/");
       }
     }
   }, [user, navigate, next])

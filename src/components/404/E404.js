@@ -9,7 +9,7 @@ export default function E404() {
         <h1>Error 404</h1>
       </div>
       <div className='btnWrapper'>
-        <button className='btnBack' onClick={() => navigate(-1)}>Back</button>
+        <button className='btnBack' onClick={() => navigate("/")}>Back to home page</button>
       </div>
     </div>
   )
