@@ -141,7 +141,7 @@ export default function Checkout() {
 
 
   return (
-    Object.keys(user).length == 0 || userCart.products.length == 0 ? <Navigate to={'/'} /> :
+    
       <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
         <AppBar
