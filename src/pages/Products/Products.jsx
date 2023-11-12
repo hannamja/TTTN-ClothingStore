@@ -17,7 +17,6 @@ const Products = () => {
   );
   const sizeData = useFetch(`/size`);
 
-  console.log(data)
   useEffect(() => {
     if (data) setSortData(data)
   }, [loading])
