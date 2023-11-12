@@ -56,7 +56,7 @@ const Cart = ({ open }) => {
         <span>{handleMoney(totalPrice())} VND</span>
       </div>
       <Link className="link" to={Object.keys(user).length == 0 ? '/signin' : '/checkout'} onClick={() => { open(false) }}>
-        <button className="checkoutBtn">PROCEED TO CHECKOUT</button>
+        <button className="checkoutBtn" disabled={userCart.products.length == 0 ? true : false}>PROCEED TO CHECKOUT</button>
       </Link>
       <span className="reset" onClick={() => dispatch(resetCart({ idU: Object.keys(user) == 0 ? '' : user.info.khachhang.makh }))}>
         Reset Cart
