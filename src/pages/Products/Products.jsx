@@ -11,13 +11,12 @@ const Products = () => {
   const [maxPrice, setMaxPrice] = useState(1000);
   const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState([]);
-  const [sortData, setSortData] = useState(null)
+  const [sortData, setSortData] = useState([])
   const { data, loading, error } = useFetch(
     `/mathang/getByLoai/${catId}`
   );
   const sizeData = useFetch(`/size`);
 
-  console.log(data)
   useEffect(() => {
     if (data) setSortData(data)
   }, [loading])
